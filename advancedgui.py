@@ -395,6 +395,13 @@ class Ui_MainWindowadvanced(object):
         self.pushButton_loadsetting.setObjectName("pushButton_loadsetting")
         self.tabWidget.addTab(self.settingtab, "")
         # ***********************sventh tabwidget*******************************
+        self.terminal_tab = QtWidgets.QWidget()
+        self.terminal_tab.setObjectName("terminal_tab")
+        self.layout_terminal = QGridLayout()
+        self.terminal_tab.setLayout(self.layout_terminal)
+        self.tabWidget.addTab(self.terminal_tab, "")
+
+        # ***********************last tabwidget*******************************
         self.infohelptab = QtWidgets.QWidget()
         self.infohelptab.setObjectName("infohelptab")
         self.layoutinfotab = QGridLayout()
