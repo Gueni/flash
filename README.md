@@ -50,7 +50,7 @@ The software is divided into two major modes, production mode and advanced mode.
 ---
 
 <p align="center">
-  <img  src="prodmod.png">
+  <img  src="prodmod.PNG">
 </p>
 
 # Advanced Mode
@@ -174,10 +174,10 @@ You can now export the efuse table with all the values and states to an excel (x
 ### Login/Password Change 
 ---
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="loginwindow.png">
 </p>
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="changepasswindow.png">
 </p>
 Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
