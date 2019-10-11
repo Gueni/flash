@@ -44,7 +44,6 @@ The software is divided into two major modes, production mode and advanced mode.
 - [Download](#Download)
 - [Installation](#Installation)
 - [To do](#To-do)
-- [Contributing](#contributing)
 - [Copyright and Licensing](#Copyright-and-Licensing)
 # Production Mode
 ---
