@@ -12,21 +12,22 @@ MicroTool is a free software which allows the user to access, flash and erase th
 
 The software is divided into two major modes, production mode and advanced mode. The production mode is a simple user interface containing the minimum number of features allowing the operator to conduct the necessary flashing and or flash erasing procedures with minimum complexity and errors.The advanced mode on the other hand is more complex and sums up all the features and commands made possible with the esptool library but with an easier and more advanced user experience. 
 
-  - Production Mode.
-  - Advanced Mode.
+
   
 # Table of contents
 ---
+- [Production Mode](#Production-Mode)
+- [Advanced Mode](#Advanced-Mode)
 - [Features](#features)
   - [Serial Port](#Serial-Port)
   - [Baud Rate](#Baud-Rate)
-  - [Flash Firmware/Bootloader](#Flash-Firmware/Bootloader)
+  - [Flash Firmware Bootloader](#Flash-Firmware-Bootloader)
   - [Setting Flash Mode and Size](#Setting-Flash-Mode-and-Size)
   - [Compression](#Compression)
   - [Read Flash Contents](#Read-Flash-Contents)
-  - [Erase Flash & erase region](#Erase-Flash:-&-erase-region)
+  - [Erase Flash & erase region](#Erase-Flash-&-erase-region)
   - [Convert ELF to Binary](#Convert-ELF-to-Binary)
-  - [Output bin image details: image info](#Output-bin-image-details:-image-info)
+  - [Output bin image details](#Output-bin-image-details)
   - [Verify flash](#Verify-flash)
   - [Dump Memory](#Dump-Memory)
   - [load RAM](#load-RAM)
@@ -42,10 +43,13 @@ The software is divided into two major modes, production mode and advanced mode.
 - [Dependencies](#Dependencies)
 - [Download](#Download)
 - [Installation](#Installation)
-- [To do](#To do)
+- [To do](#To-do)
 - [Contributing](#contributing)
-- [License](#License)
-
+- [Copyright and Licensing](#Copyright-and-Licensing)
+# Production Mode
+---
+# Advanced Mode
+---
 #  Features
 ---
 
@@ -92,7 +96,7 @@ To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a re
 Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
 
 
-### Output bin image details: image info
+### Output bin image details
 
 The image info outputs some information (load addresses, sizes, etc) about a .bin file. 
 
@@ -148,9 +152,8 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 ---
 MicroTool uses a number of open source projects and libraries to work properly:
 
-* [Python] - HTML enhanced for web apps!
+* [Python] - HTML enhanced for web apps! 
 * [PyQt5] - awesome web-based text editor
-* [esptool] - evented I/O for the backend
 * [esptool] - fast node.js network app framework [@tjholowaychuk] 
 * [Gulp] - the streaming build system
 * [Breakdance](http://breakdance.io) - HTML to Markdown converter
@@ -176,12 +179,11 @@ Install python 3 from https://www.python.org/download/releases/3.0/
  - Optimize the Efuse feature.
  - Enhance UI/UX.
  - More Interactive Help Section.
+ - Secure Boot Feature.
+ - A dedicated Firmware merge library for ESP32.
  
 
-# Contributing
-----
-
-# License
+# Copyright and Licensing
 -----
 
     Copyright 2019 by Mohamed Gueni
@@ -196,7 +198,8 @@ Install python 3 from https://www.python.org/download/releases/3.0/
     See the License for the specific language governing permissions and
     limitations under the License.
 
-## [FAQ](https://github.com/Gueni/MicroTool1.0/issues)
+###### [FAQ :Feel free to submit issues and enhancement requests.](https://github.com/Gueni/MicroTool1.0/issues)
+
 
 
 [//]:<These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO- >
