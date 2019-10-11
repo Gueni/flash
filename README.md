@@ -1,15 +1,9 @@
 <p align="center">
-  <img width="460" height="300" src="icons/espLogo.png">
+  <img  src="icons/espLogo.png">
 </p>
-
-
-
-
-
-
-#                                                        MicroTool
-![MicroTool](icons/espLogo.png)
-
+---------------------------------
+# MicroTool
+--------------------------------
 
 
 A Python-based, open source, desktop application to import, read and analyse excel files in order to create and display multiple charts.
