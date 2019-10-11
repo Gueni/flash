@@ -1,8 +1,8 @@
 --------------------------------------------------------------------------------------------------------------------------
+# MicroTool
+==========================================================================================================================
+![MicroTool](icons/espLogo.png)
 
-![# MicroTool][logo]
-
-[logo]: icons/espLogo.png "Logo "
 
 
 A Python-based, open source, desktop application to import, read and analyse excel files in order to create and display multiple charts.
