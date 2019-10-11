@@ -103,6 +103,7 @@ The Read flash feature allows reading back the contents of flash. for that you n
 
 ### Erase Flash & erase region
 
+
 <p align="center">
   <img  src="memo.png">
 </p>
@@ -111,9 +112,13 @@ To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a re
 
 
 ### Convert ELF to Binary
+
+
 <p align="center">
   <img  src="/icons/espLogo.png">
 </p>
+
+
 Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
 
 
@@ -165,20 +170,30 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 ### Secure Packaging
 This Option allows you to select firmware files you wish to work with more than once or in multiple enviroments then compress them inside a package with the extension .mtool along with the necessary settings and options for the flashing procedure in the production mode.
 ### Efuse Table
+
+
 <p align="center">
   <img  src="efusetab.png">
 </p>
+
+
 The efuse tab introduced in MicroTool makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
 ### Export Efuse
 You can now export the efuse table with all the values and states to an excel (xls) file.
 ### Login/Password Change 
 ---
+
+
 <p align="center">
   <img  src="loginwindow.png">
 </p>
+
+
 <p align="center">
   <img  src="changepasswindow.png">
 </p>
+
+
 Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
 # Dependencies
