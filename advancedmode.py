@@ -171,7 +171,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.bundle_dir = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(self.bundle_dir + '/icons/espLogo.png'))
-
+        self.lay = QVBoxLayout()
         self.settingstyle = QSettings("settingsstyle.ini", QSettings.IniFormat)
         self.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.workerThread = WorkerThread()
@@ -425,7 +425,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        # self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
 
@@ -507,7 +507,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        # self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
     def disableButtons(self):
         self.pushButton_eraseentireflash.setDisabled(True)
@@ -2013,46 +2013,24 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
     # *******************************5th_Tab****************************************************************************
 
     def refbuttonfunction(self):
+
         self.workerThread.start()
-
-        self.pushButton_reloadfusetab.deleteLater()
-        self.lay = QVBoxLayout()
-        self.fusetab.setLayout(self.lay)
-
+        self.btnref.setDisabled(True)
+        self.btnexport.setDisabled(True)
         self.status_txt = QtWidgets.QLabel()
         movie = QMovie("icons/GREY-GEAR-LOADING.gif")
         self.status_txt.setMovie(movie)
         movie.start()
         self.lay.addWidget(self.status_txt)
 
-        QtTest.QTest.qWait(10000)
+        QtTest.QTest.qWait(11000)
         movie.stop()
         self.status_txt.deleteLater()
-
+        #
         self.conn = sqlite3.connect('samples.db')
         cur = self.conn.cursor()
         cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
         rows = cur.fetchall()
-        self.tableWidget.setRowCount(0)
-        self.tableWidget.setRowCount(33)
-        self.tableWidget.setColumnCount(6)
-        self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("EFUSE NAME"))
-        self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("Description "))
-        self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Meaningful Value"))
-        self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
-        self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
-        self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
-        self.tableWidget.setGeometry(QtCore.QRect(0, 0, 780, 545))
-        self.lay.addWidget(self.tableWidget)
-        self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setColumnWidth(0, 200)
-        self.tableWidget.setColumnWidth(1, 250)
-        self.tableWidget.setColumnWidth(2, 130)
-        self.tableWidget.setColumnWidth(3, 110)
-        self.tableWidget.setColumnWidth(4, 70)
-        self.tableWidget.setColumnWidth(5, 36)
-
-        self.setuptablebuttons()
 
         itr1 = 1
         itr2 = 0
@@ -2063,6 +2041,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 itr2 = itr2 + 1
             itr1 = itr1 + 1
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.btnref.setDisabled(False)
+        self.btnexport.setDisabled(False)
 
     def refreshsummary(self):
         self.workerThread.start()
