@@ -115,7 +115,7 @@ To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a re
 
 
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="settings.png">
 </p>
 
 
