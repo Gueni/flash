@@ -230,7 +230,7 @@ Install python 3 from https://www.python.org/download/releases/3.0/
  - more file type choices for efuse export.
  - email verification for password change .
  - generate a log file containg info about the user date/time and all operations conducted.
- - add more languges.
+ - add more languages.
  
 
 # Copyright and Licensing
