@@ -1,6 +1,7 @@
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+[![N|Solid](/icons/espLogo.png)](https://github.com/Gueni/MicroTool1.0/releases)
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger) [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger) [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger) [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger) [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+---
+
 
 # Getting Started
 ---
@@ -14,15 +15,33 @@ The software is divided into two major modes, production mode and advanced mode.
 # Table of contents
 ---
 - [Features](#features)
-  - [Flags](#flags)
-  - [Combination of flags](#combination-of-flags)
-- [Installation](#installation)
-- [Recommended configurations](#recommended-configurations)
-- [Custom configurations](#custom-configurations)
-- [Updating](#updating)
-- [Uninstallation](#uninstallation)
+  - [Serial Port](#Serial-Port)
+  - [Baud Rate](#Baud-Rate)
+  - [Flash Firmware/Bootloader](#Flash-Firmware/Bootloader)
+  - [Setting Flash Mode and Size](#Setting-Flash-Mode-and-Size)
+  - [Compression](#Compression)
+  - [Read Flash Contents](#Read-Flash-Contents)
+  - [Erase Flash & erase region](#Erase-Flash:-&-erase-region)
+  - [Convert ELF to Binary](#Convert-ELF-to-Binary)
+  - [Output bin image details: image info](#Output-bin-image-details:-image-info)
+  - [Verify flash](#Verify-flash)
+  - [Dump Memory](#Dump-Memory)
+  - [load RAM](#load-RAM)
+  - [Read / write Memory](#Read-/-write-Memory)
+  - [Read flash status](#Read-flash-status)
+  - [Write flash status](#Write-flash-status)
+  - [Chip Id](#Chip-Id)
+- [New Features](#new-features)
+  - [Secure Packaging](#Secure-Packaging)
+  - [Efuse Table](#Efuse-Table)
+  - [Export Efuse](#Export-Efuse)
+  - [Login/Password Change](#Login/Password-Change)
+- [Dependencies](#Dependencies)
+- [Download](#Download)
+- [Installation](#Installation)
+- [To do](#To do)
 - [Contributing](#contributing)
-- [License](#license)
+- [License](#License)
 
 #  Features
 ---
@@ -60,7 +79,7 @@ By default, the serial transfered data is compressed by esptool.py for better pe
 The Read flash feature allows reading back the contents of flash. for that you need to specify an address, a size, and a filename to dump the output to. 
 
 
-### Erase Flash: erase flash & erase region
+### Erase Flash & erase region
 
 To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie:0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
 
@@ -123,7 +142,7 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 ---
 
 # Dependencies
-
+---
 MicroTool uses a number of open source projects and libraries to work properly:
 
 * [Python] - HTML enhanced for web apps!
@@ -133,12 +152,12 @@ MicroTool uses a number of open source projects and libraries to work properly:
 * [Gulp] - the streaming build system
 * [Breakdance](http://breakdance.io) - HTML to Markdown converter
 * [jQuery] - duh
+# Download
+---
+MicroTool itself is open source with a [public repository][MicroTool1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/MicroTool1.0/releases).
 
-And of course MicroTool itself is open source with a [public repository][dill]
- on GitHub.
-
-### Installation
-
+# Installation
+---
 Microtool requires [Python 3](https://www.python.org/download/releases/3.0/) to run.
 
 Install python 3 from https://www.python.org/download/releases/3.0/
@@ -146,39 +165,38 @@ Install python 3 from https://www.python.org/download/releases/3.0/
 
 
 
-### Todos
 
- - Write MORE Tests
- - Add Night Mode
-
-License
+# To do
 ----
 
-MIT
+ - Integrate all features in local terminal without having to type all attributes.
+ - Optimize the Efuse feature.
+ - Enhance UI/UX.
+ - More Interactive Help Section.
+ 
+
+# Contributing
+----
+
+# License
+-----
+
+    Copyright 2019 by Mohamed Gueni
+
+    Licensed under the GNU General Public License License, Version 2.0
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at GNU .
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 
-**Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - 
+[//]:<These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO- >
 
 
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
+   [MicroTool1.0]: <https://github.com/Gueni/MicroTool1.0/tree/1.0>
+   [GNU]:<https://github.com/Gueni/MicroTool1.0/releases>
+  
