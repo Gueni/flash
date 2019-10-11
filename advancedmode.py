@@ -6,13 +6,21 @@ import pyzipper
 import serial.tools.list_ports
 import xlwt
 from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
-from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, pyqtSignal
+from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, pyqtSignal, Qt, QProcess, QPoint, QEvent, \
+    QSysInfo
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
 from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut, QMessageBox, QTableWidgetItem, QTableWidget, \
-    QVBoxLayout
+    QVBoxLayout, QApplication, QPlainTextEdit
+from numpy.distutils.cpuinfo import cpu
+
 import OpmodeMain
 import aboutmain
 import advancedgui
+
+import getpass
+import socket
+from pathlib import Path
+from PyQt5.QtGui import QFont, QTextCursor
 
 ORGANIZATION_NAME = 'Micro Device Tunisie'
 ORGANIZATION_DOMAIN = 'mdtunisie.com'
@@ -82,6 +90,7 @@ dump_progress = 'dump_progress'
 read_flash_progress = 'read_flash_progress'
 comport = 'comport'
 
+
 class MyprogressbarThread(QThread):
     change_value = pyqtSignal(int)
 
@@ -107,7 +116,6 @@ class MyprogressbarThreadreadflash(QThread):
             cnt = settingsread_flash.value(read_flash_progress, type=int)
             self.change_valuereadflash.emit(cnt)
             QtTest.QTest.qWait(500)
-
 
 
 class MyprogressbarThreaddump(QThread):
@@ -147,7 +155,7 @@ class WorkerThread(QThread):
         self.settingsport = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
 
     def run(self):
-        Com_port=self.settingsport.value(comport,type=str)
+        Com_port = self.settingsport.value(comport, type=str)
         os.system('python ' + self.bundle_dir + '/espefuse.py --port ' + " " + Com_port + " " + ' summary')
 
 
@@ -183,6 +191,18 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.initProcess()
         self.initProcessmem()
         self.baudRate = 115200
+        self.setAcceptDrops(True)
+
+        self.shellWin = PlainTextEdit()
+        self.label_cpu = QtWidgets.QLabel()
+        self.label_cpu.setObjectName("label_cpu")
+        self.layout_terminal.addWidget(self.label_cpu)
+        self.layout_terminal.addWidget(self.shellWin)
+        sysinfo = QSysInfo()
+        myMachine = "CPU Architecture: " + sysinfo.currentCpuArchitecture() + " | " + sysinfo.prettyProductName() + " | " + sysinfo.kernelType() + " | " + sysinfo.kernelVersion() +" | " + sysinfo.machineHostName()
+        self.label_cpu.setText(myMachine)
+        self.settings = QSettings("QTerminal", "QTerminal")
+        self.readSettings()
         self.port = ''
         self.flasSize = self.comboBox_flashsize.currentText()
         self.frozen = 'not'
@@ -211,7 +231,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         iconsetting = QtGui.QIcon(u'icons/setting.png')
         iconmemo = QtGui.QIcon(u'icons/debug.png')
         iconfuse = QtGui.QIcon(u'icons/fuse.png')
-        icon_terminal =  QtGui.QIcon(u'icons/terminal.png')
+        icon_terminal = QtGui.QIcon(u'icons/terminal.png')
         iconhelp = QtGui.QIcon(u'icons/Info-icon.png')
         self.tabWidget.setTabIcon(0, iconConnection)
         self.tabWidget.setTabIcon(1, iconoperation)
@@ -404,11 +424,16 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.progressBarmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
     def setactionLight_Blue(self):
         self.setStyleSheet(open("qssthemes/LightBlue/stylesheet.qss", "r").read())
         self.settingstyle.setValue(SETTINGS_style, "qssthemes/LightBlue/stylesheet.qss")
         self.settingstyle.sync()
+        self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.label_5.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.label.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.label_2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
@@ -481,6 +506,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.progressBarmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
     def disableButtons(self):
         self.pushButton_eraseentireflash.setDisabled(True)
@@ -551,6 +578,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_chip.setDisabled(True)
         self.comboBox_flashsize.setDisabled(True)
         self.comboBox_flashmode.setDisabled(True)
+
+    def readSettings(self):
+        if self.settings.contains("commands"):
+            self.shellWin.commands = self.settings.value("commands")
+
+
+    def writeSettings(self):
+        self.settings.setValue("commands", self.shellWin.commands)
 
     def enableButtons(self):
         self.pushButton_eraseentireflash.setDisabled(False)
@@ -628,6 +663,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
             self.savesettings()
+            self.writeSettings()
+
             sys.exit()
         else:
             self.savesettings()
@@ -1075,13 +1112,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
     def comPortSelect(self):
         self.port = self.comboBox_serial.currentText()
         settingsport = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
-        settingsport.setValue(comport,self.comboBox_serial.currentText())
+        settingsport.setValue(comport, self.comboBox_serial.currentText())
         settingsport.sync()
+
     def open_serial(self):
         self.port = self.comboBox_serial.currentText()
         try:
             if self.ser.is_open == False:
-                self.ser = serial.Serial(self.port, baudrate=115200, timeout=0, bytesize=serial.EIGHTBITS,
+                self.ser = serial.Serial(self.port, baudrate=self.comboBox_baud.currentText(), timeout=0, bytesize=serial.EIGHTBITS,
                                          parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, rtscts=False,
                                          dsrdtr=False)
             if self.ser.is_open == True:
@@ -1684,7 +1722,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                                 QMessageBox.Ok)
         else:
             # head, keyfile = os.path.split(self.lineEdit_keypath.text())
-            if not self.lineEdit_keypath.text()==""and not self.lineEdit_keypath.text()==" ":
+            if not self.lineEdit_keypath.text() == "" and not self.lineEdit_keypath.text() == " ":
                 if os.name == 'nt':
                     if self.chip == 'ESP32':
                         self.processmem.start(
@@ -1976,50 +2014,60 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def refbuttonfunction(self):
         self.workerThread.start()
-        # self.tableWidget.clear()
+
+        self.pushButton_reloadfusetab.deleteLater()
+        self.lay = QVBoxLayout()
+        self.fusetab.setLayout(self.lay)
+
+        self.status_txt = QtWidgets.QLabel()
+        movie = QMovie("icons/GREY-GEAR-LOADING.gif")
+        self.status_txt.setMovie(movie)
+        movie.start()
+        self.lay.addWidget(self.status_txt)
 
         QtTest.QTest.qWait(10000)
+        movie.stop()
+        self.status_txt.deleteLater()
+
         self.conn = sqlite3.connect('samples.db')
         cur = self.conn.cursor()
         cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
         rows = cur.fetchall()
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setRowCount(33)
+        self.tableWidget.setColumnCount(6)
+        self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("EFUSE NAME"))
+        self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("Description "))
+        self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Meaningful Value"))
+        self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
+        self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
+        self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
+        self.tableWidget.setGeometry(QtCore.QRect(0, 0, 780, 545))
+        self.lay.addWidget(self.tableWidget)
+        self.tableWidget.verticalHeader().setVisible(False)
+        self.tableWidget.setColumnWidth(0, 200)
+        self.tableWidget.setColumnWidth(1, 250)
+        self.tableWidget.setColumnWidth(2, 130)
+        self.tableWidget.setColumnWidth(3, 110)
+        self.tableWidget.setColumnWidth(4, 70)
+        self.tableWidget.setColumnWidth(5, 36)
 
-        # self.tableWidget.setRowCount(0)
-        # self.tableWidget.setRowCount(33)
-        # self.tableWidget.setColumnCount(6)
-        # self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("EFUSE NAME"))
-        # self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("Description "))
-        # self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Meaningful Value"))
-        # self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
-        # self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
-        # self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
-        # self.tableWidget.setGeometry(QtCore.QRect(0, 0, 780, 545))
-        # self.lay.addWidget(self.tableWidget)
-        # self.tableWidget.verticalHeader().setVisible(False)
-        # self.tableWidget.setColumnWidth(0, 200)
-        # self.tableWidget.setColumnWidth(1, 250)
-        # self.tableWidget.setColumnWidth(2, 130)
-        # self.tableWidget.setColumnWidth(3, 110)
-        # self.tableWidget.setColumnWidth(4, 70)
-        # self.tableWidget.setColumnWidth(5, 36)
+        self.setuptablebuttons()
 
-        # self.setuptablebuttons()
-        #
-        # itr1 = 1
-        # itr2 = 0
-        # for record in rows:
-        #     itr2 = 0
-        #     for eachrecord in record:
-        #         self.tableWidget.setItem(itr1, itr2, QTableWidgetItem(str(eachrecord)))
-        #         itr2 = itr2 + 1
-        #     itr1 = itr1 + 1
-        # self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        itr1 = 1
+        itr2 = 0
+        for record in rows:
+            itr2 = 0
+            for eachrecord in record:
+                self.tableWidget.setItem(itr1, itr2, QTableWidgetItem(str(eachrecord)))
+                itr2 = itr2 + 1
+            itr1 = itr1 + 1
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
     def refreshsummary(self):
         self.workerThread.start()
 
         self.pushButton_reloadfusetab.deleteLater()
-        self.lay = QVBoxLayout()
         self.fusetab.setLayout(self.lay)
 
         self.status_txt = QtWidgets.QLabel()
@@ -3230,3 +3278,198 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def memorySelect(self):
         self.flasSize = self.comboBox_flashsize.currentText()
+
+
+class PlainTextEdit(QPlainTextEdit):
+    commandSignal = pyqtSignal(str)
+    commandZPressed = pyqtSignal(str)
+
+    def __init__(self, parent=None, movable=False):
+        super(PlainTextEdit, self).__init__()
+
+        self.installEventFilter(self)
+        self.setAcceptDrops(True)
+        QApplication.setCursorFlashTime(1000)
+        self.process = QProcess()
+        self.process.readyReadStandardError.connect(self.onReadyReadStandardError)
+        self.process.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
+
+        self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
+                     + ":" + str(os.getcwd()) + "$ ")
+        self.appendPlainText(self.name)
+        self.commands = []  # This is a list to track what commands the user has used so we could display them when
+        # up arrow key is pressed
+        self.tracker = 0
+        self.setStyleSheet("QPlainTextEdit{background-color: #212121; color: #f3f3f3; padding: 8;}")
+        self.verticalScrollBar().setStyleSheet("background-color: #212121;")
+        self.text = None
+        self.setFont(QFont("Noto Sans Mono", 8))
+        self.previousCommandLength = 0
+
+    def eventFilter(self, source, event):
+        if (event.type() == QEvent.DragEnter):
+            event.accept()
+            print('DragEnter')
+            return True
+        elif (event.type() == QEvent.Drop):
+            print('Drop')
+            self.setDropEvent(event)
+            return True
+        else:
+            return False  ### super(QPlainTextEdit).eventFilter(event)
+
+    def setDropEvent(self, event):
+        if event.mimeData().hasUrls():
+            f = str(event.mimeData().urls()[0].toLocalFile())
+            self.insertPlainText(f)
+            event.accept()
+        elif event.mimeData().hasText():
+            ft = event.mimeData().text()
+            print("text:", ft)
+            self.insertPlainText(ft)
+            event.accept()
+        else:
+            event.ignore()
+
+    def keyPressEvent(self, e):
+        cursor = self.textCursor()
+
+        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_A:
+            return
+
+        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_Z:
+            self.commandZPressed.emit("True")
+            return
+
+        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_C:
+            self.process.kill()
+            self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
+                         + ":" + str(os.getcwd()) + "$ ")
+            self.appendPlainText("process cancelled")
+            self.appendPlainText(self.name)
+            self.textCursor().movePosition(QTextCursor.End)
+            return
+
+        if e.key() == Qt.Key_Return:  ### 16777220:  # This is the ENTER key
+            text = self.textCursor().block().text()
+
+            if text == self.name + text.replace(self.name, "") and text.replace(self.name,
+                                                                                "") != "":  # This is to prevent adding in commands that were not meant to be added in
+                self.commands.append(text.replace(self.name, ""))
+            #                print(self.commands)
+            self.handle(text)
+            self.commandSignal.emit(text)
+            self.appendPlainText(self.name)
+
+            return
+
+        if e.key() == Qt.Key_Up:
+            try:
+                if self.tracker != 0:
+                    cursor.select(QTextCursor.BlockUnderCursor)
+                    cursor.removeSelectedText()
+                    self.appendPlainText(self.name)
+
+                self.insertPlainText(self.commands[self.tracker])
+                self.tracker -= 1
+
+            except IndexError:
+                self.tracker = 0
+
+            return
+
+        if e.key() == Qt.Key_Down:
+            try:
+                cursor.select(QTextCursor.BlockUnderCursor)
+                cursor.removeSelectedText()
+                self.appendPlainText(self.name)
+
+                self.insertPlainText(self.commands[self.tracker])
+                self.tracker += 1
+
+            except IndexError:
+                self.tracker = 0
+
+        if e.key() == Qt.Key_Backspace:  ### 16777219:
+            if cursor.positionInBlock() <= len(self.name):
+                return
+
+            else:
+                cursor.deleteChar()
+
+        super().keyPressEvent(e)
+        cursor = self.textCursor()
+        e.accept()
+
+    def ispressed(self):
+        return self.pressed
+
+    def onReadyReadStandardError(self):
+        self.error = self.process.readAllStandardError().data().decode()
+        self.appendPlainText(self.error.strip('\n'))
+
+    def onReadyReadStandardOutput(self):
+        self.result = self.process.readAllStandardOutput().data().decode()
+        self.appendPlainText(self.result.strip('\n'))
+        self.state = self.process.state()
+
+    #        print(self.result)
+
+    def run(self, command):
+        """Executes a system command."""
+        if self.process.state() != 2:
+            self.process.start(command)
+            self.process.waitForFinished()
+            self.textCursor().movePosition(QTextCursor.End)
+
+    def handle(self, command):
+        #        print("begin handle")
+        """Split a command into list so command echo hi would appear as ['echo', 'hi']"""
+        real_command = command.replace(self.name, "")
+
+        if command == "True":
+            if self.process.state() == 2:
+                self.process.kill()
+                self.appendPlainText("Program execution killed, press enter")
+
+        if real_command.startswith("python"):
+            pass
+
+        if real_command != "":
+            command_list = real_command.split()
+        else:
+            command_list = None
+        """Now we start implementing some commands"""
+        if real_command == "clear":
+            self.clear()
+
+        elif command_list is not None and command_list[0] == "echo":
+            self.appendPlainText(" ".join(command_list[1:]))
+
+        elif real_command == "exit":
+            quit()
+
+        elif command_list is not None and command_list[0] == "cd" and len(command_list) > 1:
+            try:
+                os.chdir(" ".join(command_list[1:]))
+                self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
+                             + ":" + str(os.getcwd()) + "$ ")
+                self.textCursor().movePosition(QTextCursor.End)
+
+            except FileNotFoundError as E:
+                self.appendPlainText(str(E))
+
+        elif command_list is not None and len(command_list) == 1 and command_list[0] == "cd":
+            os.chdir(str(Path.home()))
+            self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
+                         + ":" + str(os.getcwd()) + "$ ")
+            self.textCursor().movePosition(QTextCursor.End)
+
+        elif self.process.state() == 2:
+            self.process.write(real_command.encode())
+            self.process.closeWriteChannel()
+
+        elif command == self.name + real_command:
+            self.run(real_command)
+        else:
+            pass

@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QFile, QTextStream
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QGridLayout, QHBoxLayout, QBoxLayout, QVBoxLayout
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -397,7 +397,10 @@ class Ui_MainWindowadvanced(object):
         # ***********************sventh tabwidget*******************************
         self.terminal_tab = QtWidgets.QWidget()
         self.terminal_tab.setObjectName("terminal_tab")
-        self.layout_terminal = QGridLayout()
+        self.layout_terminal = QVBoxLayout()
+        # self.terminal_plaintext = QtWidgets.QPlainTextEdit(self.terminal_tab)
+        # self.terminal_plaintext.setObjectName("terminal_plaintext")
+        # self.layout_terminal.addWidget(self.terminal_plaintext)
         self.terminal_tab.setLayout(self.layout_terminal)
         self.tabWidget.addTab(self.terminal_tab, "")
 
