@@ -234,7 +234,7 @@ Install python 3 from https://www.python.org/download/releases/3.0/
 # Copyright and Licensing
 -----
 
-    Copyright 2019 by [Mohamed Gueni](https://github.com/Gueni)
+   Copyright 2019 by [Mohamed Gueni](https://github.com/Gueni)
 
     Licensed under the GNU General Public License License, Version 2.0
     you may not use this file except in compliance with the License.
