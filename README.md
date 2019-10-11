@@ -1,4 +1,3 @@
-[![N|Solid](/icons/espLogo.png)](https://github.com/Gueni/MicroTool1.0/releases)
 <p align="center">
   <img  src="/icons/espLogo.png">
 </p>
