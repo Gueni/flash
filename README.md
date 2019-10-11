@@ -45,21 +45,28 @@ The software is divided into two major modes, production mode and advanced mode.
 - [Installation](#Installation)
 - [To do](#To-do)
 - [Copyright and Licensing](#Copyright-and-Licensing)
+
 # Production Mode
 ---
+
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="prodmod.png">
 </p>
+
 # Advanced Mode
 ---
+
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="advmod.png">
 </p>
+
 #  Features
 ---
+
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="serialandbaud.png">
 </p>
+
 ### Serial Port
 
 The serial port is selected using the ComboBox Designated Serial Port, like COM1 (Windows). If no option is specified,esptool will enumerate all connected serial ports and try each one until it finds an Espressif device (ESP32 or ESP8266) connected. 
@@ -71,9 +78,8 @@ The default baud rate is 115200bps. Different rates may be set using the Baud Ra
 
 
 ### Flash Firmware/Bootloader
-<p align="center">
-  <img  src="/icons/espLogo.png">
-</p>
+
+
 Binary data (Multiple flash addresses and file)can be written to the ESP's flash chip. The chip selection is optional when writing to ESP flash, as it will be detected when it connects to the serial port.The offset (address) and file name are crucial for this operation.
 
 The file names created by "ELF to Bin" include the flash offsets as part of the file name. For other types of images, consult your SDK documentation to determine the files to flash at which offsets.Numeric values passed as offset address can only
@@ -96,9 +102,11 @@ The Read flash feature allows reading back the contents of flash. for that you n
 
 
 ### Erase Flash & erase region
+
 <p align="center">
   <img  src="/icons/espLogo.png">
 </p>
+
 To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie:0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
 
 
