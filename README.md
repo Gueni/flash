@@ -157,8 +157,8 @@ MicroTool uses a number of open source projects and libraries to work properly:
 
 * [Python ]- https://www.python.org/
 * [PyQt5] - https://pypi.org/project/PyQt5/
-* [esptool] - https://github.com/espressif/esptool (@projectgus) (@espressif)    (@themadinventor)
-
+* [esptool] - https://github.com/espressif/esptool (@[espressif](https://github.com/espressif
+)) (@[projectgus](https://github.com/projectgus/))    (@[themadinventor](https://github.com/themadinventor/))
 # Download
 ---
 MicroTool itself is open source with a [public repository][MicroTool1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/MicroTool1.0/releases).
