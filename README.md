@@ -196,6 +196,8 @@ Install python 3 from https://www.python.org/download/releases/3.0/
     See the License for the specific language governing permissions and
     limitations under the License.
 
+## [FAQ](https://github.com/Gueni/MicroTool1.0/issues)
+
 
 [//]:<These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO- >
 
