@@ -104,7 +104,7 @@ The Read flash feature allows reading back the contents of flash. for that you n
 ### Erase Flash & erase region
 
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="memo.png">
 </p>
 
 To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie:0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
@@ -166,7 +166,7 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 This Option allows you to select firmware files you wish to work with more than once or in multiple enviroments then compress them inside a package with the extension .mtool along with the necessary settings and options for the flashing procedure in the production mode.
 ### Efuse Table
 <p align="center">
-  <img  src="/icons/espLogo.png">
+  <img  src="efusetab.png">
 </p>
 The efuse tab introduced in MicroTool makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
 ### Export Efuse
