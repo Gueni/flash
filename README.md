@@ -47,11 +47,19 @@ The software is divided into two major modes, production mode and advanced mode.
 - [Copyright and Licensing](#Copyright-and-Licensing)
 # Production Mode
 ---
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 # Advanced Mode
 ---
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 #  Features
 ---
-
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 ### Serial Port
 
 The serial port is selected using the ComboBox Designated Serial Port, like COM1 (Windows). If no option is specified,esptool will enumerate all connected serial ports and try each one until it finds an Espressif device (ESP32 or ESP8266) connected. 
@@ -63,7 +71,9 @@ The default baud rate is 115200bps. Different rates may be set using the Baud Ra
 
 
 ### Flash Firmware/Bootloader
-
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 Binary data (Multiple flash addresses and file)can be written to the ESP's flash chip. The chip selection is optional when writing to ESP flash, as it will be detected when it connects to the serial port.The offset (address) and file name are crucial for this operation.
 
 The file names created by "ELF to Bin" include the flash offsets as part of the file name. For other types of images, consult your SDK documentation to determine the files to flash at which offsets.Numeric values passed as offset address can only
@@ -86,12 +96,16 @@ The Read flash feature allows reading back the contents of flash. for that you n
 
 
 ### Erase Flash & erase region
-
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie:0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
 
 
 ### Convert ELF to Binary
-
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
 
 
@@ -143,11 +157,20 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 ### Secure Packaging
 This Option allows you to select firmware files you wish to work with more than once or in multiple enviroments then compress them inside a package with the extension .mtool along with the necessary settings and options for the flashing procedure in the production mode.
 ### Efuse Table
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 The efuse tab introduced in MicroTool makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
 ### Export Efuse
 You can now export the efuse table with all the values and states to an excel (xls) file.
 ### Login/Password Change 
 ---
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
+<p align="center">
+  <img  src="/icons/espLogo.png">
+</p>
 Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
 # Dependencies
