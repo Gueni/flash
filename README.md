@@ -155,9 +155,9 @@ Since the Advanced Mode contains very risky and more complicated features tha th
 ---
 MicroTool uses a number of open source projects and libraries to work properly:
 
-* [Python ]- https://github.com/Gueni/MicroTool1.0/releases.
-* [PyQt5] - https://github.com/Gueni/MicroTool1.0/releases.
-* [esptool] - https://github.com/espressif/esptool [@projectgus][@espressif] [@themadinventor] 
+* [Python ]- https://www.python.org/
+* [PyQt5] - https://pypi.org/project/PyQt5/
+* [esptool] - https://github.com/espressif/esptool (@projectgus) (@espressif)    (@themadinventor)
 
 # Download
 ---
