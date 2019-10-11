@@ -78,7 +78,7 @@ You may also need to specify flash mode and flash size, if you wish to override 
 
 ### Compression
 
-By default, the serial transfered data is compressed by esptool.py for better performance. 
+By default, the serial transfered data is compressed by [esptool.py ](https://github.com/espressif/esptool) for better performance. 
 
 
 ### Read Flash Contents
@@ -142,22 +142,23 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 # New Features 
 ---
 ### Secure Packaging
+This Option allows you to select firmware files you wish to work with more than once or in multiple enviroments then compress them inside a package with the extension .mtool along with the necessary settings and options for the flashing procedure in the production mode.
 ### Efuse Table
+The efuse tab introduced in MicroTool makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
 ### Export Efuse
+You can now export the efuse table with all the values and states to an excel (xls) file.
 ### Login/Password Change 
-
 ---
+Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
 # Dependencies
 ---
 MicroTool uses a number of open source projects and libraries to work properly:
 
-* [Python] - HTML enhanced for web apps! 
-* [PyQt5] - awesome web-based text editor
-* [esptool] - fast node.js network app framework [@tjholowaychuk] 
-* [Gulp] - the streaming build system
-* [Breakdance](http://breakdance.io) - HTML to Markdown converter
-* [jQuery] - duh
+* [Python ]- https://github.com/Gueni/MicroTool1.0/releases.
+* [PyQt5] - https://github.com/Gueni/MicroTool1.0/releases.
+* [esptool] - https://github.com/espressif/esptool [@projectgus][@espressif] [@themadinventor] 
+
 # Download
 ---
 MicroTool itself is open source with a [public repository][MicroTool1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/MicroTool1.0/releases).
@@ -181,6 +182,8 @@ Install python 3 from https://www.python.org/download/releases/3.0/
  - More Interactive Help Section.
  - Secure Boot Feature.
  - A dedicated Firmware merge library for ESP32.
+ - more file type choices for efuse export.
+ - email verification for password change .
  
 
 # Copyright and Licensing
