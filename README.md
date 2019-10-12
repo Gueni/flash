@@ -2,6 +2,7 @@
   <img  src="/icons/espLogo.png">
 </p>
 
+<a href="https://pypi.org/project/pyzipper/" rel="nofollow"><img alt="Supported Python Versions" src="https://warehouse-camo.cmh1.psfhosted.org/c084d0a3a10b77485b3172f35a5ca019427208d5/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f70797a69707065722e737667"></a>
 
 ----
 
