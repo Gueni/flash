@@ -3,7 +3,6 @@
 </p>
 
 
-
 ----
 
 
@@ -221,21 +220,19 @@ Install python 3 from https://www.python.org/download/releases/3.0/
 
 # To do
 ----
-  - [x] Flash encrypt
-  - [ ] Integrate all features in local terminal without having to type all attributes.
-  - [ ] Optimize the Efuse feature.
-  - [ ] Enhance UI/UX.
-  - [ ] More Interactive Help Section.
-  - [ ] Secure Boot Feature.
-  - [ ] A dedicated Firmware merge library for ESP32.
-  - [ ] More file type choices for efuse export.
-  - [ ] Email verification for password change .
-  - [ ] Generate a log file containg info about the user date/time and all operations conducted.
-  - [ ] Add more languages.
-  - [ ] Change raw efuse register values all at once.
+
+ - Integrate all features in local terminal without having to type all attributes.
+ - Optimize the Efuse feature.
+ - Enhance UI/UX.
+ - More Interactive Help Section.
+ - Secure Boot Feature.
+ - A dedicated Firmware merge library for ESP32.
+ - more file type choices for efuse export.
+ - email verification for password change .
+ - generate a log file containg info about the user date/time and all operations conducted.
+ - add more languages.
  
- 
- 
+
 # Copyright and Licensing
 -----
 

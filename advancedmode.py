@@ -91,13 +91,20 @@ read_flash_progress = 'read_flash_progress'
 comport = 'comport'
 
 
+# Translate asset paths to useable format for PyInstaller
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath('.'), relative_path)
+
+
 class MyprogressbarThread(QThread):
     change_value = pyqtSignal(int)
 
     def run(self):
         cnt = 0
         while cnt < 100:
-            settingsprogresswrite = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresswrite = QSettings(resource_path("settingsprogresswrite.ini"), QSettings.IniFormat)
             cnt = settingsprogresswrite.value(progressnum, type=int)
             self.change_value.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -199,7 +206,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.layout_terminal.addWidget(self.label_cpu)
         self.layout_terminal.addWidget(self.shellWin)
         sysinfo = QSysInfo()
-        myMachine = "CPU Architecture: " + sysinfo.currentCpuArchitecture() + " | " + sysinfo.prettyProductName() + " | " + sysinfo.kernelType() + " | " + sysinfo.kernelVersion() +" | " + sysinfo.machineHostName()
+        myMachine = "CPU Architecture: " + sysinfo.currentCpuArchitecture() + " | " + sysinfo.prettyProductName() + " | " + sysinfo.kernelType() + " | " + sysinfo.kernelVersion() + " | " + sysinfo.machineHostName()
         self.label_cpu.setText(myMachine)
         self.settings = QSettings("QTerminal", "QTerminal")
         self.readSettings()
@@ -428,7 +435,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         # self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
-
     def setactionLight_Blue(self):
         self.setStyleSheet(open("qssthemes/LightBlue/stylesheet.qss", "r").read())
         self.settingstyle.setValue(SETTINGS_style, "qssthemes/LightBlue/stylesheet.qss")
@@ -582,7 +588,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
     def readSettings(self):
         if self.settings.contains("commands"):
             self.shellWin.commands = self.settings.value("commands")
-
 
     def writeSettings(self):
         self.settings.setValue("commands", self.shellWin.commands)
@@ -1119,7 +1124,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.port = self.comboBox_serial.currentText()
         try:
             if self.ser.is_open == False:
-                self.ser = serial.Serial(self.port, baudrate=self.comboBox_baud.currentText(), timeout=0, bytesize=serial.EIGHTBITS,
+                self.ser = serial.Serial(self.port, baudrate=self.comboBox_baud.currentText(), timeout=0,
+                                         bytesize=serial.EIGHTBITS,
                                          parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, rtscts=False,
                                          dsrdtr=False)
             if self.ser.is_open == True:
