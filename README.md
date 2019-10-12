@@ -2,11 +2,7 @@
   <img  src="/icons/espLogo.png">
 </p>
 
-<a href="https://pypi.org/project/pyzipper/" rel="nofollow"><img alt="Supported Python Versions" src="https://warehouse-camo.cmh1.psfhosted.org/c084d0a3a10b77485b3172f35a5ca019427208d5/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f70797a69707065722e737667"></a>
 
-<a href="https://pypi.org/project/pyzipper/" rel="nofollow"><img alt="Current Version on PyPi" src="https://warehouse-camo.cmh1.psfhosted.org/c76bb3dac7a0de84aa63c4e3c543e24ac2002c40/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f70797a69707065722e737667"></a>
-
-<a href="https://travis-ci.org/danifus/pyzipper" rel="nofollow"><img alt="Travis build (Linux/OsX)" src="https://warehouse-camo.cmh1.psfhosted.org/f9df5ef8187f4dd1468e8784ec10302f034256ec/68747470733a2f2f696d672e736869656c64732e696f2f7472617669732f64616e696675732f70797a69707065722e737667"></a>
 
 ----
 
