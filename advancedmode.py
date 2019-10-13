@@ -97,11 +97,6 @@ read_flash_progress = 'read_flash_progress'
 comport = 'comport'
 
 
-# Translate asset paths to useable format for PyInstaller
-def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath('.'), relative_path)
 
 
 class MyprogressbarThread(QThread):
@@ -110,7 +105,7 @@ class MyprogressbarThread(QThread):
     def run(self):
         cnt = 0
         while cnt < 100:
-            settingsprogresswrite = QSettings(resource_path("settingsprogresswrite.ini"), QSettings.IniFormat)
+            settingsprogresswrite = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
             cnt = settingsprogresswrite.value(progressnum, type=int)
             self.change_value.emit(cnt)
             QtTest.QTest.qWait(500)
