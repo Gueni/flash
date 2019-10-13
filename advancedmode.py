@@ -12,7 +12,7 @@ from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, p
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
 from PyQt5.QtNetwork import QHostAddress, QNetworkInterface
 from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut, QMessageBox, QTableWidgetItem, QTableWidget, \
-    QVBoxLayout, QApplication, QPlainTextEdit
+    QVBoxLayout, QApplication, QPlainTextEdit, QInputDialog, QLineEdit
 from numpy.distutils.cpuinfo import cpu
 
 import OpmodeMain
@@ -1202,7 +1202,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        self.bundle_dir + '/esptool.exe  --no-stub load_ram ' + " " + fileName)
+                        'python ' +self.bundle_dir + '/esptool.py  --no-stub load_ram ' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.process.start(
                         'python' + self.bundle_dir + '/esptool.py  --no-stub load_ram ' + " " + fileName)
@@ -1220,9 +1220,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
-                self.process.start(self.bundle_dir + '/esptool.exe --chip esp32 read_mac')
+                self.process.start('python ' +self.bundle_dir + '/esptool.py --chip esp32 read_mac')
             if self.chip == 'ESP8266':
-                self.process.start(self.bundle_dir + '/esptool.exe --chip esp8266 chip_id')
+                self.process.start('python ' +self.bundle_dir + '/esptool.py --chip esp8266 chip_id')
         else:
             if self.chip == 'ESP32':
                 self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 read_mac')
@@ -1436,11 +1436,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.process.start(
-                    self.bundle_dir + '/esptool.exe --chip esp32 --port {0} --baud {1} erase_flash'.format(self.port,
+                    'python ' +self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(self.port,
                                                                                                            self.baudRate))
             if self.chip == 'ESP8266':
                 self.process.start(
-                    self.bundle_dir + '/esptool.exe --chip esp8266 --port {0} --baud {1} erase_flash'.format(self.port,
+                    'python ' +self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(self.port,
                                                                                                              self.baudRate))
         else:
             if self.chip == 'ESP32':
@@ -1461,10 +1461,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        self.bundle_dir + '/esptool.exe  --chip esp32 image_info' + " " + fileName)
+                        'python ' +self.bundle_dir + '/esptool.py  --chip esp32 image_info' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        self.bundle_dir + '/esptool.exe  --chip esp8266 image_info ' + " " + fileName)
+                        'python ' +self.bundle_dir + '/esptool.py  --chip esp8266 image_info ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
@@ -1516,10 +1516,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        self.bundle_dir + '/esptool.exe --chip esp32 erase_region ' + startingaddress + " " + length)
+                        'python ' +self.bundle_dir + '/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        self.bundle_dir + '/esptool.exe --chip esp8266 erase_region ' + startingaddress + " " + length)
+                        'python ' +self.bundle_dir + '/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -2316,964 +2316,1154 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btn32.setStyleSheet("border: none;border-radius: 0px;")
 
     def burnfirst(self):
-
         self.item = self.tableWidget.item(1, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text()+" value :", QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn',"BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn',"no")
+                pass
 
     def burnsecond(self):
 
         self.item = self.tableWidget.item(2, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burnthird(self):
 
         self.item = self.tableWidget.item(3, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burnfourth(self):
 
         self.item = self.tableWidget.item(4, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burnfifth(self):
 
         self.item = self.tableWidget.item(5, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burnsixth(self):
 
         self.item = self.tableWidget.item(6, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burnseventh(self):
 
         self.item = self.tableWidget.item(7, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burneighth(self):
 
         self.item = self.tableWidget.item(8, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burnnineth(self):
 
         self.item = self.tableWidget.item(9, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn10(self):
 
         self.item = self.tableWidget.item(10, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn11(self):
 
         self.item = self.tableWidget.item(11, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn12(self):
 
         self.item = self.tableWidget.item(12, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn13(self):
 
         self.item = self.tableWidget.item(13, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn14(self):
 
         self.item = self.tableWidget.item(14, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn15(self):
 
         self.item = self.tableWidget.item(15, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn16(self):
 
         self.item = self.tableWidget.item(16, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn17(self):
 
         self.item = self.tableWidget.item(17, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn18(self):
 
         self.item = self.tableWidget.item(18, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn19(self):
 
         self.item = self.tableWidget.item(19, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn20(self):
 
         self.item = self.tableWidget.item(20, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn21(self):
 
         self.item = self.tableWidget.item(21, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn22(self):
 
         self.item = self.tableWidget.item(22, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn23(self):
 
         self.item = self.tableWidget.item(23, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn24(self):
 
         self.item = self.tableWidget.item(24, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn25(self):
 
         self.item = self.tableWidget.item(25, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn26(self):
 
         self.item = self.tableWidget.item(26, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn27(self):
 
         self.item = self.tableWidget.item(27, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn28(self):
 
         self.item = self.tableWidget.item(28, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn29(self):
 
         self.item = self.tableWidget.item(29, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn30(self):
 
         self.item = self.tableWidget.item(30, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn31(self):
 
         self.item = self.tableWidget.item(31, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     def burn32(self):
 
         self.item = self.tableWidget.item(32, 0)
 
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
-            if not self.item.text() == "" or not self.item.text() == " ":
-                self.port = self.comboBox_serial.currentText()
-                if os.name == 'nt':
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                    if self.chip == 'ESP8266':
-                        self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-                else:
-                    if self.chip == 'ESP32':
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
+        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
+                                                    QLineEdit.Normal, "")
+        if okPressed and new_value != '':
+            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
+                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
+                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            if choice == QtWidgets.QMessageBox.Yes:
+                settings_burn.setValue('confirm_burn', "BURN")
+                if not self.item.text() == "" or not self.item.text() == " ":
+                    self.port = self.comboBox_serial.currentText()
+                    if os.name == 'nt':
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        if self.chip == 'ESP8266':
+                            self.processmem.start(
+                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
-                        self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + 1)
-            else:
-                pass
+                        if self.chip == 'ESP32':
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                        else:
+                            self.processmem.start(
+                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                else:
+                    pass
 
-        else:
-            pass
+            else:
+                settings_burn.setValue('confirm_burn', "no")
+                pass
 
     # *******************************6th_Tab****************************************************************************
 

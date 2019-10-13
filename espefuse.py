@@ -135,14 +135,15 @@ CODING_SCHEME_34 = 1
 
 
 def confirm(action, args):
+    settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
     print("%s%sThis is an irreversible operation." % (action, "" if action.endswith("\n") else ". "))
     if not args.do_not_confirm:
         print("Type 'BURN' (all capitals) to continue.")
         sys.stdout.flush()  # required for Pythons which disable line buffering, ie mingw in mintty
         try:
-            yes = input()  # raw_input renamed to input in Python 3
+            yes = settings_burn.value('confirm_burn',type=str)  # raw_input renamed to input in Python 3
         except NameError:
-            yes = input()
+            yes = settings_burn.value('confirm_burn',type=str)
         if yes != "BURN":
             print("Aborting.")
             sys.exit(0)
