@@ -1,28 +1,27 @@
+import getpass
 import os
 import os.path
 import platform
+import socket
 import sqlite3
 import sys
+from pathlib import Path
+
 import pyzipper
 import serial.tools.list_ports
 import xlwt
 from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
-from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, pyqtSignal, Qt, QProcess, QPoint, QEvent, \
-    QSysInfo, QDate, QDateTime, QTime
+from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, pyqtSignal, Qt, QProcess, QEvent, \
+    QSysInfo, QDate, QTime
+from PyQt5.QtGui import QFont, QTextCursor
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
 from PyQt5.QtNetwork import QHostAddress, QNetworkInterface
 from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut, QMessageBox, QTableWidgetItem, QTableWidget, \
     QVBoxLayout, QApplication, QPlainTextEdit, QInputDialog, QLineEdit
-from numpy.distutils.cpuinfo import cpu
 
 import OpmodeMain
 import aboutmain
 import advancedgui
-
-import getpass
-import socket
-from pathlib import Path
-from PyQt5.QtGui import QFont, QTextCursor
 
 machinesettig = 'machinesettig'
 ipaddresssetting = 'ipaddresssetting'
@@ -2072,6 +2071,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.status_txt = QtWidgets.QLabel()
         movie = QMovie("icons/GREY-GEAR-LOADING.gif")
         self.status_txt.setMovie(movie)
+        self.status_txt.setAlignment(Qt.AlignCenter)
         movie.start()
         self.lay.addWidget(self.status_txt)
 
@@ -2105,6 +2105,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.status_txt = QtWidgets.QLabel()
         movie = QMovie("icons/GREY-GEAR-LOADING.gif")
         self.status_txt.setMovie(movie)
+        self.status_txt.setAlignment(Qt.AlignCenter)
+
         movie.start()
         self.lay.addWidget(self.status_txt)
 
@@ -2182,138 +2184,191 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btnexport.setIcon(QIcon('icons/Excel.png'))
         self.btnexport.setStyleSheet("border: none;border-radius: 0px;")
         self.btnexport.setIconSize(QSize(20, 20))
+        self.btnexport.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(0, 5, self.btnref)
         self.btnref.setIcon(QIcon('icons/refresh.png'))
         self.btnref.setStyleSheet("border: none;border-radius: 0px;")
+        self.btnref.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(1, 5, self.btn1)
         self.btn1.setIcon(QIcon('icons/executefuse1.png'))
         self.btn1.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(2, 5, self.btn2)
         self.btn2.setIcon(QIcon('icons/executefuse1.png'))
         self.btn2.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(3, 5, self.btn3)
         self.btn3.setIcon(QIcon('icons/executefuse1.png'))
         self.btn3.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn3.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(4, 5, self.btn4)
         self.btn4.setIcon(QIcon('icons/executefuse1.png'))
         self.btn4.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn4.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(5, 5, self.btn5)
         self.btn5.setIcon(QIcon('icons/executefuse1.png'))
         self.btn5.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn5.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(6, 5, self.btn6)
         self.btn6.setIcon(QIcon('icons/executefuse1.png'))
         self.btn6.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn6.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(7, 5, self.btn7)
         self.btn7.setIcon(QIcon('icons/executefuse1.png'))
         self.btn7.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn7.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(8, 5, self.btn8)
         self.btn8.setIcon(QIcon('icons/executefuse1.png'))
         self.btn8.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn8.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(9, 5, self.btn9)
         self.btn9.setIcon(QIcon('icons/executefuse1.png'))
         self.btn9.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn9.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(10, 5, self.btn10)
         self.btn10.setIcon(QIcon('icons/executefuse1.png'))
         self.btn10.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn10.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(11, 5, self.btn11)
         self.btn11.setIcon(QIcon('icons/executefuse1.png'))
         self.btn11.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn11.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(12, 5, self.btn12)
         self.btn12.setIcon(QIcon('icons/executefuse1.png'))
         self.btn12.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn12.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(13, 5, self.btn13)
         self.btn13.setIcon(QIcon('icons/executefuse1.png'))
         self.btn13.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn13.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
         self.tableWidget.setCellWidget(14, 5, self.btn14)
         self.btn14.setIcon(QIcon('icons/executefuse1.png'))
         self.btn14.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn14.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(15, 5, self.btn15)
         self.btn15.setIcon(QIcon('icons/executefuse1.png'))
         self.btn15.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn15.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(16, 5, self.btn16)
         self.btn16.setIcon(QIcon('icons/executefuse1.png'))
         self.btn16.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn16.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(17, 5, self.btn17)
         self.btn17.setIcon(QIcon('icons/executefuse1.png'))
         self.btn17.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn17.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(18, 5, self.btn18)
         self.btn18.setIcon(QIcon('icons/executefuse1.png'))
         self.btn18.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn18.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(19, 5, self.btn19)
         self.btn19.setIcon(QIcon('icons/executefuse1.png'))
         self.btn19.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn19.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(20, 5, self.btn20)
         self.btn20.setIcon(QIcon('icons/executefuse1.png'))
         self.btn20.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn20.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(21, 5, self.btn21)
         self.btn21.setIcon(QIcon('icons/executefuse1.png'))
         self.btn21.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn21.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(22, 5, self.btn22)
         self.btn22.setIcon(QIcon('icons/executefuse1.png'))
         self.btn22.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn22.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(23, 5, self.btn23)
         self.btn23.setIcon(QIcon('icons/executefuse1.png'))
         self.btn23.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn23.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(24, 5, self.btn24)
         self.btn24.setIcon(QIcon('icons/executefuse1.png'))
         self.btn24.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn24.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(25, 5, self.btn25)
         self.btn25.setIcon(QIcon('icons/executefuse1.png'))
         self.btn25.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn25.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(26, 5, self.btn26)
         self.btn26.setIcon(QIcon('icons/executefuse1.png'))
         self.btn26.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn26.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(27, 5, self.btn27)
         self.btn27.setIcon(QIcon('icons/executefuse1.png'))
         self.btn27.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn27.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(28, 5, self.btn28)
         self.btn28.setIcon(QIcon('icons/executefuse1.png'))
         self.btn28.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn28.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(29, 5, self.btn29)
         self.btn29.setIcon(QIcon('icons/executefuse1.png'))
         self.btn29.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn29.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(30, 5, self.btn30)
         self.btn30.setIcon(QIcon('icons/executefuse1.png'))
         self.btn30.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn30.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(31, 5, self.btn31)
         self.btn31.setIcon(QIcon('icons/executefuse1.png'))
         self.btn31.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn31.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
         self.tableWidget.setCellWidget(32, 5, self.btn32)
         self.btn32.setIcon(QIcon('icons/executefuse1.png'))
         self.btn32.setStyleSheet("border: none;border-radius: 0px;")
+        self.btn32.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+
 
     def burnfirst(self):
         self.item = self.tableWidget.item(1, 0)

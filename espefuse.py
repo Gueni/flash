@@ -17,26 +17,18 @@
 # Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from __future__ import division, print_function
 
-# import Workbook
-import sqlite3
-
-from PyQt5.QtCore import QSettings
-from openpyxl import Workbook
-
 import argparse
 import os
+# import Workbook
+import sqlite3
 import struct
 import sys
 import time
 
-import xlwt as xlwt
-from openpyxl import Workbook
-
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtCore import QSettings
 
 import esptool
 
-import advancedgui
 condition ='condition'
 
 # Table of efuse values - (category, block, word in block, mask, write disable bit, read disable bit, type, description)
