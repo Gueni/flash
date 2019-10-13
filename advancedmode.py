@@ -1,5 +1,6 @@
 import os
 import os.path
+import platform
 import sqlite3
 import sys
 import pyzipper
@@ -7,8 +8,9 @@ import serial.tools.list_ports
 import xlwt
 from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
 from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, pyqtSignal, Qt, QProcess, QPoint, QEvent, \
-    QSysInfo
+    QSysInfo, QDate, QDateTime, QTime
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
+from PyQt5.QtNetwork import QHostAddress, QNetworkInterface
 from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut, QMessageBox, QTableWidgetItem, QTableWidget, \
     QVBoxLayout, QApplication, QPlainTextEdit
 from numpy.distutils.cpuinfo import cpu
@@ -21,6 +23,11 @@ import getpass
 import socket
 from pathlib import Path
 from PyQt5.QtGui import QFont, QTextCursor
+
+machinesettig = 'machinesettig'
+ipaddresssetting = 'ipaddresssetting'
+timenowsetting = 'timenowsetting'
+datenowsetting = 'datenowsetting'
 
 ORGANIZATION_NAME = 'Micro Device Tunisie'
 ORGANIZATION_DOMAIN = 'mdtunisie.com'
@@ -1897,7 +1904,44 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         settings.setValue('baudrate', self.comboBox_baud.currentIndex())
         settings.setValue('flashsize', self.comboBox_flashsize.currentIndex())
         settings.setValue('flashmode', self.comboBox_flashmode.currentText())
+        # add pc info and date/time to display later on
+
+        now = QDate.currentDate()
+        settings.setValue('datenowsetting',now.toString(Qt.DefaultLocaleLongDate))
+        time = QTime.currentTime()
+        settings.setValue('timenowsetting',time.toString(Qt.DefaultLocaleLongDate))
+        """Get all ip addresses from computer
+           :rtype: list
+           """
+        ip_list = []
+
+        for interface in QNetworkInterface().allInterfaces():
+            flags = interface.flags()
+            is_loopback = bool(flags & QNetworkInterface.IsLoopBack)
+            is_p2p = bool(flags & QNetworkInterface.IsPointToPoint)
+            is_running = bool(flags & QNetworkInterface.IsRunning)
+            is_up = bool(flags & QNetworkInterface.IsUp)
+
+            if not is_running:
+                continue
+            if not interface.isValid() or is_loopback or is_p2p:
+                continue
+
+            for addr in interface.allAddresses():
+                if addr == QHostAddress.LocalHost:
+                    continue
+                if not addr.toIPv4Address():
+                    continue
+                ip = addr.toString()
+                if ip == '':
+                    continue
+
+                if ip not in ip_list:
+                    ip_list.append(ip)
+        settings.setValue('ipaddresssetting',ip_list)
+        settings.setValue('machinesettig',str((platform.uname())))
         settings.sync()
+
 
     def createpackage(self):
         self.saveSettingstofilepackage()
@@ -1905,6 +1949,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getSaveFileName(self, "Select Package path", options=options)
+        head, tail = os.path.split(fileName)
+
         if not (fileName == " " or fileName == ""):
             secret_password = b'hello123456789'
             with pyzipper.AESZipFile(fileName, 'w', compression=pyzipper.ZIP_LZMA) as zf:
