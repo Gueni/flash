@@ -5,6 +5,7 @@
 
 ----
 
+<img src="https://raw.githubusercontent.com/travis-ci/travis-api/master/public/images/result/unknown.png" alt="unknown status image">
 
 # Getting Started
 ---
