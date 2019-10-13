@@ -210,6 +210,10 @@ MicroTool uses a number of open source projects and libraries to work properly:
 ---
 MicroTool itself is open source with a [public repository][MicroTool1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/MicroTool1.0/releases).
 
+Or simply by cloning the repository to your machine : 
+
+      git clone https://github.com/Gueni/MicroTool1.0.git
+
 # Installation
 ---
 Microtool requires [Python 3](https://www.python.org/download/releases/3.0/) to run.
