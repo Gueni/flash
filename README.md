@@ -196,7 +196,7 @@ You can now export the efuse table with all the values and states to an excel (x
 
 Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
-<font color="red">Default Password is : microtool</font> 
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `Default Password is : microtool`
 
 # Dependencies
 ---
