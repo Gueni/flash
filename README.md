@@ -225,7 +225,7 @@ Install python 3 from https://www.python.org/download/releases/3.0/
  - Optimize the Efuse feature.
  - Enhance UI/UX.
  - More Interactive Help Section.
- - Secure Boot Feature.
+ - Enhancing ESP32’s Security Features : Secure Boot and Flash Ecrypt.
  - A dedicated Firmware merge library for ESP32.
  - more file type choices for efuse export.
  - email verification for password change .
