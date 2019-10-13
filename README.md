@@ -196,6 +196,8 @@ You can now export the efuse table with all the values and states to an excel (x
 
 Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
+<p color ="Red">Default Password is : microtool</p>
+
 # Dependencies
 ---
 MicroTool uses a number of open source projects and libraries to work properly:
