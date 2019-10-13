@@ -216,7 +216,9 @@ Microtool requires [Python 3](https://www.python.org/download/releases/3.0/) to 
 
 Install python 3 from https://www.python.org/download/releases/3.0/
 
+Install PyQt5 from https://pypi.org/project/PyQt5/ 
 
+        pip install pyqt5
 
 
 
