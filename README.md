@@ -6,7 +6,7 @@
 
 ----
 
-<img src="https://raw.githubusercontent.com/travis-ci/travis-api/master/public/images/result/unknown.png" alt="unknown status image"> ![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)  ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) [![Release](<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="102" height="20"><g shape-rendering="crispEdges"><path fill="#555" d="M0 0h49v20H0z"/><path fill="#007ec6" d="M49 0h53v20H49z"/></g><g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110"> <text x="255" y="140" transform="scale(.1)" textLength="390">release</text><text x="745" y="140" transform="scale(.1)" textLength="430">v1.0.0</text></g> </svg>](https://github.com/Gueni/MicroTool1.0/releases/tag/v1.0)
+<img src="https://raw.githubusercontent.com/travis-ci/travis-api/master/public/images/result/unknown.png" alt="unknown status image"> ![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)  ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) 
  
 
 # Getting Started
