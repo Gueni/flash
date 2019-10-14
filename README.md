@@ -245,7 +245,7 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
 # Copyright and Licensing
 -----
 
-   Copyright 2019 by [Mohamed Gueni](https://github.com/Gueni) :tn:
+   Copyright 2019 by [Mohamed Gueni](https://github.com/Gueni)
 
     Licensed under the GNU General Public License License, Version 2.0
     you may not use this file except in compliance with the License.
