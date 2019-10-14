@@ -229,7 +229,7 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
         
 # How to launch
 
-$ python3 Microtool.py
+        python3 Microtool.py
 
 
 # To do
