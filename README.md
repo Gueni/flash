@@ -6,8 +6,8 @@
 
 ----
 
-<img src="https://raw.githubusercontent.com/travis-ci/travis-api/master/public/images/result/unknown.png" alt="unknown status image"> ![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)  ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg)[![Release](https://img.shields.io/github/release/digimezzo/Dopamine.svg?style=flat-square)](https://github.com/Gueni/MicroTool1.0/releases/tag/v1.0)
-[![Issues](https://img.shields.io/github/issues/digimezzo/Dopamine.svg?style=flat-square)](https://github.com/Gueni/MicroTool1.0/issues)
+<img src="https://raw.githubusercontent.com/travis-ci/travis-api/master/public/images/result/unknown.png" alt="unknown status image"> ![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)  ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) [![Release](https://img.shields.io/github/Gueni/MicroTool1.0/releases/tag/v1.0.svg?style=flat-square)](https://github.com/Gueni/MicroTool1.0/releases/tag/v1.0)
+ [![Issues](https://img.shields.io/github/issues/digimezzo/Dopamine.svg?style=flat-square)](https://github.com/Gueni/MicroTool1.0/issues)
 
 # Getting Started
 ---
