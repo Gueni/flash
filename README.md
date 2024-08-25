@@ -53,21 +53,21 @@ The software is divided into two major modes, production mode and advanced mode.
 ---
 
 <p align="center">
-  <img  src="prodmod.PNG">
+  <img  src="\Theme\icons\prodmod.PNG">
 </p>
 
 # Advanced Mode
 ---
 
 <p align="center">
-  <img  src="advmod.png">
+  <img  src="\Theme\icons\advmod.png">
 </p>
 
 #  Features
 ---
 
 <p align="center">
-  <img  src="serialandbaud.png">
+  <img  src="\Theme\icons\serialandbaud.png">
 </p>
 
 ### Serial Port
@@ -108,7 +108,7 @@ The Read flash feature allows reading back the contents of flash. for that you n
 
 
 <p align="center">
-  <img  src="memo.png">
+  <img  src="\Theme\icons\memo.png">
 </p>
 
 To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie 0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
@@ -118,7 +118,7 @@ To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a re
 
 
 <p align="center">
-  <img  src="settings.png">
+  <img  src="\Theme\icons\settings.png">
 </p>
 
 
@@ -176,7 +176,7 @@ This Option allows you to select firmware files you wish to work with more than 
 
 
 <p align="center">
-  <img  src="efusetab.png">
+  <img  src="\Theme\icons\efusetab.png">
 </p>
 
 
@@ -188,12 +188,12 @@ You can now export the efuse table with all the values and states to an excel (x
 
 
 <p align="center">
-  <img  src="loginwindow.png">
+  <img  src="\Theme\icons\loginwindow.png">
 </p>
 
 
 <p align="center">
-  <img  src="changepasswindow.png">
+  <img  src="\Theme\icons\changepasswindow.png">
 </p>
 
 
