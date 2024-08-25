@@ -1,3 +1,5 @@
+
+#?---------------------------------------------------------------------------------------------------------------------------
 import os
 import os.path
 import sqlite3
@@ -9,14 +11,17 @@ import OpmodeMain
 import advancedmode
 import changepasshandler
 import logingui
-
+#?---------------------------------------------------------------------------------------------------------------------------
 SETTINGS_style = 'style'
 
+#?---------------------------------------------------------------------------------------------------------------------------
 
 class Loghandler(QtWidgets.QMainWindow, logingui.Ui_MainWindow):
+    
     switch_window2 = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
+
         super(Loghandler, self).__init__(parent)
         if getattr(sys, 'frozen', False):
             self.frozen = 'ever so'
@@ -34,6 +39,7 @@ class Loghandler(QtWidgets.QMainWindow, logingui.Ui_MainWindow):
         self.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
     def log_sig(self):
+
         conn = sqlite3.connect('Userdatabase.db')
         c = conn.cursor()
         try:
@@ -56,11 +62,14 @@ class Loghandler(QtWidgets.QMainWindow, logingui.Ui_MainWindow):
             error_dialog.exec_()
 
     def changepass(self):
+
         self.changep = changepasshandler.passhandler()
         self.close()
         self.changep.show()
 
     def cancellog(self):
+
         self.loginwin = OpmodeMain.ESPToolGUIApp()
         self.close()
         self.loginwin.show()
+#?---------------------------------------------------------------------------------------------------------------------------
