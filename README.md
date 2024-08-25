@@ -1,5 +1,5 @@
 <p align="center">
-  <img  src="\flash\Theme\icons\espLogo.png.png"
+  <img  src="\Theme\icons\espLogo.png.png"
 </p>
 
 
