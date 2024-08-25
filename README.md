@@ -11,7 +11,7 @@
 
 # Getting Started
 ---
-MicroTool is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , MicroTool introduces the set of features mentioned in the sections below.
+flash is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
 
 The software is divided into two major modes, production mode and advanced mode. The production mode is a simple user interface containing the minimum number of features allowing the operator to conduct the necessary flashing and or flash erasing procedures with minimum complexity and errors.The advanced mode on the other hand is more complex and sums up all the features and commands made possible with the esptool library but with an easier and more advanced user experience. 
 
@@ -180,7 +180,7 @@ This Option allows you to select firmware files you wish to work with more than 
 </p>
 
 
-The efuse tab introduced in MicroTool makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
+The efuse tab introduced in flash makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
 ### Export Efuse
 You can now export the efuse table with all the values and states to an excel (xls) file.
 ### Login/Password Change 
@@ -199,11 +199,11 @@ You can now export the efuse table with all the values and states to an excel (x
 
 Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
 
-        Default Password is : microtool
+        Default Password is : flash
 
 # Dependencies
 ---
-MicroTool uses a number of open source projects and libraries to work properly:
+flash uses a number of open source projects and libraries to work properly:
 
 * [Python ]- https://www.python.org/
 * [PyQt5] - https://pypi.org/project/PyQt5/
@@ -211,15 +211,15 @@ MicroTool uses a number of open source projects and libraries to work properly:
 )) (@[projectgus](https://github.com/projectgus/))    (@[themadinventor](https://github.com/themadinventor/))
 # Download
 ---
-MicroTool itself is open source with a [public repository][MicroTool1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/MicroTool1.0/releases).
+flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/flash1.0/releases).
 
 Or simply by cloning the repository to your machine : 
 
-      git clone https://github.com/Gueni/MicroTool1.0.git
+      git clone https://github.com/Gueni/flash1.0.git
 
 # Installation
 ---
-Microtool requires [Python 3](https://www.python.org/download/releases/3.0/) to run.
+flash requires [Python 3](https://www.python.org/download/releases/3.0/) to run.
 
 Install python 3 from https://www.python.org/download/releases/3.0/
 
@@ -262,13 +262,13 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
     See the License for the specific language governing permissions and
     limitations under the License.
 
-###### [FAQ :Feel free to submit issues and enhancement requests.](https://github.com/Gueni/MicroTool1.0/issues)
+###### [FAQ :Feel free to submit issues and enhancement requests.](https://github.com/Gueni/flash1.0/issues)
 
 
 
 [//]:<These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO- >
 
 
-   [MicroTool1.0]: <https://github.com/Gueni/MicroTool1.0/tree/1.0>
-   [GNU]:<https://github.com/Gueni/MicroTool1.0/releases>
+   [flash1.0]: <https://github.com/Gueni/flash1.0/tree/1.0>
+   [GNU]:<https://github.com/Gueni/flash1.0/releases>
   
