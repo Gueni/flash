@@ -89,7 +89,7 @@ a.datas += [
 
 
 a = Analysis(['OpmodeMain.py'],
-             pathex=['C:\\Users\\0xHunter\\Desktop\\Workspace\\PFE\\MicroTool'],
+             pathex=['C:\\Users\\0xHunter\\Desktop\\Workspace\\PFE\\Flash'],
              binaries=[],
              datas=[],
              hiddenimports=[],

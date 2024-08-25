@@ -12,7 +12,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QProgressBar, QInputDialog, QLineEdit
 
 import aboutmain
-import Lib.getfilesubnamemodule as getfilesubnamemodule
+import getfilesubnamemodule as getfilesubnamemodule
 import loghandel
 import opmodeui
 
@@ -156,7 +156,7 @@ class ESPToolGUIApp(QtWidgets.QMainWindow, opmodeui.Ui_MainWindow):
         self.window.show()
 
     def close_application(self):
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit MicroTool ?",
+        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
@@ -329,7 +329,7 @@ class ESPToolGUIApp(QtWidgets.QMainWindow, opmodeui.Ui_MainWindow):
         self.plainTextEditStatus.clear()
 
     def cleanUp(self):
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit MicroTool ?",
+        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()

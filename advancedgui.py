@@ -467,7 +467,7 @@ class Ui_MainWindowadvanced(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MicroTool 1.0"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flash 1.0"))
         self.pushButton_disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.pushButton_logout.setText(_translate("MainWindow", "Log out"))
         self.pushButtonconnect.setText(_translate("MainWindow", "Connect"))

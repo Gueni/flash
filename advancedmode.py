@@ -32,7 +32,7 @@ datenowsetting = 'datenowsetting'
 
 ORGANIZATION_NAME = 'Micro Device Tunisie'
 ORGANIZATION_DOMAIN = 'mdtunisie.com'
-APPLICATION_NAME = 'MicroTool'
+APPLICATION_NAME = 'Flash'
 
 SETTINGS_TRAYbaud = 'SETTINGS_TRAYbaud'
 SETTINGS_TRAYchip = 'SETTINGS_TRAYchip'
@@ -664,7 +664,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_flashsize.setDisabled(False)
 
     def close_application(self):
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit MicroTool ?",
+        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
