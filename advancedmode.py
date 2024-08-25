@@ -1,3 +1,4 @@
+#?---------------------------------------------------------------------------------------------------------------------------
 import os.path
 import getpass
 import os
@@ -8,216 +9,209 @@ import socket
 import sqlite3
 import sys
 from pathlib import Path
-
 import pyzipper
 import serial.tools.list_ports
 import xlwt
 from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
-from PyQt5.QtCore import QSize, QRegExp, QCoreApplication, QSettings, QThread, pyqtSignal, Qt, QProcess, QEvent, \
-    QSysInfo, QDate, QTime
+from PyQt5.QtCore import QSize, QRegExp, QCoreApplication 
+from PyQt5.QtCore import  QSettings, QThread, pyqtSignal, Qt, QProcess
+from PyQt5.QtCore import  QEvent,QSysInfo, QDate, QTime
 from PyQt5.QtGui import QFont, QTextCursor
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
 from PyQt5.QtNetwork import QHostAddress, QNetworkInterface
-from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut, QMessageBox, QTableWidgetItem, QTableWidget, \
-    QVBoxLayout, QApplication, QPlainTextEdit, QInputDialog, QLineEdit
-
+from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QTableWidget,QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QPlainTextEdit, QInputDialog, QLineEdit
 import OpmodeMain
 import aboutmain
 import advancedgui
-
-machinesettig = 'machinesettig'
-ipaddresssetting = 'ipaddresssetting'
-timenowsetting = 'timenowsetting'
-datenowsetting = 'datenowsetting'
-
-ORGANIZATION_NAME = 'Micro Device Tunisie'
-ORGANIZATION_DOMAIN = 'mdtunisie.com'
-APPLICATION_NAME = 'Flash'
-
-SETTINGS_TRAYbaud = 'SETTINGS_TRAYbaud'
-SETTINGS_TRAYchip = 'SETTINGS_TRAYchip'
-SETTINGS_TRAYflashsize = 'SETTINGS_TRAYflashsize'
-SETTINGS_TRAYflashmode = 'SETTINGS_TRAYflashmode'
-SETTINGS_TRAYreadstatus = 'SETTINGS_TRAYreadstatus'
-SETTINGS_TRAYwritestatus = 'SETTINGS_TRAYwritestatus'
-
-SETTINGS_plainadv = 'SETTINGS_plainadv'
-SETTING_verifyFlash = 'SETTING_verifyFlash'
-SETTING_readmemory = 'SETTING_readmemory'
-SETTING_writemem1 = 'SETTING_writemem1'
-SETTING_writemem2 = 'SETTING_writemem2'
-SETTING_writemem3 = 'SETTING_writemem3'
-SETTING_eraseregion1 = 'SETTING_eraseregion1'
-SETTING_eraseregion2 = 'SETTING_eraseregion2'
-SETTING_dumpmem1 = 'SETTING_dumpmem1'
-SETTING_dumpmem2 = 'SETTING_dumpmem2'
-SETTING_readflash1 = 'SETTING_readflash1'
-SETTING_readflash2 = 'SETTING_readflash2'
-SETTING_plainmem = 'SETTING_plainmem'
-SETTING_offset1 = 'SETTING_offset1'
-SETTING_offset2 = 'SETTING_offset2'
-SETTING_offset3 = 'SETTING_offset3'
-SETTING_offsetcombined = 'SETTING_offsetcombined'
-SETTING_path1 = 'SETTING_path1'
-SETTING_path2 = 'SETTING_path2'
-SETTING_path3 = 'SETTING_path3'
-SETTING_path4 = 'SETTING_path4'
-SETTING_path5 = 'SETTING_path5'
-SETTING_path6 = 'SETTING_path6'
-
-SETTINGS_check1 = 'SETTINGS_check1'
-SETTINGS_check2 = 'SETTINGS_check2'
-SETTINGS_check3 = 'SETTINGS_check3'
-
-SETTINGS_style = 'style'
-
-offset1 = 'offset1'
-offset2 = 'offset2'
-offset3 = 'offset3'
-baudrate = 'baudrate'
-flashsize = 'flashsize'
-flashmode = 'flashmode'
-verifyflash = 'verifyflash'
-readmem = 'readmem'
-writemem1 = 'writemem1'
-writemem2 = 'writemem2'
-writemem3 = 'writemem3'
-eraseregion1 = 'eraseregion1'
-eraseregion2 = 'eraseregion2'
-readstatus = 'readstatus'
-writestatus = 'writestatus'
-readflash1 = 'readflash1'
-readflash2 = 'readflash2'
-combined_offset = 'combined_offset'
-memdump1 = 'memdump1'
-memdump2 = 'memdump2'
-
-progressnum = 'progressnum'
-verifconst = 'veriftest'
-dump_progress = 'dump_progress'
-read_flash_progress = 'read_flash_progress'
-comport = 'comport'
-
+#?---------------------------------------------------------------------------------------------------------------------------
+machinesettig                   = 'machinesettig'
+ipaddresssetting                = 'ipaddresssetting'
+timenowsetting                  = 'timenowsetting'
+datenowsetting                  = 'datenowsetting'
+ORGANIZATION_NAME               = 'flash Softwares'
+ORGANIZATION_DOMAIN             = 'https://github.com/Gueni/flash'
+APPLICATION_NAME                = 'Flash'
+SETTINGS_TRAYbaud               = 'SETTINGS_TRAYbaud'
+SETTINGS_TRAYchip               = 'SETTINGS_TRAYchip'
+SETTINGS_TRAYflashsize          = 'SETTINGS_TRAYflashsize'
+SETTINGS_TRAYflashmode          = 'SETTINGS_TRAYflashmode'
+SETTINGS_TRAYreadstatus         = 'SETTINGS_TRAYreadstatus'
+SETTINGS_TRAYwritestatus        = 'SETTINGS_TRAYwritestatus'
+SETTINGS_plainadv               = 'SETTINGS_plainadv'
+SETTING_verifyFlash             = 'SETTING_verifyFlash'
+SETTING_readmemory              = 'SETTING_readmemory'
+SETTING_writemem1               = 'SETTING_writemem1'
+SETTING_writemem2               = 'SETTING_writemem2'
+SETTING_writemem3               = 'SETTING_writemem3'
+SETTING_eraseregion1            = 'SETTING_eraseregion1'
+SETTING_eraseregion2            = 'SETTING_eraseregion2'
+SETTING_dumpmem1                = 'SETTING_dumpmem1'
+SETTING_dumpmem2                = 'SETTING_dumpmem2'
+SETTING_readflash1              = 'SETTING_readflash1'
+SETTING_readflash2              = 'SETTING_readflash2'
+SETTING_plainmem                = 'SETTING_plainmem'
+SETTING_offset1                 = 'SETTING_offset1'
+SETTING_offset2                 = 'SETTING_offset2'
+SETTING_offset3                 = 'SETTING_offset3'
+SETTING_offsetcombined          = 'SETTING_offsetcombined'
+SETTING_path1                   = 'SETTING_path1'
+SETTING_path2                   = 'SETTING_path2'
+SETTING_path3                   = 'SETTING_path3'
+SETTING_path4                   = 'SETTING_path4'
+SETTING_path5                   = 'SETTING_path5'
+SETTING_path6                   = 'SETTING_path6'
+SETTINGS_check1                 = 'SETTINGS_check1'
+SETTINGS_check2                 = 'SETTINGS_check2'
+SETTINGS_check3                 = 'SETTINGS_check3'
+SETTINGS_style                  = 'style'
+offset1                         = 'offset1'
+offset2                         = 'offset2'
+offset3                         = 'offset3'
+baudrate                        = 'baudrate'
+flashsize                       = 'flashsize'
+flashmode                       = 'flashmode'
+verifyflash                     = 'verifyflash'
+readmem                         = 'readmem'
+writemem1                       = 'writemem1'
+writemem2                       = 'writemem2'
+writemem3                       = 'writemem3'
+eraseregion1                    = 'eraseregion1'
+eraseregion2                    = 'eraseregion2'
+readstatus                      = 'readstatus'
+writestatus                     = 'writestatus'
+readflash1                      = 'readflash1'
+readflash2                      = 'readflash2'
+combined_offset                 = 'combined_offset'
+memdump1                        = 'memdump1'
+memdump2                        = 'memdump2'
+progressnum                     = 'progressnum'
+verifconst                      = 'veriftest'
+dump_progress                   = 'dump_progress'
+read_flash_progress             = 'read_flash_progress'
+comport                         = 'comport'
+#?---------------------------------------------------------------------------------------------------------------------------
 
 class MyprogressbarThread(QThread):
+    
     change_value = pyqtSignal(int)
 
     def run(self):
-        cnt = 0
+
+        cnt                         = 0
         while cnt < 100:
-            settingsprogresswrite = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
-            cnt = settingsprogresswrite.value(progressnum, type=int)
+            settingsprogresswrite   = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            cnt                     = settingsprogresswrite.value(progressnum, type=int)
             self.change_value.emit(cnt)
             QtTest.QTest.qWait(500)
         if cnt == 100:
             print("done")
             self.change_value.emit(0)
 
-
 class MyprogressbarThreadreadflash(QThread):
+    
     change_valuereadflash = pyqtSignal(int)
 
     def run(self):
-        cnt = 0
+
+        cnt                         = 0
         while cnt < 100:
-            settingsread_flash = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
-            cnt = settingsread_flash.value(read_flash_progress, type=int)
+            settingsread_flash      = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            cnt                     = settingsread_flash.value(read_flash_progress, type=int)
             self.change_valuereadflash.emit(cnt)
             QtTest.QTest.qWait(500)
 
-
 class MyprogressbarThreaddump(QThread):
+    
     change_valuedump = pyqtSignal(int)
 
     def run(self):
-        cnt = 0
+
+        cnt                         = 0
         while cnt < 100:
-            settingsprogresdump = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
-            cnt = settingsprogresdump.value(dump_progress, type=int)
+            settingsprogresdump     = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            cnt                     = settingsprogresdump.value(dump_progress, type=int)
             self.change_valuedump.emit(cnt)
             QtTest.QTest.qWait(500)
         if cnt == 100:
             print("done")
             self.change_valuedump.emit(0)
 
-
 class MyprogressbarThreadflashall(QThread):
-    change_valueall = pyqtSignal(int)
+    
+    change_valueall                 = pyqtSignal(int)
 
     def run(self):
-        cnt = 0
+        cnt                         = 0
         while cnt <= 100:
-            settingsprogresswrite = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
-            cnt = settingsprogresswrite.value(progressnum, type=int)
+            settingsprogresswrite   = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            cnt                     = settingsprogresswrite.value(progressnum, type=int)
             self.change_valueall.emit(cnt)
             QtTest.QTest.qWait(500)
-        # if cnt == 100:
-        #     print("done")
-        #     self.change_value.emit(0)
-
 
 class WorkerThread(QThread):
+
     def __init__(self, parent=None):
+
         super(WorkerThread, self).__init__(parent)
-        self.bundle_dir = os.path.dirname(os.path.abspath(__file__))
-        self.settingsport = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
+        self.settingsport   = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
 
     def run(self):
-        Com_port = self.settingsport.value(comport, type=str)
+
+        Com_port            = self.settingsport.value(comport, type=str)
         os.system('python ' + self.bundle_dir + '/espefuse.py --port ' + " " + Com_port + " " + ' summary')
 
-
 class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
+
     updatePb = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None):
+
         super(AdvancedModeApp, self).__init__(parent)
         if getattr(sys, 'frozen', False):
-            self.frozen = 'ever so'
-            self.bundle_dir = sys._MEIPASS
+            self.frozen         = 'ever so'
+            self.bundle_dir     = sys._MEIPASS
         else:
-            self.bundle_dir = os.path.dirname(os.path.abspath(__file__))
+            self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(self.bundle_dir + '/icons/espLogo.png'))
-        self.lay = QVBoxLayout()
-        self.settingstyle = QSettings("settingsstyle.ini", QSettings.IniFormat)
+        self.lay                = QVBoxLayout()
+        self.settingstyle       = QSettings("settingsstyle.ini", QSettings.IniFormat)
         self.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.workerThread = WorkerThread()
-        self.memoryESP8266 = ['detect', '512KB', '256KB', '1MB', '2MB', '4MB', '2MB-c1', '4MB-c1', '4MB-c2']
-        self.memoryESP32 = ['detect', '1MB', '2MB', '4MB', '8MB', '16MB']
-        self.ser = serial.Serial()
-        self.timer = QtCore.QTimer()
+        self.workerThread       = WorkerThread()
+        self.memoryESP8266      = ['detect', '512KB', '256KB', '1MB', '2MB', '4MB', '2MB-c1', '4MB-c1', '4MB-c2']
+        self.memoryESP32        = ['detect', '1MB', '2MB', '4MB', '8MB', '16MB']
+        self.ser                = serial.Serial()
+        self.timer              = QtCore.QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(50)
         self.initButtons()
-
-        # To ensure that every time you call QSettings not enter the data of your application,
-        # which will be the settings, you can set them globally for all applications
         QCoreApplication.setApplicationName(ORGANIZATION_NAME)
         QCoreApplication.setOrganizationDomain(ORGANIZATION_DOMAIN)
         QCoreApplication.setApplicationName(APPLICATION_NAME)
         self.initProcess()
         self.initProcessmem()
-        self.baudRate = 115200
+        self.baudRate           = 115200
         self.setAcceptDrops(True)
-
-        self.shellWin = PlainTextEdit()
-        self.label_cpu = QtWidgets.QLabel()
+        self.shellWin           = PlainTextEdit()
+        self.label_cpu          = QtWidgets.QLabel()
         self.label_cpu.setObjectName("label_cpu")
         self.layout_terminal.addWidget(self.label_cpu)
         self.layout_terminal.addWidget(self.shellWin)
-        sysinfo = QSysInfo()
-        myMachine = "CPU Architecture: " + sysinfo.currentCpuArchitecture() + " | " + sysinfo.prettyProductName() + " | " + sysinfo.kernelType() + " | " + sysinfo.kernelVersion() + " | " + sysinfo.machineHostName()
+        sysinfo                 = QSysInfo()
+        myMachine               = "CPU Architecture: " + sysinfo.currentCpuArchitecture() + " | " + sysinfo.prettyProductName() + " | " + sysinfo.kernelType() + " | " + sysinfo.kernelVersion() + " | " + sysinfo.machineHostName()
         self.label_cpu.setText(myMachine)
-        self.settings = QSettings("QTerminal", "QTerminal")
+        self.settings           = QSettings("QTerminal", "QTerminal")
         self.readSettings()
-        self.port = ''
-        self.flasSize = self.comboBox_flashsize.currentText()
-        self.frozen = 'not'
-        self.chip = 'ESP32'
+        self.port               = ''
+        self.flasSize           = self.comboBox_flashsize.currentText()
+        self.frozen             = 'not'
+        self.chip               = 'ESP32'
         self.statusbar.showMessage('Version 1.0')
-        validator = QRegExpValidator(QRegExp("0x[0-9A-Fa-f][0-9A-Fa-f]{1,8}"))
-        validator2 = QRegExpValidator(QRegExp("[0-9]{1,8}"))
+        validator               = QRegExpValidator(QRegExp("0x[0-9A-Fa-f][0-9A-Fa-f]{1,8}"))
+        validator2              = QRegExpValidator(QRegExp("[0-9]{1,8}"))
         self.lineEdit_offset1.setValidator(validator)
         self.lineEdit_offset2.setValidator(validator)
         self.lineEdit_offset3.setValidator(validator)
@@ -233,14 +227,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.lineEdit_eraseregion2.setValidator(validator2)
         self.lineEdit_dumpmem2.setValidator(validator2)
         self.lineEdit_readFlash2.setValidator(validator2)
-        iconConnection = QtGui.QIcon(u'icons/connection.png')
-        icondata = QtGui.QIcon(u'icons/settings.ico')
-        iconoperation = QtGui.QIcon(u'icons/chip.png')
-        iconsetting = QtGui.QIcon(u'icons/setting.png')
-        iconmemo = QtGui.QIcon(u'icons/debug.png')
-        iconfuse = QtGui.QIcon(u'icons/fuse.png')
-        icon_terminal = QtGui.QIcon(u'icons/terminal.png')
-        iconhelp = QtGui.QIcon(u'icons/Info-icon.png')
+        iconConnection          = QtGui.QIcon(u'icons/connection.png')
+        icondata                = QtGui.QIcon(u'icons/settings.ico')
+        iconoperation           = QtGui.QIcon(u'icons/chip.png')
+        iconsetting             = QtGui.QIcon(u'icons/setting.png')
+        iconmemo                = QtGui.QIcon(u'icons/debug.png')
+        iconfuse                = QtGui.QIcon(u'icons/fuse.png')
+        icon_terminal           = QtGui.QIcon(u'icons/terminal.png')
+        iconhelp                = QtGui.QIcon(u'icons/Info-icon.png')
         self.tabWidget.setTabIcon(0, iconConnection)
         self.tabWidget.setTabIcon(1, iconoperation)
         self.tabWidget.setTabIcon(2, iconmemo)
@@ -250,17 +244,15 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.tabWidget.setTabIcon(6, icon_terminal)
         self.tabWidget.setTabIcon(7, iconhelp)
         self.tabWidget.setIconSize(QSize(57, 57))
-        scene = QGraphicsScene()
-        pixmap = QPixmap('icons/disconnected.png')
-        pixmapbig = pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio)
+        scene                   = QGraphicsScene()
+        pixmap                  = QPixmap('icons/disconnected.png')
+        pixmapbig               = pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio)
         scene.addPixmap(pixmapbig)
         self.graphicsView.setScene(scene)
         self.label_8.setText("Serial Port Closed !")
         self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
         self.actionDark.triggered.connect(self.setDark)
-
         self.actionLight_Blue.triggered.connect(self.setactionLight_Blue)
-
         self.onStopbutton()
         self.onStopbuttonmemo()
         self.actionExit.triggered.connect(self.close_application)
@@ -277,11 +269,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             lambda: self.checkBox_3.setEnabled(self.lineEdit_path3.text() != ""))
         self.initsettings()
         self.updatePb.connect(self.progressBar.setValue)
-        self.tableWidget = QTableWidget()
-
+        self.tableWidget        = QTableWidget()
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
 
     def initui(self):
+
         self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(425, 10, 0, 0))
         self.groupBoxmemo.setGeometry(QtCore.QRect(30, 10, 720, 350))
         self.groupBox_2memo.setGeometry(QtCore.QRect(30, 370, 720, 100))
@@ -333,17 +325,21 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_loadsetting.clicked.connect(self.loadsettingsbutton)
 
     def showAbout(self):
+
         self.window = aboutmain.abouthandel()
         self.window.show()
 
     def dataReady(self):
+
         self.plainTextEditadvanced.appendPlainText(bytearray(self.process.readAllStandardOutput()).decode('utf-8'))
 
     def dataReadymem(self):
+
         self.plainTextEditadvancedmem.appendPlainText(
             bytearray(self.processmem.readAllStandardOutput()).decode('utf-8'))
 
     def initProcessmem(self):
+
         self.processmem = QtCore.QProcess(self)
         self.processmem.setProcessChannelMode(QtCore.QProcess.MergedChannels)
         self.processmem.readyRead.connect(self.dataReadymem)
@@ -351,6 +347,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.processmem.finished.connect(self.enableButtons)
 
     def initProcess(self):
+
         self.process = QtCore.QProcess(self)
         self.process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
         self.process.readyRead.connect(self.dataReady)
@@ -358,6 +355,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.process.finished.connect(self.enableButtons)
 
     def setDark(self):
+
         self.setStyleSheet(open("qssthemes/Dark/darkstyle.qss", "r").read())
         self.settingstyle.setValue(SETTINGS_style, "qssthemes/Dark/darkstyle.qss")
         self.settingstyle.sync()
@@ -437,6 +435,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
     def setactionLight_Blue(self):
+
         self.setStyleSheet(open("qssthemes/LightBlue/stylesheet.qss", "r").read())
         self.settingstyle.setValue(SETTINGS_style, "qssthemes/LightBlue/stylesheet.qss")
         self.settingstyle.sync()
@@ -449,7 +448,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.label_8.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.pushButtoncollapsexpand.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.pushButton_savesetting.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        # self.pushButton_reloadfusetab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.pushButton_13.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.pushButton_browsecombined.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
@@ -514,9 +512,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
         self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        # self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
 
     def disableButtons(self):
+
         self.pushButton_eraseentireflash.setDisabled(True)
         self.pushButton_disconnect.setDisabled(True)
         self.pushButton_combine.setDisabled(True)
@@ -587,13 +585,16 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_flashmode.setDisabled(True)
 
     def readSettings(self):
+
         if self.settings.contains("commands"):
             self.shellWin.commands = self.settings.value("commands")
 
     def writeSettings(self):
+
         self.settings.setValue("commands", self.shellWin.commands)
 
     def enableButtons(self):
+
         self.pushButton_eraseentireflash.setDisabled(False)
         self.pushButton_disconnect.setDisabled(False)
         self.pushButton_combine.setDisabled(False)
@@ -664,6 +665,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_flashsize.setDisabled(False)
 
     def close_application(self):
+
         choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
@@ -677,6 +679,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             pass
 
     def initButtons(self):
+
         self.pushButton_path1.clicked.connect(lambda: self.selectbinFile('Select Bin File', self.lineEdit_path1))
         self.pushButton_path2.clicked.connect(lambda: self.selectbinFile('Select Bin File', self.lineEdit_path2))
         self.pushButton_path3.clicked.connect(lambda: self.selectbinFile('Select Bin File', self.lineEdit_path3))
@@ -695,15 +698,15 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_baud.addItems(['1500000', '921600', '512000', '256000', '230400', '115200', '74880', '9600'])
         self.comboBox_baud.setCurrentIndex(5)
         self.comboBox_baud.currentIndexChanged.connect(self.baudSelect)
-        self.baudRate = int(self.comboBox_baud.currentText())
+        self.baudRate       = int(self.comboBox_baud.currentText())
         self.comboBox_readstatusreg.addItems(['1', '2', '3'])
         self.comboBox_writestatusreg.addItems(['1', '2', '3'])
         self.comboBox_flashmode.addItems(["qio", "dio", "dout"])
         self.comboBox_flashmode.currentIndexChanged.connect(self.baudSelect)
-        self.flashmode = self.comboBox_flashmode.currentText()
+        self.flashmode      = self.comboBox_flashmode.currentText()
         self.comboBox_chip.addItems(['ESP32', 'ESP8266'])
         self.comboBox_chip.currentIndexChanged.connect(self.chipSelect)
-        comPort = []
+        comPort             = []
         try:
             for x in serial.tools.list_ports.comports():
                 comPort.append(str(x.device))
@@ -712,10 +715,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_serial.addItems(comPort)
         self.comboBox_serial.popupAboutToBeShown.connect(self.comPortClick)
         self.comboBox_serial.currentIndexChanged.connect(self.comPortSelect)
-        self.port = self.comboBox_serial.currentText()
+        self.port           = self.comboBox_serial.currentText()
         self.comboBox_flashsize.addItems(self.memoryESP32)
         self.comboBox_flashsize.currentIndexChanged.connect(self.memorySelect)
-        self.flasSize = self.comboBox_flashsize.currentText()
+        self.flasSize       = self.comboBox_flashsize.currentText()
         self.pushButton_default.clicked.connect(self.onDefault)
         self.pushButton_cleardata.clicked.connect(self.clearData)
         self.pushButton_selectall.clicked.connect(self.selectall)
@@ -740,13 +743,13 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_flashAll.clicked.connect(self.flash_all)
         self.pushButton_flashcombined.clicked.connect(self.flashcombined)
         self.pushButton_readFlash.clicked.connect(self.readFlashfunc)
-        self.connectshortcut = QShortcut(QKeySequence("CTRL+C"), self)
+        self.connectshortcut    = QShortcut(QKeySequence("CTRL+C"), self)
         self.connectshortcut.activated.connect(self.open_serial)
         self.pushButtonconnect.setStatusTip('Open Serial Connection CTRL+C')
         self.disconnectshortcut = QShortcut(QKeySequence("CTRL+D"), self)
         self.disconnectshortcut.activated.connect(self.close_serial)
         self.pushButton_disconnect.setStatusTip('Close Serial Connection CTRL+D')
-        self.flashBootShortcut = QShortcut(QKeySequence("CTRL+B"), self)
+        self.flashBootShortcut  = QShortcut(QKeySequence("CTRL+B"), self)
         self.flashBootShortcut.activated.connect(self.flash_boot)
         self.pushButton_13.setStatusTip('Flash Bootloader CTRL+B')
         self.flashfirmwareShortcut = QShortcut(QKeySequence("CTRL+F"), self)
@@ -847,6 +850,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btnref.clicked.connect(self.refbuttonfunction)
 
     def expandcollapseopt(self):
+
         testwidth = self.plainTextEditadvanced.width()
         testheight = self.plainTextEditadvanced.height()
         if testheight == 511 and testwidth == 371:
@@ -892,6 +896,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
 
     def expandcollapsemem(self):
+
         testwidth = self.plainTextEditadvancedmem.width()
         testheight = self.plainTextEditadvancedmem.height()
         if testheight == 511 and testwidth == 371:
@@ -956,6 +961,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_encrypt.setGeometry(QtCore.QRect(132, 265, 101, 25))
 
     def pushbutton_handler(self):
+
         choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Advanced Mode ?",
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
@@ -969,12 +975,15 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             pass
 
     def setProgressValdump(self, val):
+
         self.progressBarmemo.setValue(val)
 
     def setProgressVal(self, val):
+
         self.progressBar.setValue(val)
 
     def tick(self):
+
         if self.ser.is_open == True:
             try:
                 s = self.ser.read(512)
@@ -984,6 +993,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 pass
 
     def savesettings(self):
+
         settings = QSettings()
 
         settings.setValue(SETTINGS_check1, self.checkBox_1.isChecked())
@@ -3668,8 +3678,6 @@ class PlainTextEdit(QPlainTextEdit):
         self.appendPlainText(self.result.strip('\n'))
         self.state = self.process.state()
 
-    #        print(self.result)
-
     def run(self, command):
         """Executes a system command."""
         if self.process.state() != 2:
@@ -3678,7 +3686,6 @@ class PlainTextEdit(QPlainTextEdit):
             self.textCursor().movePosition(QTextCursor.End)
 
     def handle(self, command):
-        #        print("begin handle")
         """Split a command into list so command echo hi would appear as ['echo', 'hi']"""
         real_command = command.replace(self.name, "")
 
