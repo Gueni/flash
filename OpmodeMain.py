@@ -490,13 +490,13 @@ class ESPToolGUIApp(QtWidgets.QMainWindow, opmodeui.Ui_MainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    splash_pix = QPixmap('icons/loadsplash.jpg')
+    splash_pix = QPixmap('Theme/icons/logo-color.png')
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     progressBar = QProgressBar(splash)
-    progressBar.setGeometry(0, 337, 429, 10)
+    progressBar.setGeometry(0, 470, 480, 10)
     splash.setMask(splash_pix.mask())
     progressBar.setTextVisible(False)
-    progressBar.setStyleSheet(open("qssthemes/Dark/darkstyle.qss", "r").read())
+    progressBar.setStyleSheet(open("Theme/qssthemes/LightBlue/stylesheet.qss", "r").read())
     splash.show()
     for i in range(0, 100):
         progressBar.setValue(i)
