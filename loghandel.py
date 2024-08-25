@@ -25,7 +25,7 @@ class Loghandler(QtWidgets.QMainWindow, logingui.Ui_MainWindow):
             self.bundle_dir = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(self.bundle_dir + '/icons/espLogo.png'))
-        self.setStyleSheet(open("qssthemes/Dark/darkstyle.qss", "r").read())
+        self.setStyleSheet(open("Theme/qssthemes/LightBlue/stylesheet.qss", "r").read())
         self.pushButton.clicked.connect(self.log_sig)
         self.pushButton_2.clicked.connect(self.changepass)
         self.pushButton_cancel.clicked.connect(self.cancellog)
