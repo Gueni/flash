@@ -2128,15 +2128,15 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
         self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
         self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
-        self.tableWidget.setGeometry(QtCore.QRect(0, 0, 780, 545))
+        self.tableWidget.setGeometry(QtCore.QRect(20, 0, 950, 650))
         self.lay.addWidget(self.tableWidget)
         self.tableWidget.verticalHeader().setVisible(False)
         self.tableWidget.setColumnWidth(0, 200)
-        self.tableWidget.setColumnWidth(1, 250)
+        self.tableWidget.setColumnWidth(1, 200)
         self.tableWidget.setColumnWidth(2, 130)
         self.tableWidget.setColumnWidth(3, 110)
         self.tableWidget.setColumnWidth(4, 70)
-        self.tableWidget.setColumnWidth(5, 36)
+        self.tableWidget.setColumnWidth(5, 50)
 
         self.setuptablebuttons()
 

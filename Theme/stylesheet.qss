@@ -126,7 +126,7 @@ QGroupBox::title {
 
 QAbstractScrollArea {
     border-radius: 2px;
-    border: 1px solid #3A3939;
+    border: 1px solid #e6e6e6;
     background-color: transparent;
 }
 
