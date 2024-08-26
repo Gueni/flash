@@ -47,9 +47,7 @@ The software is divided into two major modes, production mode and advanced mode.
 - [Licensing](#Licensing)
 
 
-<p align="center">
-  <img  src="\Theme\icons\advmod.png">
-</p>
+
 
 #  Features
 ---
@@ -121,7 +119,9 @@ The image info outputs some information (load addresses, sizes, etc) about a .bi
 ### Verify flash
 
 Allows you to verify that data in flash matches a local file. Additional verification is not usually needed. However, if you wish to perform a byte-by-byte verification of the flash contents then you can do so with this feature. 
-
+<p align="center">
+  <img  src="\Theme\icons\advmod.png">
+</p>
 
 ### Dump Memory
 
