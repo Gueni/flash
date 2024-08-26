@@ -1,3 +1,4 @@
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -50,11 +51,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "About "))
         self.label.setText(_translate("MainWindow", "Version : 1.0"))
-        urlLink = " <a href=\"http://mdtunisie.com/\"> <font face=rmfamily   color=BLUE> Micro Device Tunisie</font> </a>"
-        urlLinkesptool = " <a href=\"https://github.com/espressif/esptool/\"> <font face=rmfamily   color=BLUE> esptool</font> </a>"
         urlLinkgueni = " <a href=\"https://github.com/Gueni/\"> <font face=rmfamily   color=BLUE> Mohamed Gueni</font> </a>"
-        # self.label_3.setText(_translate("MainWindow", "Copyright" + urlLink + " © 2019 "))
-        self.label_3.setText(_translate("MainWindow",
-                                        "This Software uses libraries from the " + urlLinkesptool + "project under the GPLv2 license"))
         self.label_4.setText(_translate("MainWindow", "Author :" + urlLinkgueni))
         self.pushButton.setText(_translate("MainWindow", "License"))

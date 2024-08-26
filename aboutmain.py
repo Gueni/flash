@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QDesktopWidget
 import aboutgui
 import licensemain
 
-SETTINGS_style = 'style'
+
 
 class abouthandel(QtWidgets.QMainWindow, aboutgui.Ui_MainWindow):
     switch_window2 = QtCore.pyqtSignal()
