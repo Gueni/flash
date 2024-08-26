@@ -1,5 +1,5 @@
 <RCC>
   <qresource prefix="newPrefix">
-    <file>espLogo.png</file>
+    <file>espLogo.png.png</file>
   </qresource>
 </RCC>
