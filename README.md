@@ -52,14 +52,14 @@ The software is divided into two major modes, production mode and advanced mode.
 #  Features
 ---
 
-<p align="center">
-  <img  src="\Theme\icons\serialandbaud.png">
-</p>
+
 
 ### Serial Port
 
 The serial port is selected using the ComboBox Designated Serial Port, like COM1 (Windows). If no option is specified,esptool will enumerate all connected serial ports and try each one until it finds an Espressif device (ESP32 or ESP8266) connected. 
-
+<p align="center">
+  <img  src="\Theme\icons\serialandbaud.png">
+</p>
 
 ### Baud Rate
 
@@ -93,23 +93,19 @@ The Read flash feature allows reading back the contents of flash. for that you n
 ### Erase Flash & erase region
 
 
+
+To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie 0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
 <p align="center">
   <img  src="\Theme\icons\memo.png">
 </p>
 
-To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie 0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
-
 
 ### Convert ELF to Binary
 
-
+Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
 <p align="center">
   <img  src="\Theme\icons\settings.png">
 </p>
-
-
-Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
-
 
 ### Output bin image details
 
@@ -161,33 +157,13 @@ Allows you to read a 4 byte ID which forms part of the MAC address.
 ### Secure Packaging
 This Option allows you to select firmware files you wish to work with more than once or in multiple enviroments then compress them inside a package with the extension .mtool along with the necessary settings and options for the flashing procedure in the production mode.
 ### Efuse Table
-
-
+The efuse tab introduced in flash makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways.
 <p align="center">
   <img  src="\Theme\icons\efusetab.png">
 </p>
 
-
-The efuse tab introduced in flash makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways. 
 ### Export Efuse
 You can now export the efuse table with all the values and states to an excel (xls) file.
-### Login/Password Change 
----
-
-
-<p align="center">
-  <img  src="\Theme\icons\loginwindow.png">
-</p>
-
-
-<p align="center">
-  <img  src="\Theme\icons\changepasswindow.png">
-</p>
-
-
-Since the Advanced Mode contains very risky and more complicated features tha the production mode we included a login and a password change windows. 
-
-        Default Password is : flash
 
 # Dependencies
 ---
@@ -223,17 +199,12 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
 # To do
 ----
 
- - Integrate all features in local terminal without having to type all attributes.
  - Optimize the Efuse feature.
  - Enhance UI/UX.
  - More Interactive Help Section.
  - Secure Boot Feature.
  - A dedicated Firmware merge library for ESP32.
  - more file type choices for efuse export.
- - email verification for password change .
- - generate a log file containg info about the user date/time and all operations conducted.
- - add more languages.
- 
 
 # Copyright and Licensing
 -----
