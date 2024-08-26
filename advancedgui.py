@@ -31,11 +31,11 @@ class Ui_MainWindowadvanced(object):
     def setupUi(self, MainWindow):
 
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setFixedSize(910, 590)
+        MainWindow.setFixedSize(910, 600)
         self.centralwidget              = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tabWidget                  = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 1000, 551))
+        self.tabWidget.setGeometry(QtCore.QRect(0, 40, 1000, 551))
         self.tabWidget.setObjectName("tabWidget")
         self.tabbar                     = TabBar(self)
         self.tabWidget.setTabBar(self.tabbar)
@@ -435,7 +435,7 @@ class Ui_MainWindowadvanced(object):
         self.pushButton_disconnect.setText(_translate("MainWindow", "Disconnect"))
         self.pushButton_logout.setText(_translate("MainWindow", "Log out"))
         self.pushButtonconnect.setText(_translate("MainWindow", "Connect"))
-        self.label_6.setText(_translate("MainWindow", " Serial Port"))
+        self.label_6.setText(_translate("MainWindow", "Serial Port"))
         self.label_8.setText(_translate("MainWindow", ""))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.info), _translate("MainWindow", ""))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Memo), _translate("MainWindow", ""))
