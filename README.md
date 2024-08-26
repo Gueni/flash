@@ -19,8 +19,6 @@ The software is divided into two major modes, production mode and advanced mode.
   
 # Table of contents
 ---
-- [Production Mode](#Production-Mode)
-- [Advanced Mode](#Advanced-Mode)
 - [Features](#features)
   - [Serial Port](#Serial-Port)
   - [Baud Rate](#Baud-Rate)
@@ -38,7 +36,6 @@ The software is divided into two major modes, production mode and advanced mode.
   - [Read flash status](#Read-flash-status)
   - [Write flash status](#Write-flash-status)
   - [Chip Id](#Chip-Id)
-- [New Features](#new-features)
   - [Secure Packaging](#Secure-Packaging)
   - [Efuse Table](#Efuse-Table)
   - [Export Efuse](#Export-Efuse)
@@ -47,17 +44,8 @@ The software is divided into two major modes, production mode and advanced mode.
 - [Download](#Download)
 - [Installation](#Installation)
 - [To do](#To-do)
-- [Copyright and Licensing](#Copyright-and-Licensing)
+- [Licensing](#Licensing)
 
-# Production Mode
----
-
-<p align="center">
-  <img  src="\Theme\icons\prodmod.PNG">
-</p>
-
-# Advanced Mode
----
 
 <p align="center">
   <img  src="\Theme\icons\advmod.png">
