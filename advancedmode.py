@@ -209,7 +209,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.flasSize           = self.comboBox_flashsize.currentText()
         self.frozen             = 'not'
         self.chip               = 'ESP32'
-        self.statusbar.showMessage('Version 1.0')
+        self.statusbar.showMessage('Version 2.0')
         validator               = QRegExpValidator(QRegExp("0x[0-9A-Fa-f][0-9A-Fa-f]{1,8}"))
         validator2              = QRegExpValidator(QRegExp("[0-9]{1,8}"))
         self.lineEdit_offset1.setValidator(validator)
@@ -3555,25 +3555,25 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 def main():
     app             = QtWidgets.QApplication(sys.argv)
     
-    splash_pix      = QPixmap(splash_screen_png)
-    splash          = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+    # splash_pix      = QPixmap(splash_screen_png)
+    # splash          = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     
-    progressBar     = QProgressBar(splash)
-    progressBar.setGeometry(0, 470, 480, 10)
+    # progressBar     = QProgressBar(splash)
+    # progressBar.setGeometry(0, 470, 480, 10)
     
-    splash.setMask(splash_pix.mask())
+    # splash.setMask(splash_pix.mask())
     
-    progressBar.setTextVisible(False)
-    progressBar.setStyleSheet(open(QSS_style, "r").read())
+    # progressBar.setTextVisible(False)
+    # progressBar.setStyleSheet(open(QSS_style, "r").read())
     
-    splash.show()
+    # splash.show()
     
-    for i in range(0, 100):
-        progressBar.setValue(i)
-        t = time.time()
-        while time.time() < t + 0.02:
-            app.processEvents()
-    splash.close()
+    # for i in range(0, 100):
+    #     progressBar.setValue(i)
+    #     t = time.time()
+    #     while time.time() < t + 0.02:
+    #         app.processEvents()
+    # splash.close()
     window          = AdvancedModeApp()
     window.setWindowFlags(Qt.FramelessWindowHint)
     window.show()
