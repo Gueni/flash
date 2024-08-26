@@ -1,30 +1,29 @@
+
 #?---------------------------------------------------------------------------------------------------------------------------
-import os.path
-import getpass
 import os
 import os.path
-import os.path
 import platform
-import socket
 import sqlite3
 import sys
-from pathlib import Path
 import pyzipper
 import serial.tools.list_ports
 import xlwt
 from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
 from PyQt5.QtCore import QSize, QRegExp, QCoreApplication 
-from PyQt5.QtCore import  QSettings, QThread, pyqtSignal, Qt, QProcess
-from PyQt5.QtCore import  QEvent,QSysInfo, QDate, QTime
-from PyQt5.QtGui import QFont, QTextCursor
+from PyQt5.QtCore import  QSettings, QThread, pyqtSignal, Qt
+from PyQt5.QtCore import  QDate, QTime
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
 from PyQt5.QtNetwork import QHostAddress, QNetworkInterface
 from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QTableWidget,QVBoxLayout
-from PyQt5.QtWidgets import QApplication, QPlainTextEdit, QInputDialog, QLineEdit
-import OpmodeMain
+from PyQt5.QtWidgets import QInputDialog, QLineEdit
 import aboutmain
 import advancedgui
+import time
+from PyQt5.QtCore import Qt, QSize, QSettings, QThread, pyqtSignal
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QProgressBar, QInputDialog, QLineEdit
+from PyQt5.QtCore import QPoint
 #?---------------------------------------------------------------------------------------------------------------------------
 machinesettig                   = 'machinesettig'
 ipaddresssetting                = 'ipaddresssetting'
@@ -65,7 +64,7 @@ SETTING_path6                   = 'SETTING_path6'
 SETTINGS_check1                 = 'SETTINGS_check1'
 SETTINGS_check2                 = 'SETTINGS_check2'
 SETTINGS_check3                 = 'SETTINGS_check3'
-SETTINGS_style                  = 'style'
+SETTINGS_style                  = 'Theme/stylesheet.qss'
 offset1                         = 'offset1'
 offset2                         = 'offset2'
 offset3                         = 'offset3'
@@ -91,6 +90,13 @@ verifconst                      = 'veriftest'
 dump_progress                   = 'dump_progress'
 read_flash_progress             = 'read_flash_progress'
 comport                         = 'comport'
+QSS_style               = "Theme/stylesheet.qss"
+settingsprogresswrite   = "Dependecies/Dependecies/settingsprogresswrite.ini"
+settingsstyle           = "Dependecies/settingsstyle.ini"
+expand_png              = 'Theme/icons/expand.png'
+collapse_png            = 'Theme/icons/collapse.png'
+espLogo_png             = 'Theme/icons/espLogo.png'
+splash_screen_png       = 'Theme/icons/logo-color.png'
 #?---------------------------------------------------------------------------------------------------------------------------
 
 class MyprogressbarThread(QThread):
@@ -101,7 +107,7 @@ class MyprogressbarThread(QThread):
 
         cnt                         = 0
         while cnt < 100:
-            settingsprogresswrite   = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresswrite   = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
             cnt                     = settingsprogresswrite.value(progressnum, type=int)
             self.change_value.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -117,7 +123,7 @@ class MyprogressbarThreadreadflash(QThread):
 
         cnt                         = 0
         while cnt < 100:
-            settingsread_flash      = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsread_flash      = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
             cnt                     = settingsread_flash.value(read_flash_progress, type=int)
             self.change_valuereadflash.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -130,7 +136,7 @@ class MyprogressbarThreaddump(QThread):
 
         cnt                         = 0
         while cnt < 100:
-            settingsprogresdump     = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresdump     = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
             cnt                     = settingsprogresdump.value(dump_progress, type=int)
             self.change_valuedump.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -145,7 +151,7 @@ class MyprogressbarThreadflashall(QThread):
     def run(self):
         cnt                         = 0
         while cnt <= 100:
-            settingsprogresswrite   = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresswrite   = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
             cnt                     = settingsprogresswrite.value(progressnum, type=int)
             self.change_valueall.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -156,12 +162,12 @@ class WorkerThread(QThread):
 
         super(WorkerThread, self).__init__(parent)
         self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
-        self.settingsport   = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        self.settingsport   = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
 
     def run(self):
 
         Com_port            = self.settingsport.value(comport, type=str)
-        os.system('python ' + self.bundle_dir + '/espefuse.py --port ' + " " + Com_port + " " + ' summary')
+        os.system('python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + Com_port + " " + ' summary')
 
 class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
@@ -170,16 +176,18 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
     def __init__(self, parent=None):
 
         super(AdvancedModeApp, self).__init__(parent)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.old_pos = None  # To store the last mouse position
         if getattr(sys, 'frozen', False):
             self.frozen         = 'ever so'
             self.bundle_dir     = sys._MEIPASS
         else:
             self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
-        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + '/icons/espLogo.png'))
+        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + 'Theme/icons/espLogo.png'))
         self.lay                = QVBoxLayout()
-        self.settingstyle       = QSettings("settingsstyle.ini", QSettings.IniFormat)
-        self.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.settingstyle       = QSettings("Dependencies/settingsstyle.ini", QSettings.IniFormat)
+        self.setStyleSheet(open('Theme/stylesheet.qss', "r").read())
         self.workerThread       = WorkerThread()
         self.memoryESP8266      = ['detect', '512KB', '256KB', '1MB', '2MB', '4MB', '2MB-c1', '4MB-c1', '4MB-c2']
         self.memoryESP32        = ['detect', '1MB', '2MB', '4MB', '8MB', '16MB']
@@ -195,16 +203,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.initProcessmem()
         self.baudRate           = 115200
         self.setAcceptDrops(True)
-        self.shellWin           = PlainTextEdit()
-        self.label_cpu          = QtWidgets.QLabel()
-        self.label_cpu.setObjectName("label_cpu")
-        self.layout_terminal.addWidget(self.label_cpu)
-        self.layout_terminal.addWidget(self.shellWin)
-        sysinfo                 = QSysInfo()
-        myMachine               = "CPU Architecture: " + sysinfo.currentCpuArchitecture() + " | " + sysinfo.prettyProductName() + " | " + sysinfo.kernelType() + " | " + sysinfo.kernelVersion() + " | " + sysinfo.machineHostName()
-        self.label_cpu.setText(myMachine)
-        self.settings           = QSettings("QTerminal", "QTerminal")
-        self.readSettings()
+      
+       
         self.port               = ''
         self.flasSize           = self.comboBox_flashsize.currentText()
         self.frozen             = 'not'
@@ -227,14 +227,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.lineEdit_eraseregion2.setValidator(validator2)
         self.lineEdit_dumpmem2.setValidator(validator2)
         self.lineEdit_readFlash2.setValidator(validator2)
-        iconConnection          = QtGui.QIcon(u'icons/connection.png')
-        icondata                = QtGui.QIcon(u'icons/settings.ico')
-        iconoperation           = QtGui.QIcon(u'icons/chip.png')
-        iconsetting             = QtGui.QIcon(u'icons/setting.png')
-        iconmemo                = QtGui.QIcon(u'icons/debug.png')
-        iconfuse                = QtGui.QIcon(u'icons/fuse.png')
-        icon_terminal           = QtGui.QIcon(u'icons/terminal.png')
-        iconhelp                = QtGui.QIcon(u'icons/Info-icon.png')
+        iconConnection          = QtGui.QIcon(u'Theme/icons/connection.png')
+        icondata                = QtGui.QIcon(u'Theme/icons/settings.ico')
+        iconoperation           = QtGui.QIcon(u'Theme/icons/chip.png')
+        iconsetting             = QtGui.QIcon(u'Theme/icons/setting.png')
+        iconmemo                = QtGui.QIcon(u'Theme/icons/debug.png')
+        iconfuse                = QtGui.QIcon(u'Theme/icons/fuse.png')
+        icon_terminal           = QtGui.QIcon(u'Theme/icons/terminal.png')
+        iconhelp                = QtGui.QIcon(u'Theme/icons/Info-icon.png')
         self.tabWidget.setTabIcon(0, iconConnection)
         self.tabWidget.setTabIcon(1, iconoperation)
         self.tabWidget.setTabIcon(2, iconmemo)
@@ -245,14 +245,12 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.tabWidget.setTabIcon(7, iconhelp)
         self.tabWidget.setIconSize(QSize(57, 57))
         scene                   = QGraphicsScene()
-        pixmap                  = QPixmap('icons/disconnected.png')
+        pixmap                  = QPixmap('Theme/icons/disconnected.png')
         pixmapbig               = pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio)
         scene.addPixmap(pixmapbig)
         self.graphicsView.setScene(scene)
         self.label_8.setText("Serial Port Closed !")
         self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
-        self.actionDark.triggered.connect(self.setDark)
-        self.actionLight_Blue.triggered.connect(self.setactionLight_Blue)
         self.onStopbutton()
         self.onStopbuttonmemo()
         self.actionExit.triggered.connect(self.close_application)
@@ -300,7 +298,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_clearmemo.setGeometry(QtCore.QRect(30, 20, 320, 25))
         self.pushButton_stopmemo.setGeometry(QtCore.QRect(370, 20, 320, 25))
         self.progressBarmemo.setGeometry(QtCore.QRect(30, 60, 660, 13))
-        self.pushButtoncollapsexpandm.setIcon(QIcon('icons/expandv.png'))
+        self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/expandv.png'))
         self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
         self.plainTextEditadvanced.setGeometry(QtCore.QRect(425, 10, 0, 0))
         self.groupBox.setGeometry(QtCore.QRect(30, 10, 720, 100))
@@ -319,10 +317,23 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_clearop.setGeometry(QtCore.QRect(30, 30, 300, 25))
         self.pushButton_stop.setGeometry(QtCore.QRect(390, 30, 300, 25))
         self.progressBar.setGeometry(QtCore.QRect(30, 80, 660, 13))
-        self.pushButtoncollapsexpand.setIcon(QIcon('icons/expandv.png'))
+        self.pushButtoncollapsexpand.setIcon(QIcon('Theme/icons/expandv.png'))
         self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
         self.pushButton_encrypt.setGeometry(QtCore.QRect(370, 265, 320, 25))
         self.pushButton_loadsetting.clicked.connect(self.loadsettingsbutton)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.old_pos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        if self.old_pos is not None:
+            delta = QPoint(event.globalPos() - self.old_pos)
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self.old_pos = event.globalPos()
+
+    def mouseReleaseEvent(self, event):
+        self.old_pos = None
 
     def showAbout(self):
 
@@ -356,162 +367,161 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def setDark(self):
 
-        self.setStyleSheet(open("qssthemes/Dark/darkstyle.qss", "r").read())
-        self.settingstyle.setValue(SETTINGS_style, "qssthemes/Dark/darkstyle.qss")
+        self.setStyleSheet(open("Theme/stylesheet.qss", "r").read())
+        self.settingstyle.setValue(SETTINGS_style, "Theme/stylesheet.qss")
         self.settingstyle.sync()
-        self.label_5.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_6.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_7.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_8.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButtoncollapsexpand.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_savesetting.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_13.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.label_5.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_6.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_7.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_8.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButtoncollapsexpand.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_savesetting.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_13.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_browsecombined.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_chipid.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_cleardata.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_clearmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_clearop.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_combine.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_default.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_disconnect.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_dumpmem.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_elffile.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_encrypt.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.pushButton_chipid.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_cleardata.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_clearmemo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_clearop.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_combine.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_default.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_disconnect.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_dumpmem.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_elffile.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_encrypt.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_eraseentireflash.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_eraseregion.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_flashAll.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_verifyflash.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_loadram.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_verifyoffset.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_flashcombined.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_flashfirmware.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_imageinfo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_stop.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.progressBar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.tabWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.fusetab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.optab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.settingtab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.infohelptab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.datatab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.info.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButtonconnect.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_logout.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_baud.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_serial.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_selectall.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.pushButton_eraseregion.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_flashAll.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_verifyflash.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_loadram.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_verifyoffset.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_flashcombined.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_flashfirmware.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_imageinfo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_stop.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.progressBar.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.tabWidget.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.fusetab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.optab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.settingtab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.infohelptab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.datatab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.info.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButtonconnect.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_logout.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.comboBox_baud.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.comboBox_serial.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_selectall.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_generatebinfromelf.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_zipfiles.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_readmem.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEditreadmemaddr.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_writemem.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_writemem1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_writemem2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_writemem3.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_eraseregion1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_eraseregion2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_dumpmem1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_dumpmem2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_readstatusreg.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_readstatusreg.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.pushButton_zipfiles.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_readmem.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEditreadmemaddr.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_writemem.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_writemem1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_writemem2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_writemem3.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_eraseregion1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_eraseregion2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_dumpmem1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_dumpmem2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.comboBox_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_writestatusreg.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_writestatusreg.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_readFlash.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_readFlash1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_readFlash2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_Fusedump.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_stopmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.progressBarmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        # self.shellWin.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.comboBox_writestatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_readFlash.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_readFlash1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_readFlash2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_Fusedump.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_stopmemo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.progressBarmemo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.Memo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.tableWidget.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.terminal_tab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.menubar.setStyleSheet(open(SETTINGS_style, "r").read())
 
     def setactionLight_Blue(self):
 
-        self.setStyleSheet(open("qssthemes/LightBlue/stylesheet.qss", "r").read())
-        self.settingstyle.setValue(SETTINGS_style, "qssthemes/LightBlue/stylesheet.qss")
+        self.setStyleSheet(open("Theme/stylesheet.qss", "r").read())
+        self.settingstyle.setValue(SETTINGS_style, "Theme/stylesheet.qss")
         self.settingstyle.sync()
-        self.menubar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_5.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_6.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_7.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.label_8.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButtoncollapsexpand.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_savesetting.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_13.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.menubar.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_5.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_6.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_7.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.label_8.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButtoncollapsexpand.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_savesetting.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_13.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_browsecombined.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_chipid.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_cleardata.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_clearmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_clearop.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_combine.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_default.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_disconnect.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_dumpmem.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_elffile.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_encrypt.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.pushButton_chipid.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_cleardata.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_clearmemo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_clearop.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_combine.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_default.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_disconnect.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_dumpmem.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_elffile.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_encrypt.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_eraseentireflash.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_eraseregion.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_flashAll.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_verifyflash.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_loadram.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_verifyoffset.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_flashcombined.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_flashfirmware.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_imageinfo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_stop.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.progressBar.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.tabWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.fusetab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.optab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.settingtab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.infohelptab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.datatab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.info.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButtonconnect.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_logout.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_baud.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_serial.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_selectall.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.pushButton_eraseregion.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_flashAll.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_verifyflash.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_loadram.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_verifyoffset.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_flashcombined.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_flashfirmware.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_imageinfo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_stop.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.progressBar.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.tabWidget.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.fusetab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.optab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.settingtab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.infohelptab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.datatab.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.info.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButtonconnect.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_logout.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.comboBox_baud.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.comboBox_serial.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_selectall.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_generatebinfromelf.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_zipfiles.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_readmem.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEditreadmemaddr.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_writemem.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_writemem1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_writemem2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_writemem3.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_eraseregion1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_eraseregion2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_dumpmem1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_dumpmem2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_readstatusreg.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_readstatusreg.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.pushButton_zipfiles.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_readmem.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEditreadmemaddr.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_writemem.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_writemem1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_writemem2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_writemem3.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_eraseregion1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_eraseregion2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_dumpmem1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_dumpmem2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.comboBox_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
         self.pushButton_writestatusreg.setStyleSheet(
             open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_writestatusreg.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_readFlash.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_readFlash1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.lineEdit_readFlash2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_Fusedump.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_stopmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.progressBarmemo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.Memo.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.tableWidget.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.terminal_tab.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.comboBox_writestatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_readFlash.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_readFlash1.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.lineEdit_readFlash2.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_Fusedump.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.pushButton_stopmemo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.progressBarmemo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.Memo.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.tableWidget.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.terminal_tab.setStyleSheet(open(SETTINGS_style, "r").read())
 
     def disableButtons(self):
 
@@ -583,15 +593,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.comboBox_chip.setDisabled(True)
         self.comboBox_flashsize.setDisabled(True)
         self.comboBox_flashmode.setDisabled(True)
-
-    def readSettings(self):
-
-        if self.settings.contains("commands"):
-            self.shellWin.commands = self.settings.value("commands")
-
-    def writeSettings(self):
-
-        self.settings.setValue("commands", self.shellWin.commands)
 
     def enableButtons(self):
 
@@ -671,7 +672,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
             self.savesettings()
-            self.writeSettings()
 
             sys.exit()
         else:
@@ -805,14 +805,12 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_clearmemo.setStatusTip('Clear Log C')
         self.pushButton_Fusedump.clicked.connect(self.fusedump)
         self.pushButton_logout.clicked.connect(self.pushbutton_handler)
-        self.actionProduction_Mode.triggered.connect(self.pushbutton_handler)
         self.pushButtoncollapsexpand.clicked.connect(self.expandcollapseopt)
         self.pushButtoncollapsexpandm.clicked.connect(self.expandcollapsemem)
         self.pushButton_reloadfusetab.clicked.connect(self.refreshsummary)
         self.pushButton_genkey.clicked.connect(self.generateencryptionkey)
         self.pushButton_encrypt.clicked.connect(self.encryptflash)
         self.pushButton_zipfiles.clicked.connect(self.createpackage)
-        # self.btnref.clicked.connect(self.refreshsummary2)
         self.btn1.clicked.connect(self.burnfirst)
         self.btn2.clicked.connect(self.burnsecond)
         self.btn3.clicked.connect(self.burnthird)
@@ -871,7 +869,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearop.setGeometry(QtCore.QRect(30, 30, 300, 25))
             self.pushButton_stop.setGeometry(QtCore.QRect(390, 30, 300, 25))
             self.progressBar.setGeometry(QtCore.QRect(30, 80, 660, 13))
-            self.pushButtoncollapsexpand.setIcon(QIcon('icons/expandv.png'))
+            self.pushButtoncollapsexpand.setIcon(QIcon('Theme/icons/expandv.png'))
             self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
             self.pushButton_encrypt.setGeometry(QtCore.QRect(370, 265, 320, 25))
         if testheight == 0 and testwidth == 0:
@@ -892,7 +890,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearop.setGeometry(QtCore.QRect(20, 30, 161, 25))
             self.pushButton_stop.setGeometry(QtCore.QRect(200, 30, 161, 25))
             self.progressBar.setGeometry(QtCore.QRect(20, 80, 340, 13))
-            self.pushButtoncollapsexpand.setIcon(QIcon('icons/collapsev.png'))
+            self.pushButtoncollapsexpand.setIcon(QIcon('Theme/icons/collapsev.png'))
             self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
 
     def expandcollapsemem(self):
@@ -927,7 +925,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearmemo.setGeometry(QtCore.QRect(30, 20, 320, 25))
             self.pushButton_stopmemo.setGeometry(QtCore.QRect(370, 20, 320, 25))
             self.progressBarmemo.setGeometry(QtCore.QRect(30, 60, 660, 13))
-            self.pushButtoncollapsexpandm.setIcon(QIcon('icons/expandv.png'))
+            self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/expandv.png'))
             self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
         if testheight == 0 and testwidth == 0:
             self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(425, 10, 371, 511))
@@ -956,7 +954,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearmemo.setGeometry(QtCore.QRect(20, 20, 161, 25))
             self.pushButton_stopmemo.setGeometry(QtCore.QRect(200, 20, 161, 25))
             self.progressBarmemo.setGeometry(QtCore.QRect(20, 60, 340, 13))
-            self.pushButtoncollapsexpandm.setIcon(QIcon('icons/collapsev.png'))
+            self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/collapsev.png'))
             self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
             self.pushButton_encrypt.setGeometry(QtCore.QRect(132, 265, 101, 25))
 
@@ -965,11 +963,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Advanced Mode ?",
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
-            self.loginwin = OpmodeMain.ESPToolGUIApp()
             self.close_serial()
             self.savesettings()
             self.close()
-            self.loginwin.show()
         else:
             self.savesettings()
             pass
@@ -1127,7 +1123,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def comPortSelect(self):
         self.port = self.comboBox_serial.currentText()
-        settingsport = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settingsport = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         settingsport.setValue(comport, self.comboBox_serial.currentText())
         settingsport.sync()
 
@@ -1142,13 +1138,13 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if self.ser.is_open == True:
                 self.label_8.setText("Connection Established !")
                 scene = QGraphicsScene()
-                scene.addPixmap(QPixmap('icons/connected.png'))
+                scene.addPixmap(QPixmap('Theme/icons/connected.png'))
                 self.graphicsView.setScene(scene)
                 self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
         except:
             self.label_8.setText("Error! Check COM Port !")
             scene = QGraphicsScene()
-            scene.addPixmap(QPixmap('icons/wrongcom.png'))
+            scene.addPixmap(QPixmap('Theme/icons/wrongcom.png'))
             self.graphicsView.setScene(scene)
             self.label_8.setStyleSheet(" border-radius: 5px;  color: #e53935;font-weight: bold;")
 
@@ -1157,13 +1153,12 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.ser.close()
         self.label_8.setText("Serial Port Closed !")
         scene = QGraphicsScene()
-        scene.addPixmap(QPixmap('icons/disconnected.png'))
+        scene.addPixmap(QPixmap('Theme/icons/disconnected.png'))
         self.graphicsView.setScene(scene)
         self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
 
     # *******************************2nd_Tab****************************************************************************
     def verifyFlash(self):
-        # settingsverify = QSettings("verif_ini.ini", QSettings.IniFormat)
         verifyoffset = self.lineEdit_verifyoffset.text()
         if (verifyoffset == "") or (verifyoffset == " "):
             QMessageBox.warning(self, 'Error', "Missing Argument: " + "Please insert an Offset @ First", QMessageBox.Ok,
@@ -1177,19 +1172,19 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 if os.name == 'nt':
                     if self.chip == 'ESP32':
                         self.process.start(
-                            'python ' + self.bundle_dir + '/esptool.py --chip esp32 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
+                            'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
 
                     if self.chip == 'ESP8266':
                         self.process.start(
-                            'python ' + self.bundle_dir + '/esptool.py --chip esp8266 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
+                            'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
                 else:
                     if self.chip == 'ESP32':
                         self.process.start(
-                            'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
+                            'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
 
                     else:
                         self.process.start(
-                            'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
+                            'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
 
             else:
                 self.plainTextEditadvanced.appendPlainText("Operation Verify Flash Aborted ")
@@ -1206,17 +1201,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'python ' + self.bundle_dir + '/esptool.py  --no-stub load_ram ' + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        'python' + self.bundle_dir + '/esptool.py  --no-stub load_ram ' + " " + fileName)
+                        'python' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py  --no-stub load_ram ' + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
                 else:
                     self.process.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py  --no-stub load_ram ' + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
         else:
             self.plainTextEditadvanced.appendPlainText("Operation Load RAM Aborted ")
 
@@ -1224,30 +1219,30 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
-                self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp32 read_mac')
+                self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mac')
             if self.chip == 'ESP8266':
-                self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp8266 chip_id')
+                self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id')
         else:
             if self.chip == 'ESP32':
-                self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 read_mac')
+                self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mac')
             else:
-                self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 chip_id')
+                self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id')
 
     def chipId(self):
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
-                self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp32 chip_id ')
+                self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 chip_id ')
             if self.chip == 'ESP8266':
                 self.process.start(
-                    'python' + self.bundle_dir + '/esptool.py --chip esp8266 chip_id ')
+                    'python' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id ')
         else:
             if self.chip == 'ESP32':
                 self.process.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 chip_id ')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 chip_id ')
             else:
                 self.process.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 chip_id ')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id ')
 
     def flashcombined(self):
         offsetflashcomb = self.lineEdit_offsetcombined.text()
@@ -1266,28 +1261,28 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
 
-                    self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                                        --before default_reset --after hard_reset write_flash\
                                                        -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                                        {3} {4}'.format(self.port, self.baudRate, self.flasSize,
                                                                        offsetflashcomb
                                                                        , self.lineEdit_combinedfile.text()))
                 else:
-                    self.process.start('python' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('python' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                                        --before default_reset --after hard_reset write_flash --flash_size={2}\
                                                         {3} {4}'.format(self.port, self.baudRate, self.flasSize,
                                                                         offsetflashcomb
                                                                         , self.lineEdit_combinedfile.text()))
             else:
                 if self.chip == 'ESP32':
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                                    --before default_reset --after hard_reset write_flash\
                                                    -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                                    {3} {4}'.format(self.port, self.baudRate, self.flasSize,
                                                                    offsetflashcomb
                                                                    , self.lineEdit_combinedfile.text()))
                 else:
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                                    --before default_reset --after hard_reset write_flash --flash_size={2}\
                                                     {3} {4}'.format(self.port, self.baudRate, self.flasSize,
                                                                     offsetflashcomb
@@ -1310,26 +1305,26 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.thread.start()
             if os.name == 'nt':
                 if self.chip == 'ESP32':
-                    self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                                 --before default_reset --after hard_reset write_flash\
                                                 -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                                 {3} {4}'.format(self.port, self.baudRate, self.flasSize, offsetflash
                                                                 , self.lineEdit_path1.text()))
 
                 else:
-                    self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                                 --before default_reset --after hard_reset write_flash --flash_size={2}\
                                                  {3} {4}'.format(self.port, self.baudRate, self.flasSize, offsetflash
                                                                  , self.lineEdit_path1.text()))
             else:
                 if self.chip == 'ESP32':
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                             --before default_reset --after hard_reset write_flash\
                                             -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                             {3} {4}'.format(self.port, self.baudRate, self.flasSize, offsetflash
                                                             , self.lineEdit_path1.text()))
                 else:
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                             --before default_reset --after hard_reset write_flash --flash_size={2}\
                                              {3} {4}'.format(self.port, self.baudRate, self.flasSize, offsetflash
                                                              , self.lineEdit_path1.text()))
@@ -1357,7 +1352,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.thread.start()
             if os.name == 'nt':
                 if self.chip == 'ESP32':
-                    self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                         --before default_reset --after hard_reset write_flash\
                                         -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                       {3} {4} {5} {6}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
@@ -1365,7 +1360,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                                                               self.lineEdit_path3.text()))
             else:
                 if self.chip == 'ESP32':
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                     --before default_reset --after hard_reset write_flash\
                                     -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                    {3} {4} {5} {6}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
@@ -1403,7 +1398,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.thread.start()
             if os.name == 'nt':
                 if self.chip == 'ESP32':
-                    self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                         --before default_reset --after hard_reset write_flash\
                                         -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                          {3} {4} {5} {6} {7} {8}'.format(self.port, self.baudRate, self.flasSize,
@@ -1412,7 +1407,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                                                                          self.lineEdit_path3.text(), offsetfirm,
                                                                          self.lineEdit_path1.text()))
                 else:
-                    self.process.start('python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                         --before default_reset --after hard_reset write_flash --flash_size={2}\
                                         {3}{4}{5}{6}{7}{8}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
                                                                    self.lineEdit_path2.text(), offsetpart,
@@ -1420,7 +1415,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                                                                    self.lineEdit_path1.text()))
             else:
                 if self.chip == 'ESP32':
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                     --before default_reset --after hard_reset write_flash\
                                     -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                  {3}{4}{5}{6}{7}{8}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
@@ -1428,7 +1423,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                                                             self.lineEdit_path3.text(), offsetfirm,
                                                             self.lineEdit_path1.text()))
                 else:
-                    self.process.start('sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                     --before default_reset --after hard_reset write_flash --flash_size={2}\
                                    {3}{4}{5}{6}{7}{8}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
                                                               self.lineEdit_path2.text(), offsetpart,
@@ -1440,22 +1435,22 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.process.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(
                         self.port,
                         self.baudRate))
             if self.chip == 'ESP8266':
                 self.process.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(
                         self.port,
                         self.baudRate))
         else:
             if self.chip == 'ESP32':
                 self.process.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(
                         self.port, self.baudRate))
             else:
                 self.process.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(
                         self.port, self.baudRate))
 
     def imageInfo(self):
@@ -1467,17 +1462,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'python ' + self.bundle_dir + '/esptool.py  --chip esp32 image_info' + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp32 image_info' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        'python ' + self.bundle_dir + '/esptool.py  --chip esp8266 image_info ' + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp8266 image_info ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py  --chip esp32 image_info ' + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp32 image_info ' + " " + fileName)
                 else:
                     self.process.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py  --chip esp8266 image_info ' + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp8266 image_info ' + " " + fileName)
         else:
             self.plainTextEditadvanced.appendPlainText("Operation Image Information Aborted ")
 
@@ -1522,17 +1517,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
                 else:
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
 
     def clear_mem(self):
         self.plainTextEditadvancedmem.clear()
@@ -1549,34 +1544,34 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' summary')
+                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' summary')
+                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' summary')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
             else:
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' summary')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
 
     def fusedump(self):
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' dump')
+                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' dump')
+                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' dump')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
             else:
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' dump')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
 
     # *********************************3rd_Tab**************************************************************************
     def readmemory(self):
@@ -1589,17 +1584,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp32 read_mem ' + memoryaddr)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mem ' + memoryaddr)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp8266 read_mem ' + memoryaddr)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_mem ' + memoryaddr)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 read_mem ' + memoryaddr)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mem ' + memoryaddr)
                 else:
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 read_mem ' + memoryaddr)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_mem ' + memoryaddr)
 
     def readstatusreg(self):
         RDSR = self.comboBox_readstatusreg.currentText()
@@ -1607,17 +1602,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp32 read_flash_status --bytes  ' + " " + RDSR)
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_flash_status --bytes  ' + " " + RDSR)
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp8266 read_flash_status --bytes  ' + " " + RDSR)
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_flash_status --bytes  ' + " " + RDSR)
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 read_flash_status --bytes  ' + " " + RDSR)
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_flash_status --bytes  ' + " " + RDSR)
             else:
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 read_flash_status --bytes  ' + " " + RDSR)
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_flash_status --bytes  ' + " " + RDSR)
 
     def writestatusreg(self):
         WRSR = self.comboBox_writestatusreg.currentText()
@@ -1625,17 +1620,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp32 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp8266 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
             else:
                 self.processmem.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
 
     def writememory(self):
         memoryaddr1 = self.lineEdit_writemem1.text()
@@ -1655,17 +1650,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp32 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp8266 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
                 else:
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
 
     def dumpmemory(self):
         dumpline1 = self.lineEdit_dumpmem1.text()
@@ -1689,17 +1684,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp32 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp8266 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
                 else:
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
 
     def readFlashfunc(self):
         readflashline1 = self.lineEdit_readFlash1.text()
@@ -1722,17 +1717,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + '/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
                 else:
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
 
     def encryptflash(self):
         self.port = self.comboBox_serial.currentText()
@@ -1745,7 +1740,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 if os.name == 'nt':
                     if self.chip == 'ESP32':
                         self.processmem.start(
-                            '  python ' + self.bundle_dir + '/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
+                            '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
                                 self.port, self.lineEdit_keypath.text()))
                     if self.chip == 'ESP8266':
                         self.processmem.start(
@@ -1754,11 +1749,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 else:
                     if self.chip == 'ESP32':
                         self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
+                            'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
                                 self.port, self.lineEdit_keypath.text()))
                     else:
                         self.processmem.start(
-                            'sudo python ' + self.bundle_dir + '/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
+                            'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
                                 self.port, self.lineEdit_keypath.text()))
 
     # *******************************4th_Tab****************************************************************************
@@ -1885,25 +1880,25 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.process.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp32 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
             if self.chip == 'ESP8266':
                 self.process.start(
-                    'python ' + self.bundle_dir + '/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
+                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
         else:
             if self.chip == 'ESP32':
                 self.process.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
             else:
                 self.process.start(
-                    'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
+                    'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
 
     def saveSettingstofilepackage(self):
 
-        settings = QSettings("privatesettings.ini", QSettings.IniFormat)
+        settings = QSettings("Dependecies/privatesettings.ini", QSettings.IniFormat)
         settings.setValue('offset1', self.lineEdit_offset1.text())
         settings.setValue('offset2', self.lineEdit_offset2.text())
         settings.setValue('offset3', self.lineEdit_offset3.text())
@@ -1964,33 +1959,33 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 if self.checkBox_1.isChecked() and not self.checkBox_2.isChecked() and not self.checkBox_3.isChecked():
                     if os.path.isfile(path1):
                         zf.write(self.lineEdit_path1.text())
-                        zf.write("privatesettings.ini")
+                        zf.write("Dependecies/privatesettings.ini")
                     else:
                         QMessageBox.about(self, "No Device is Connected", "Please Connect a Device First")
 
                 elif self.checkBox_2.isChecked() and not self.checkBox_1.isChecked() and not self.checkBox_3.isChecked():
                     zf.write(self.lineEdit_path2.text())
-                    zf.write("privatesettings.ini")
+                    zf.write("Dependecies/privatesettings.ini")
                 elif self.checkBox_3.isChecked() and not self.checkBox_2.isChecked() and not self.checkBox_1.isChecked():
                     zf.write(self.lineEdit_path3.text())
-                    zf.write("privatesettings.ini")
+                    zf.write("Dependecies/privatesettings.ini")
                 elif self.checkBox_1.isChecked() and self.checkBox_2.isChecked() and not self.checkBox_3.isChecked():
                     zf.write(self.lineEdit_path1.text())
                     zf.write(self.lineEdit_path2.text())
-                    zf.write("privatesettings.ini")
+                    zf.write("Dependecies/privatesettings.ini")
                 elif self.checkBox_1.isChecked() and self.checkBox_3.isChecked() and not self.checkBox_2.isChecked():
                     zf.write(self.lineEdit_path1.text())
                     zf.write(self.lineEdit_path3.text())
-                    zf.write("privatesettings.ini")
+                    zf.write("Dependecies/privatesettings.ini")
                 elif self.checkBox_2.isChecked() and self.checkBox_3.isChecked() and not self.checkBox_1.isChecked():
                     zf.write(self.lineEdit_path2.text())
                     zf.write(self.lineEdit_path3.text())
-                    zf.write("privatesettings.ini")
+                    zf.write("Dependecies/privatesettings.ini")
                 elif self.checkBox_1.isChecked() and self.checkBox_2.isChecked() and self.checkBox_3.isChecked():
                     zf.write(self.lineEdit_path1.text())
                     zf.write(self.lineEdit_path2.text())
                     zf.write(self.lineEdit_path3.text())
-                    zf.write("privatesettings.ini")
+                    zf.write("Dependecies/privatesettings.ini")
                 else:
                     pass
         else:
@@ -2034,17 +2029,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp32 elf2image ' + " " + elfpath)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 elf2image ' + " " + elfpath)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        'python ' + self.bundle_dir + '/esptool.py --chip esp8266 elf2image ' + " " + elfpath)
+                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 elf2image ' + " " + elfpath)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp32 elf2image ' + " " + elfpath)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 elf2image ' + " " + elfpath)
                 else:
                     self.process.start(
-                        'sudo python ' + self.bundle_dir + '/esptool.py --chip esp8266 elf2image ' + " " + elfpath)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 elf2image ' + " " + elfpath)
 
     def generateencryptionkey(self):
         options = QFileDialog.Options()
@@ -2055,17 +2050,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        '  python ' + self.bundle_dir + '/espsecure.py generate_flash_encryption_key' + " " + fileName)
+                        '  python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        '  python ' + self.bundle_dir + '/espsecure.py generate_flash_encryption_key ' + " " + fileName)
+                        '  python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/espsecure.py generate_flash_encryption_key ' + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key ' + " " + fileName)
                 else:
                     self.processmem.start(
-                        'sudo python ' + self.bundle_dir + '/espsecure.py generate_flash_encryption_key ' + " " + fileName)
+                        'sudo python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key ' + " " + fileName)
 
     # *******************************5th_Tab****************************************************************************
 
@@ -2075,7 +2070,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btnref.setDisabled(True)
         self.btnexport.setDisabled(True)
         self.status_txt = QtWidgets.QLabel()
-        movie = QMovie("icons/GREY-GEAR-LOADING.gif")
+        movie = QMovie("Theme/icons/GREY-GEAR-LOADING.gif")
         self.status_txt.setMovie(movie)
         self.status_txt.setAlignment(Qt.AlignCenter)
         movie.start()
@@ -2085,7 +2080,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         movie.stop()
         self.status_txt.deleteLater()
         #
-        self.conn = sqlite3.connect('samples.db')
+        self.conn = sqlite3.connect('Dependecies/samples.db')
         cur = self.conn.cursor()
         cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
         rows = cur.fetchall()
@@ -2109,7 +2104,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.fusetab.setLayout(self.lay)
 
         self.status_txt = QtWidgets.QLabel()
-        movie = QMovie("icons/GREY-GEAR-LOADING.gif")
+        movie = QMovie("Theme/icons/GREY-GEAR-LOADING.gif")
         self.status_txt.setMovie(movie)
         self.status_txt.setAlignment(Qt.AlignCenter)
 
@@ -2120,7 +2115,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         movie.stop()
         self.status_txt.deleteLater()
 
-        self.conn = sqlite3.connect('samples.db')
+        self.conn = sqlite3.connect('Dependecies/samples.db')
         cur = self.conn.cursor()
         cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
         rows = cur.fetchall()
@@ -2187,180 +2182,180 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def setuptablebuttons(self):
         self.tableWidget.setCellWidget(0, 0, self.btnexport)
-        self.btnexport.setIcon(QIcon('icons/Excel.png'))
+        self.btnexport.setIcon(QIcon('Theme/icons/Excel.png'))
         self.btnexport.setStyleSheet("border: none;border-radius: 0px;")
         self.btnexport.setIconSize(QSize(20, 20))
-        self.btnexport.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btnexport.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(0, 5, self.btnref)
-        self.btnref.setIcon(QIcon('icons/refresh.png'))
+        self.btnref.setIcon(QIcon('Theme/icons/refresh.png'))
         self.btnref.setStyleSheet("border: none;border-radius: 0px;")
-        self.btnref.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btnref.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(1, 5, self.btn1)
-        self.btn1.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn1.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn1.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn1.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn1.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(2, 5, self.btn2)
-        self.btn2.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn2.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn2.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn2.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn2.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(3, 5, self.btn3)
-        self.btn3.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn3.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn3.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn3.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn3.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(4, 5, self.btn4)
-        self.btn4.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn4.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn4.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn4.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn4.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(5, 5, self.btn5)
-        self.btn5.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn5.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn5.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn5.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn5.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(6, 5, self.btn6)
-        self.btn6.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn6.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn6.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn6.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn6.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(7, 5, self.btn7)
-        self.btn7.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn7.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn7.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn7.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn7.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(8, 5, self.btn8)
-        self.btn8.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn8.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn8.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn8.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn8.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(9, 5, self.btn9)
-        self.btn9.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn9.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn9.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn9.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn9.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(10, 5, self.btn10)
-        self.btn10.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn10.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn10.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn10.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn10.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(11, 5, self.btn11)
-        self.btn11.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn11.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn11.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn11.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn11.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(12, 5, self.btn12)
-        self.btn12.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn12.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn12.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn12.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn12.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(13, 5, self.btn13)
-        self.btn13.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn13.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn13.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn13.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn13.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(14, 5, self.btn14)
-        self.btn14.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn14.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn14.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn14.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn14.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(15, 5, self.btn15)
-        self.btn15.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn15.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn15.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn15.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn15.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(16, 5, self.btn16)
-        self.btn16.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn16.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn16.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn16.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn16.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(17, 5, self.btn17)
-        self.btn17.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn17.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn17.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn17.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn17.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(18, 5, self.btn18)
-        self.btn18.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn18.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn18.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn18.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn18.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(19, 5, self.btn19)
-        self.btn19.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn19.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn19.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn19.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn19.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(20, 5, self.btn20)
-        self.btn20.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn20.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn20.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn20.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn20.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(21, 5, self.btn21)
-        self.btn21.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn21.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn21.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn21.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn21.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(22, 5, self.btn22)
-        self.btn22.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn22.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn22.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn22.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn22.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(23, 5, self.btn23)
-        self.btn23.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn23.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn23.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn23.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn23.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(24, 5, self.btn24)
-        self.btn24.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn24.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn24.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn24.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn24.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(25, 5, self.btn25)
-        self.btn25.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn25.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn25.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn25.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn25.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(26, 5, self.btn26)
-        self.btn26.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn26.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn26.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn26.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn26.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(27, 5, self.btn27)
-        self.btn27.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn27.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn27.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn27.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn27.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(28, 5, self.btn28)
-        self.btn28.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn28.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn28.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn28.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn28.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(29, 5, self.btn29)
-        self.btn29.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn29.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn29.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn29.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn29.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(30, 5, self.btn30)
-        self.btn30.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn30.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn30.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn30.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn30.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(31, 5, self.btn31)
-        self.btn31.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn31.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn31.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn31.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn31.setStyleSheet(open(SETTINGS_style, "r").read())
 
         self.tableWidget.setCellWidget(32, 5, self.btn32)
-        self.btn32.setIcon(QIcon('icons/executefuse1.png'))
+        self.btn32.setIcon(QIcon('Theme/icons/executefuse1.png'))
         self.btn32.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn32.setStyleSheet(open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
+        self.btn32.setStyleSheet(open(SETTINGS_style, "r").read())
 
     def burnfirst(self):
         self.item = self.tableWidget.item(1, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2374,17 +2369,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2396,7 +2391,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(2, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2410,17 +2405,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2432,7 +2427,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(3, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2446,17 +2441,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2468,7 +2463,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(4, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2482,17 +2477,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2504,7 +2499,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(5, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2518,17 +2513,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2540,7 +2535,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(6, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2554,17 +2549,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2576,7 +2571,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(7, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2590,17 +2585,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2612,7 +2607,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(8, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2626,17 +2621,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2648,7 +2643,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(9, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2662,17 +2657,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2684,7 +2679,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(10, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2698,17 +2693,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2720,7 +2715,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(11, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2734,17 +2729,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2756,7 +2751,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(12, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2770,17 +2765,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2792,7 +2787,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(13, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2806,17 +2801,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2828,7 +2823,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(14, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2842,17 +2837,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2864,7 +2859,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(15, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2878,17 +2873,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2900,7 +2895,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(16, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2914,17 +2909,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2936,7 +2931,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(17, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2950,17 +2945,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -2972,7 +2967,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(18, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -2986,17 +2981,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3008,7 +3003,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(19, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3022,17 +3017,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3044,7 +3039,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(20, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3058,17 +3053,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3080,7 +3075,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(21, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3094,17 +3089,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3116,7 +3111,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(22, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3130,17 +3125,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3152,7 +3147,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(23, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3166,17 +3161,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3188,7 +3183,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(24, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3202,17 +3197,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3224,7 +3219,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(25, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3238,17 +3233,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3260,7 +3255,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(26, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3274,17 +3269,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3296,7 +3291,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(27, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3310,17 +3305,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3332,7 +3327,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(28, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3346,17 +3341,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3368,7 +3363,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(29, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3382,17 +3377,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3404,7 +3399,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(30, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3418,17 +3413,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3440,7 +3435,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(31, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3454,17 +3449,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3476,7 +3471,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         self.item = self.tableWidget.item(32, 0)
 
-        settings_burn = QSettings("settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -3490,17 +3485,17 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         else:
                             self.processmem.start(
-                                'sudo python ' + self.bundle_dir + '/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                 else:
                     pass
 
@@ -3542,196 +3537,50 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.flasSize = self.comboBox_flashsize.currentText()
 
     def memorySelect(self):
-        self.flasSize = self.comboBox_flashsize.currentText()
-
-
-class PlainTextEdit(QPlainTextEdit):
-    commandSignal = pyqtSignal(str)
-    commandZPressed = pyqtSignal(str)
-
-    def __init__(self, parent=None, movable=False):
-        super(PlainTextEdit, self).__init__()
-
-        self.installEventFilter(self)
-        self.setAcceptDrops(True)
-        QApplication.setCursorFlashTime(1000)
-        self.process = QProcess()
-        self.process.readyReadStandardError.connect(self.onReadyReadStandardError)
-        self.process.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
-
-        self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
-                     + ":" + str(os.getcwd()) + "$ ")
-        self.appendPlainText(self.name)
-        self.commands = []  # This is a list to track what commands the user has used so we could display them when
-        # up arrow key is pressed
-        self.tracker = 0
-        self.setStyleSheet("QPlainTextEdit{background-color: #212121; color: #f3f3f3; padding: 8;}")
-        self.verticalScrollBar().setStyleSheet("background-color: #212121;")
-        self.text = None
-        self.setFont(QFont("Noto Sans Mono", 8))
-        self.previousCommandLength = 0
-
-    def eventFilter(self, source, event):
-        if event.type() == QEvent.DragEnter:
-            event.accept()
-            print('DragEnter')
-            return True
-        elif event.type() == QEvent.Drop:
-            print('Drop')
-            self.setDropEvent(event)
-            return True
+        self.flasSize   = self.comboBox_flashsize.currentText()
+   
+    def cleanUp(self):
+        choice          = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
+                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if choice == QtWidgets.QMessageBox.Yes:
+            self.close_serial()
+            sys.exit()
         else:
-            return False  ### super(QPlainTextEdit).eventFilter(event)
+            app         = QtWidgets.QApplication(sys.argv)
+            window      = AdvancedModeApp()
+            window.show()
+            app.aboutToQuit.connect(window.cleanUp)
+            sys.exit(app.exec_())
 
-    def setDropEvent(self, event):
-        if event.mimeData().hasUrls():
-            f = str(event.mimeData().urls()[0].toLocalFile())
-            self.insertPlainText(f)
-            event.accept()
-        elif event.mimeData().hasText():
-            ft = event.mimeData().text()
-            print("text:", ft)
-            self.insertPlainText(ft)
-            event.accept()
-        else:
-            event.ignore()
+def main():
+    app             = QtWidgets.QApplication(sys.argv)
+    
+    splash_pix      = QPixmap(splash_screen_png)
+    splash          = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+    
+    progressBar     = QProgressBar(splash)
+    progressBar.setGeometry(0, 470, 480, 10)
+    
+    splash.setMask(splash_pix.mask())
+    
+    progressBar.setTextVisible(False)
+    progressBar.setStyleSheet(open(QSS_style, "r").read())
+    
+    splash.show()
+    
+    for i in range(0, 100):
+        progressBar.setValue(i)
+        t = time.time()
+        while time.time() < t + 0.02:
+            app.processEvents()
+    splash.close()
+    window          = AdvancedModeApp()
+    window.setWindowFlags(Qt.FramelessWindowHint)
+    window.show()
+    app.aboutToQuit.connect(window.cleanUp)
+    sys.exit(app.exec_())
 
-    def keyPressEvent(self, e):
-        cursor = self.textCursor()
-
-        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_A:
-            return
-
-        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_Z:
-            self.commandZPressed.emit("True")
-            return
-
-        if e.modifiers() == Qt.ControlModifier and e.key() == Qt.Key_C:
-            self.process.kill()
-            self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
-                         + ":" + str(os.getcwd()) + "$ ")
-            self.appendPlainText("process cancelled")
-            self.appendPlainText(self.name)
-            self.textCursor().movePosition(QTextCursor.End)
-            return
-
-        if e.key() == Qt.Key_Return:  ### 16777220:  # This is the ENTER key
-            text = self.textCursor().block().text()
-
-            if text == self.name + text.replace(self.name, "") and text.replace(self.name,
-                                                                                "") != "":  # This is to prevent adding in commands that were not meant to be added in
-                self.commands.append(text.replace(self.name, ""))
-            #                print(self.commands)
-            self.handle(text)
-            self.commandSignal.emit(text)
-            self.appendPlainText(self.name)
-
-            return
-
-        if e.key() == Qt.Key_Up:
-            try:
-                if self.tracker != 0:
-                    cursor.select(QTextCursor.BlockUnderCursor)
-                    cursor.removeSelectedText()
-                    self.appendPlainText(self.name)
-
-                self.insertPlainText(self.commands[self.tracker])
-                self.tracker -= 1
-
-            except IndexError:
-                self.tracker = 0
-
-            return
-
-        if e.key() == Qt.Key_Down:
-            try:
-                cursor.select(QTextCursor.BlockUnderCursor)
-                cursor.removeSelectedText()
-                self.appendPlainText(self.name)
-
-                self.insertPlainText(self.commands[self.tracker])
-                self.tracker += 1
-
-            except IndexError:
-                self.tracker = 0
-
-        if e.key() == Qt.Key_Backspace:  ### 16777219:
-            if cursor.positionInBlock() <= len(self.name):
-                return
-
-            else:
-                cursor.deleteChar()
-
-        super().keyPressEvent(e)
-        cursor = self.textCursor()
-        e.accept()
-
-    def ispressed(self):
-        return self.pressed
-
-    def onReadyReadStandardError(self):
-        self.error = self.process.readAllStandardError().data().decode()
-        self.appendPlainText(self.error.strip('\n'))
-
-    def onReadyReadStandardOutput(self):
-        self.result = self.process.readAllStandardOutput().data().decode()
-        self.appendPlainText(self.result.strip('\n'))
-        self.state = self.process.state()
-
-    def run(self, command):
-        """Executes a system command."""
-        if self.process.state() != 2:
-            self.process.start(command)
-            self.process.waitForFinished()
-            self.textCursor().movePosition(QTextCursor.End)
-
-    def handle(self, command):
-        """Split a command into list so command echo hi would appear as ['echo', 'hi']"""
-        real_command = command.replace(self.name, "")
-
-        if command == "True":
-            if self.process.state() == 2:
-                self.process.kill()
-                self.appendPlainText("Program execution killed, press enter")
-
-        if real_command.startswith("python"):
-            pass
-
-        if real_command != "":
-            command_list = real_command.split()
-        else:
-            command_list = None
-        """Now we start implementing some commands"""
-        if real_command == "clear":
-            self.clear()
-
-        elif command_list is not None and command_list[0] == "echo":
-            self.appendPlainText(" ".join(command_list[1:]))
-
-        elif real_command == "exit":
-            quit()
-
-        elif command_list is not None and command_list[0] == "cd" and len(command_list) > 1:
-            try:
-                os.chdir(" ".join(command_list[1:]))
-                self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
-                             + ":" + str(os.getcwd()) + "$ ")
-                self.textCursor().movePosition(QTextCursor.End)
-
-            except FileNotFoundError as E:
-                self.appendPlainText(str(E))
-
-        elif command_list is not None and len(command_list) == 1 and command_list[0] == "cd":
-            os.chdir(str(Path.home()))
-            self.name = (str(getpass.getuser()) + "@" + str(socket.gethostname())
-                         + ":" + str(os.getcwd()) + "$ ")
-            self.textCursor().movePosition(QTextCursor.End)
-
-        elif self.process.state() == 2:
-            self.process.write(real_command.encode())
-            self.process.closeWriteChannel()
-
-        elif command == self.name + real_command:
-            self.run(real_command)
-        else:
-            pass
+#?---------------------------------------------------------------------------------------------------------------------------
+if __name__ == '__main__':
+    main()
+#?---------------------------------------------------------------------------------------------------------------------------

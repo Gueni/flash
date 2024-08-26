@@ -7,15 +7,15 @@ QAbstractScrollArea,QCheckBox,QColumnView,QComboBox,QDateEdit,QDateTimeEdit,QDia
 }
 
 QMdiArea[showImage="true"] {
-    background-image: url(icons/background_freecad.png);
+    background-image: url(Theme/icons/background_freecad.png);
     background-position: center;
     background-repeat: no-repeat;
 }
 
 QProgressBar,
 QProgressBar:horizontal {
-    background: #fefeff;
-    border: 1px solid #b6b6b6;
+    background: #f0e3f1;
+    border: 1px solid #ca0e68;
     text-align: center;
     border-radius: 4px;
 }
@@ -49,16 +49,16 @@ QWidget:disabled {
 }
 
 QMenuBar {
-    color: #ffffff;
+    color: #dfcfd7;
     background-color: #ca0e68;
 }
 
 QMenuBar::item {
-    background-color: #e0e0e0;
+    background-color: #ca0e68;
 }
 
 QMenuBar::item:selected {
-    color: #1b3774;
+    color: #741b61;
     border: 1px solid #f1e6ff;
     background-color: #f1e6ff;
 }
@@ -80,7 +80,7 @@ QMenu::icon {
 }
 
 QMenu::right-arrow {
-    image:url(icons/right_arrow_light.png);
+    image:url(Theme/icons/right_arrow_light.png);
 }
 
 QMenu::item {
@@ -90,7 +90,7 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-    color: #1b3774;
+    color: #f1e6ff;
     background-color: #f1e6ff;
 }
 
@@ -108,7 +108,7 @@ QMenu::indicator:non-exclusive {
 QMenu::indicator:non-exclusive:checked {
     background-color: #3874f2;
     border: 1px solid #1b3774;
-    image:url(icons/checkbox_light.png);
+    image:url(Theme/icons/checkbox_light.png);
 }
 
 QGroupBox {
@@ -147,26 +147,26 @@ QScrollBar::handle:horizontal {
 }
 
 QScrollBar::add-line:horizontal {
-    border-image: url(icons/right_arrow_light.png);
+    border-image: url(Theme/icons/right_arrow_light.png);
     subcontrol-position: right;
     subcontrol-origin: margin;
 }
 
 QScrollBar::sub-line:horizontal {
-    border-image: url(icons/left_arrow_light.png);
+    border-image: url(Theme/icons/left_arrow_light.png);
     subcontrol-position: left;
     subcontrol-origin: margin;
 }
 
 QScrollBar::add-line:horizontal:hover,
 QScrollBar::add-line:horizontal:on {
-    border-image: url(icons/right_arrow_lighter.png);
+    border-image: url(Theme/icons/right_arrow_lighter.png);
 }
 
 
 QScrollBar::sub-line:horizontal:hover,
 QScrollBar::sub-line:horizontal:on {
-    border-image: url(icons/left_arrow_lighter.png);
+    border-image: url(Theme/icons/left_arrow_lighter.png);
 }
 
 QScrollBar::up-arrow:horizontal,
@@ -192,13 +192,13 @@ QScrollBar::handle:vertical {
 }
 
 QScrollBar::sub-line:vertical {
-    border-image: url(icons/up_arrow_light.png);
+    border-image: url(Theme/icons/up_arrow_light.png);
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
 
 QScrollBar::add-line:vertical {
-    border-image: url(icons/down_arrow_light.png);
+    border-image: url(Theme/icons/down_arrow_light.png);
 
     subcontrol-position: bottom;
     subcontrol-origin: margin;
@@ -206,12 +206,12 @@ QScrollBar::add-line:vertical {
 
 QScrollBar::sub-line:vertical:hover,
 QScrollBar::sub-line:vertical:on {
-    border-image: url(icons/up_arrow_lighter.png);
+    border-image: url(Theme/icons/up_arrow_lighter.png);
 }
 
 QScrollBar::add-line:vertical:hover,
 QScrollBar::add-line:vertical:on {
-    border-image: url(icons/down_arrow_lighter.png);
+    border-image: url(Theme/icons/down_arrow_lighter.png);
 }
 
 QScrollBar::up-arrow:vertical,
@@ -241,7 +241,7 @@ QPlainTextEdit {
 }
 
 QSizeGrip {
-    image: url(icons/sizegrip_light.png);
+    image: url(Theme/icons/sizegrip_light.png);
 
     background-color: transparent;
 }
@@ -255,7 +255,7 @@ QRadioButton::indicator:unchecked{
 QRadioButton::indicator:checked {
     background-color: #3874f2;
     border: 1px solid #1b3774;
-    image:url(icons/radiobutton_light.png);
+    image:url(Theme/icons/radiobutton_light.png);
 }
 
 QCheckBox,
@@ -297,7 +297,7 @@ QCheckBox::indicator:checked,
 QGroupBox::indicator:checked {
     background-color: #3874f2;
     border: 1px solid #1b3774;
-    image:url(icons/checkbox_light.png);
+    image:url(Theme/icons/checkbox_light.png);
 }
 
 QCheckBox::indicator:disabled,
@@ -320,7 +320,7 @@ QMenu::indicator:non-exclusive:disabled {
 QCheckBox::indicator:indeterminate {
     background-color: #3874f2;
     border: 1px solid #1b3774;
-    image: url(icons/checkbox_indeterminate_light.png);
+    image: url(Theme/icons/checkbox_indeterminate_light.png);
 }
 
 QCheckBox:focus,
@@ -450,28 +450,28 @@ QToolBar {
 }
 
 QToolBar::handle:horizontal {
-    background-image: url(icons/Hmovetoolbar_dark.png);
+    background-image: url(Theme/icons/Hmovetoolbar_dark.png);
 
     background-position: top right;
     background-repeat: repeat-y;
 }
 
 QToolBar::handle:vertical {
-    background-image: url(icons/Vmovetoolbar_dark.png);
+    background-image: url(Theme/icons/Vmovetoolbar_dark.png);
 
     background-position: left bottom;
     background-repeat: repeat-x;
 }
 
 QToolBar::separator:horizontal {
-    background-image: url(icons/separtoolbar_dark.png);
+    background-image: url(Theme/icons/separtoolbar_dark.png);
 
     background-position: center center;
     background-repeat: repeat-y;
 }
 
 QToolBar::separator:vertical {
-    background-image: url(icons/separtoolbar_dark.png);
+    background-image: url(Theme/icons/separtoolbar_dark.png);
 
     background-position: center center;
     background-repeat: repeat-x;
@@ -518,16 +518,16 @@ QAbstractSpinBox:down-button:disabled {
 }
 
 QAbstractSpinBox::up-arrow {
-    image: url(icons/up_arrow_light.png);
+    image: url(Theme/icons/up_arrow_light.png);
 
 }
 
 QAbstractSpinBox::up-arrow:hover {
-    image: url(icons/up_arrow_lighter.png);
+    image: url(Theme/icons/up_arrow_lighter.png);
 }
 
 QAbstractSpinBox::up-arrow:off {
-    image: url(icons/up_arrow_disabled_dark.png);
+    image: url(Theme/icons/up_arrow_disabled_dark.png);
 }
 
 QAbstractSpinBox::up-arrow:disabled {
@@ -535,15 +535,15 @@ QAbstractSpinBox::up-arrow:disabled {
 }
 
 QAbstractSpinBox::down-arrow {
-    image: url(icons/down_arrow_light.png);
+    image: url(Theme/icons/down_arrow_light.png);
 
 }
 QAbstractSpinBox::down-arrow:hover {
-    image: url(icons/down_arrow_lighter.png);
+    image: url(Theme/icons/down_arrow_lighter.png);
 }
 
 QAbstractSpinBox::down-arrow:off {
-    image: url(icons/down_arrow_disabled_dark.png);
+    image: url(Theme/icons/down_arrow_disabled_dark.png);
 }
 
 QAbstractSpinBox::down-arrow:disabled {
@@ -597,13 +597,13 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-    image: url(icons/down_arrow_light.png);
+    image: url(Theme/icons/down_arrow_light.png);
 }
 
 QComboBox::down-arrow:on,
 QComboBox::down-arrow:hover,
 QComboBox::down-arrow:focus {
-    image: url(icons/down_arrow_lighter.png);
+    image: url(Theme/icons/down_arrow_lighter.png);
 }
 
 QComboBox QAbstractItemView {
@@ -731,7 +731,7 @@ QTabBar:focus {
 QTabBar::close-button {
 
     border-radius: 2px;
-    background-image: url(icons/close_dark.png);
+    background-image: url(Theme/icons/close_dark.png);
     background-position: center center;
     background-repeat: none;
 }
@@ -751,55 +751,55 @@ QTabBar QToolButton,
 
 
 QTabBar QToolButton::right-arrow:enabled {
-     image: url(icons/right_arrow_light.png);
+     image: url(Theme/icons/right_arrow_light.png);
 }
 
 QTabBar QToolButton::right-arrow:disabled,
 QTabBar QToolButton::right-arrow:off {
-     image: url(icons/right_arrow_disabled_dark.png);
+     image: url(Theme/icons/right_arrow_disabled_dark.png);
 }
 
 QTabBar QToolButton::right-arrow:hover {
-     image: url(icons/right_arrow_lighter.png);
+     image: url(Theme/icons/right_arrow_lighter.png);
 }
 
  QTabBar QToolButton::left-arrow:enabled {
-     image: url(icons/left_arrow_light.png);
+     image: url(Theme/icons/left_arrow_light.png);
 }
 
  QTabBar QToolButton::left-arrow:disabled,
  QTabBar QToolButton::left-arrow:off {
-     image: url(icons/left_arrow_disabled_dark.png);
+     image: url(Theme/icons/left_arrow_disabled_dark.png);
 }
 
  QTabBar QToolButton::left-arrow:hover {
-     image: url(icons/left_arrow_lighter.png);
+     image: url(Theme/icons/left_arrow_lighter.png);
 }
 
  QTabBar QToolButton::up-arrow:enabled {
-     image: url(icons/up_arrow_light.png);
+     image: url(Theme/icons/up_arrow_light.png);
 }
 
  QTabBar QToolButton::up-arrow:disabled,
  QTabBar QToolButton::up-arrow:off {
-     image: url(icons/up_arrow_disabled_dark.png);
+     image: url(Theme/icons/up_arrow_disabled_dark.png);
 }
 
  QTabBar QToolButton::up-arrow:hover {
-     image: url(icons/up_arrow_lighter.png);
+     image: url(Theme/icons/up_arrow_lighter.png);
 }
 
  QTabBar QToolButton::down-arrow:enabled {
-     image: url(icons/down_arrow_light.png);
+     image: url(Theme/icons/down_arrow_light.png);
 }
 
  QTabBar QToolButton::down-arrow:disabled,
  QTabBar QToolButton::down-arrow:off {
-     image: url(icons/down_arrow_disabled_dark.png);
+     image: url(Theme/icons/down_arrow_disabled_dark.png);
 }
 
  QTabBar QToolButton::down-arrow:hover {
-     image: url(icons/down_arrow_lighter.png);
+     image: url(Theme/icons/down_arrow_lighter.png);
 }
 
 QTabBar::tab:top,
@@ -890,8 +890,8 @@ QTabBar::tab:right:only-one {
 QDockWidget {
     color: #ca0e68;
     border: 1px solid #e6e6e6;
-    titlebar-close-icon: url(icons/close_dark.png);
-    titlebar-normal-icon: url(icons/undock_dark.png);
+    titlebar-close-icon: url(Theme/icons/close_dark.png);
+    titlebar-normal-icon: url(Theme/icons/undock_dark.png);
 }
 
 QDockWidget::title {
@@ -974,34 +974,34 @@ QTreeView::branch  {
 }
 
 QTreeView::branch:has-siblings:!adjoins-item  {
-    border-image: url(icons/branch_vline.png) 0;
+    border-image: url(Theme/icons/branch_vline.png) 0;
 }
 
 QTreeView::branch:has-siblings:adjoins-item  {
-    border-image: url(icons/branch_more.png) 0;
+    border-image: url(Theme/icons/branch_more.png) 0;
 }
 
 QTreeView::branch:!has-children:!has-siblings:adjoins-item  {
-    border-image: url(icons/branch_end.png) 0;
+    border-image: url(Theme/icons/branch_end.png) 0;
 }
 
 QTreeView::branch:closed:has-children:has-siblings  {
-    image: url(icons/branch_closed_dark.png);
+    image: url(Theme/icons/branch_closed_dark.png);
 }
 
 QTreeView::branch:has-children:!has-siblings:closed  {
-    image: url(icons/branch_closed_dark.png);
-    border-image: url(icons/branch_end.png) 0;
+    image: url(Theme/icons/branch_closed_dark.png);
+    border-image: url(Theme/icons/branch_end.png) 0;
 }
 
 QTreeView::branch:open:has-children:has-siblings  {
-    image: url(icons/branch_open_dark.png);
-    border-image: url(icons/branch_more.png) 0;
+    image: url(Theme/icons/branch_open_dark.png);
+    border-image: url(Theme/icons/branch_more.png) 0;
 }
 
 QTreeView::branch:open:has-children:!has-siblings  {
-    image: url(icons/branch_open_dark.png);
-    border-image: url(icons/branch_end.png) 0;
+    image: url(Theme/icons/branch_open_dark.png);
+    border-image: url(Theme/icons/branch_end.png) 0;
 }
 
 QSlider,
@@ -1111,20 +1111,20 @@ QToolButton::menu-indicator  {
 /*The "show more" button  (it can also be stylable with "QToolBarExtension" */
 QToolButton#qt_toolbar_ext_button {
     border-radius: 0px;
-    /*background-image: url(icons/more_dark.png);*/
+    /*background-image: url(Theme/icons/more_dark.png);*/
     image: transparent;
     background-repeat: none;
     background-position: center left;
 }
 
 QToolButton#qt_toolbar_ext_button:hover {
-    /*background-image: url(icons/more_light.png);*/
+    /*background-image: url(Theme/icons/more_light.png);*/
     border-color: #e0e0e0;
     background-color: #e0e0e0;
 }
 
 QToolButton#qt_toolbar_ext_button:on {
-    /*background-image: url(icons/more_light.png);*/
+    /*background-image: url(Theme/icons/more_light.png);*/
     border-color: #e0e0e0;
     background-color: #e0e0e0;
 }
@@ -1180,7 +1180,7 @@ QToolBar QToolButton::menu-button:disabled {
 }
 
 QToolBar QToolButton::menu-arrow {
-    background-image: url(icons/down_arrow_light.png);
+    background-image: url(Theme/icons/down_arrow_light.png);
     background-position: center center;
     background-repeat: none;
     subcontrol-origin: padding;
@@ -1188,7 +1188,7 @@ QToolBar QToolButton::menu-arrow {
 }
 
 QToolBar QToolButton::menu-arrow:open {
-    background-image: url(icons/down_arrow_lighter.png);
+    background-image: url(Theme/icons/down_arrow_lighter.png);
 }
 
 QToolBar:tear {
@@ -1286,11 +1286,11 @@ QHeaderView::section:checked {
 
  /* style the sort indicator */
 QHeaderView::down-arrow {
-    image: url(icons/down_arrow_light.png);
+    image: url(Theme/icons/down_arrow_light.png);
 }
 
 QHeaderView::up-arrow {
-    image: url(icons/up_arrow_light.png);
+    image: url(Theme/icons/up_arrow_light.png);
 }
 
 QTableCornerButton::section {
@@ -1333,14 +1333,14 @@ QSplitter::handle {
 }
 
 QSplitter::handle:vertical {
-    background-image: url(icons/splitter_horizontal_dark.png);
+    background-image: url(Theme/icons/splitter_horizontal_dark.png);
     background-position: center center;
     background-repeat: none;
     margin: 2px 10px 2px 10px;
 }
 
 QSplitter::handle:horizontal {
-    background-image: url(icons/splitter_horizontal_dark.png);
+    background-image: url(Theme/icons/splitter_horizontal_dark.png);
     background-position: center center;
     background-repeat: none;
     margin: 10px 2px 10px 2px;
@@ -1364,11 +1364,11 @@ QMainWindow::separator:hover {
 }
 
 QMainWindow::separator:horizontal {
-    background-image: url(icons/splitter_horizontal_dark.png);
+    background-image: url(Theme/icons/splitter_horizontal_dark.png);
 }
 
 QMainWindow::separator:vertical {
-    background-image: url(icons/splitter_vertical_dark.png);
+    background-image: url(Theme/icons/splitter_vertical_dark.png);
 }
 
 QLabel {
@@ -1413,7 +1413,7 @@ QSint--ActionGroup QToolButton[class="header"]:hover {
 
 QSint--ActionGroup QFrame[class="header"] QLabel {
     background-color: transparent;
-    background-image: url(icons/down_arrow_light.png);
+    background-image: url(Theme/icons/down_arrow_light.png);
     background-repeat: none;
     background-position: center center;
 
@@ -1421,12 +1421,12 @@ QSint--ActionGroup QFrame[class="header"] QLabel {
 
 QSint--ActionGroup QFrame[class="header"] QLabel:hover {
     background-color: transparent;
-    background-image: url(icons/down_arrow_lighter.png);
+    background-image: url(Theme/icons/down_arrow_lighter.png);
 }
 
 QSint--ActionGroup QFrame[class="header"] QLabel[fold="true"] {
     background-color: transparent;
-    background-image: url(icons/up_arrow_light.png);
+    background-image: url(Theme/icons/up_arrow_light.png);
     background-repeat: none;
     background-position: center center;
 
@@ -1434,7 +1434,7 @@ QSint--ActionGroup QFrame[class="header"] QLabel[fold="true"] {
 
 QSint--ActionGroup QFrame[class="header"] QLabel[fold="true"]:hover {
     background-color: transparent;
-    background-image: url(icons/up_arrow_lighter.png);
+    background-image: url(Theme/icons/up_arrow_lighter.png);
 }
 
 QSint--ActionGroup QFrame[class="content"] {
