@@ -5,11 +5,11 @@
 
 
 ----
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) /github/v/release/:Gueni/:flash
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) 
 
  
 
-# Getting Started  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico)
+# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Getting Started  
 ---
 flash is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
 
@@ -193,7 +193,7 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
 # How to launch  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico)
 
         python3 main.py
-or simply download the latest release : [![GitHub release](https://img.shields.io/github/release/johnDoe/Library.svg)](https://github.com/Gueni/flash/releases/latest)
+or simply download the latest release : 
 
 # To do  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico)
 ----
