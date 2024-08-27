@@ -5,11 +5,11 @@
 
 
 ----
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg)  
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) 
 
  
 
-# Getting Started
+# Getting Started  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/flash.ico)
 ---
 flash is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
 
