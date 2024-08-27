@@ -1,5 +1,5 @@
 <p align="center">
-  <img  src="\Theme\icons\espLogo.png.png"
+  <img  src="\Screenshots\espLogo.png.png"
 </p>
 
 
@@ -58,7 +58,7 @@ The software is divided into two major modes, production mode and advanced mode.
 
 The serial port is selected using the ComboBox Designated Serial Port, like COM1 (Windows). If no option is specified,esptool will enumerate all connected serial ports and try each one until it finds an Espressif device (ESP32 or ESP8266) connected. 
 <p align="center">
-  <img  src="\Theme\icons\serialandbaud.png">
+  <img  src="\Screenshots\serialandbaud.png">
 </p>
 
 ### Baud Rate
@@ -96,7 +96,7 @@ The Read flash feature allows reading back the contents of flash. for that you n
 
 To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie 0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
 <p align="center">
-  <img  src="\Theme\icons\memo.png">
+  <img  src="\Screenshots\memo.png">
 </p>
 
 
@@ -104,7 +104,7 @@ To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a re
 
 Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
 <p align="center">
-  <img  src="\Theme\icons\settings.png">
+  <img  src="\Screenshots\settings.png">
 </p>
 
 ### Output bin image details
@@ -116,7 +116,7 @@ The image info outputs some information (load addresses, sizes, etc) about a .bi
 
 Allows you to verify that data in flash matches a local file. Additional verification is not usually needed. However, if you wish to perform a byte-by-byte verification of the flash contents then you can do so with this feature. 
 <p align="center">
-  <img  src="\Theme\icons\advmod.png">
+  <img  src="\Screenshots\advmod.png">
 </p>
 
 ### Dump Memory
@@ -158,7 +158,7 @@ This Option allows you to select firmware files you wish to work with more than 
 ### Efuse Table
 The efuse tab introduced in flash makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways.
 <p align="center">
-  <img  src="\Theme\icons\efusetab.png">
+  <img  src="\Screenshots\efusetab.png">
 </p>
 
 ### Export Efuse

@@ -38,7 +38,7 @@ import openpyxl
 from PyQt5 import QtCore, QtTest
 from PyQt5.QtCore import QSettings
 
-import advancedmode
+import main
 
 try:
     import serial

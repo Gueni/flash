@@ -1,0 +1,818 @@
+('D:\\4 WORKSPACE\\flash\\build\\main\\PYZ-00.pyz',
+ [('Cryptodome',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\__init__.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\__init__.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher.AES',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\AES.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._EKSBlowfish',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_EKSBlowfish.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_cbc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_cbc.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_ccm',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ccm.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_cfb',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_cfb.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_ctr',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ctr.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_eax',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_eax.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_ecb',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ecb.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_gcm',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_gcm.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_ocb',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ocb.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_ofb',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ofb.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_openpgp',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_openpgp.py',
+   'PYMODULE'),
+  ('Cryptodome.Cipher._mode_siv',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_siv.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\__init__.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.BLAKE2s',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\BLAKE2s.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.CMAC',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\CMAC.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.HMAC',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\HMAC.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.MD5',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\MD5.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA1',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA1.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA224',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA224.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA256',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA256.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA384',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA384.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA3_224',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_224.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA3_256',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_256.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA3_384',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_384.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA3_512',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_512.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.SHA512',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA512.py',
+   'PYMODULE'),
+  ('Cryptodome.Hash.keccak',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\keccak.py',
+   'PYMODULE'),
+  ('Cryptodome.Protocol',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Protocol\\__init__.py',
+   'PYMODULE'),
+  ('Cryptodome.Protocol.KDF',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Protocol\\KDF.py',
+   'PYMODULE'),
+  ('Cryptodome.Random',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Random\\__init__.py',
+   'PYMODULE'),
+  ('Cryptodome.Util',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\__init__.py',
+   'PYMODULE'),
+  ('Cryptodome.Util.Counter',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\Counter.py',
+   'PYMODULE'),
+  ('Cryptodome.Util._cpu_features',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\_cpu_features.py',
+   'PYMODULE'),
+  ('Cryptodome.Util._file_system',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\_file_system.py',
+   'PYMODULE'),
+  ('Cryptodome.Util._raw_api',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\_raw_api.py',
+   'PYMODULE'),
+  ('Cryptodome.Util.number',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\number.py',
+   'PYMODULE'),
+  ('Cryptodome.Util.py3compat',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\py3compat.py',
+   'PYMODULE'),
+  ('Cryptodome.Util.strxor',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\strxor.py',
+   'PYMODULE'),
+  ('PyQt5',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyQt5\\__init__.py',
+   'PYMODULE'),
+  ('__future__',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\__future__.py',
+   'PYMODULE'),
+  ('_compat_pickle',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_compat_pickle.py',
+   'PYMODULE'),
+  ('_compression',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_compression.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_py_abc.py',
+   'PYMODULE'),
+  ('_pydatetime',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_pydatetime.py',
+   'PYMODULE'),
+  ('_pydecimal',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_pydecimal.py',
+   'PYMODULE'),
+  ('_pyi_rth_utils',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\__init__.py',
+   'PYMODULE'),
+  ('_pyi_rth_utils.qt',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\qt.py',
+   'PYMODULE'),
+  ('_strptime',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_strptime.py',
+   'PYMODULE'),
+  ('_threading_local',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\_threading_local.py',
+   'PYMODULE'),
+  ('aboutgui', 'D:\\4 WORKSPACE\\flash\\aboutgui.py', 'PYMODULE'),
+  ('aboutmain', 'D:\\4 WORKSPACE\\flash\\aboutmain.py', 'PYMODULE'),
+  ('advancedgui', 'D:\\4 WORKSPACE\\flash\\advancedgui.py', 'PYMODULE'),
+  ('argparse',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\argparse.py',
+   'PYMODULE'),
+  ('ast',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ast.py',
+   'PYMODULE'),
+  ('base64',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\base64.py',
+   'PYMODULE'),
+  ('bisect',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\bisect.py',
+   'PYMODULE'),
+  ('bz2',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\bz2.py',
+   'PYMODULE'),
+  ('calendar',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\calendar.py',
+   'PYMODULE'),
+  ('code',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\code.py',
+   'PYMODULE'),
+  ('codeop',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\codeop.py',
+   'PYMODULE'),
+  ('contextlib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\contextlib.py',
+   'PYMODULE'),
+  ('contextvars',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\contextvars.py',
+   'PYMODULE'),
+  ('copy',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\copy.py',
+   'PYMODULE'),
+  ('csv',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\csv.py',
+   'PYMODULE'),
+  ('ctypes',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\__init__.py',
+   'PYMODULE'),
+  ('ctypes._aix',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\_aix.py',
+   'PYMODULE'),
+  ('ctypes._endian',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\_endian.py',
+   'PYMODULE'),
+  ('ctypes.macholib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\__init__.py',
+   'PYMODULE'),
+  ('ctypes.macholib.dyld',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\dyld.py',
+   'PYMODULE'),
+  ('ctypes.macholib.dylib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\dylib.py',
+   'PYMODULE'),
+  ('ctypes.macholib.framework',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\framework.py',
+   'PYMODULE'),
+  ('ctypes.util',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\util.py',
+   'PYMODULE'),
+  ('ctypes.wintypes',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\wintypes.py',
+   'PYMODULE'),
+  ('dataclasses',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\dataclasses.py',
+   'PYMODULE'),
+  ('datetime',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\datetime.py',
+   'PYMODULE'),
+  ('decimal',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\decimal.py',
+   'PYMODULE'),
+  ('dis',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\dis.py',
+   'PYMODULE'),
+  ('email',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\__init__.py',
+   'PYMODULE'),
+  ('email._encoded_words',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\_encoded_words.py',
+   'PYMODULE'),
+  ('email._header_value_parser',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\_header_value_parser.py',
+   'PYMODULE'),
+  ('email._parseaddr',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\_parseaddr.py',
+   'PYMODULE'),
+  ('email._policybase',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\_policybase.py',
+   'PYMODULE'),
+  ('email.base64mime',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\base64mime.py',
+   'PYMODULE'),
+  ('email.charset',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\charset.py',
+   'PYMODULE'),
+  ('email.contentmanager',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\contentmanager.py',
+   'PYMODULE'),
+  ('email.encoders',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\encoders.py',
+   'PYMODULE'),
+  ('email.errors',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\errors.py',
+   'PYMODULE'),
+  ('email.feedparser',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\feedparser.py',
+   'PYMODULE'),
+  ('email.generator',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\generator.py',
+   'PYMODULE'),
+  ('email.header',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\header.py',
+   'PYMODULE'),
+  ('email.headerregistry',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\headerregistry.py',
+   'PYMODULE'),
+  ('email.iterators',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\iterators.py',
+   'PYMODULE'),
+  ('email.message',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\message.py',
+   'PYMODULE'),
+  ('email.parser',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\parser.py',
+   'PYMODULE'),
+  ('email.policy',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\policy.py',
+   'PYMODULE'),
+  ('email.quoprimime',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\quoprimime.py',
+   'PYMODULE'),
+  ('email.utils',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\email\\utils.py',
+   'PYMODULE'),
+  ('fnmatch',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fnmatch.py',
+   'PYMODULE'),
+  ('fractions',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py',
+   'PYMODULE'),
+  ('getopt',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\getopt.py',
+   'PYMODULE'),
+  ('gettext',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\gettext.py',
+   'PYMODULE'),
+  ('glob',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\glob.py',
+   'PYMODULE'),
+  ('gzip',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\gzip.py',
+   'PYMODULE'),
+  ('hashlib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\hashlib.py',
+   'PYMODULE'),
+  ('importlib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\__init__.py',
+   'PYMODULE'),
+  ('importlib._abc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\_abc.py',
+   'PYMODULE'),
+  ('importlib._bootstrap',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\_bootstrap.py',
+   'PYMODULE'),
+  ('importlib._bootstrap_external',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\_bootstrap_external.py',
+   'PYMODULE'),
+  ('importlib.abc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\abc.py',
+   'PYMODULE'),
+  ('importlib.machinery',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\machinery.py',
+   'PYMODULE'),
+  ('importlib.metadata',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\__init__.py',
+   'PYMODULE'),
+  ('importlib.metadata._adapters',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\_adapters.py',
+   'PYMODULE'),
+  ('importlib.metadata._collections',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\_collections.py',
+   'PYMODULE'),
+  ('importlib.metadata._functools',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\_functools.py',
+   'PYMODULE'),
+  ('importlib.metadata._itertools',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\_itertools.py',
+   'PYMODULE'),
+  ('importlib.metadata._meta',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\_meta.py',
+   'PYMODULE'),
+  ('importlib.metadata._text',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\metadata\\_text.py',
+   'PYMODULE'),
+  ('importlib.readers',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\readers.py',
+   'PYMODULE'),
+  ('importlib.resources',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\__init__.py',
+   'PYMODULE'),
+  ('importlib.resources._adapters',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\_adapters.py',
+   'PYMODULE'),
+  ('importlib.resources._common',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\_common.py',
+   'PYMODULE'),
+  ('importlib.resources._itertools',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\_itertools.py',
+   'PYMODULE'),
+  ('importlib.resources._legacy',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\_legacy.py',
+   'PYMODULE'),
+  ('importlib.resources.abc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\abc.py',
+   'PYMODULE'),
+  ('importlib.resources.readers',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\resources\\readers.py',
+   'PYMODULE'),
+  ('importlib.util',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\importlib\\util.py',
+   'PYMODULE'),
+  ('inspect',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\inspect.py',
+   'PYMODULE'),
+  ('ipaddress',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ipaddress.py',
+   'PYMODULE'),
+  ('licensegui', 'D:\\4 WORKSPACE\\flash\\licensegui.py', 'PYMODULE'),
+  ('licensemain', 'D:\\4 WORKSPACE\\flash\\licensemain.py', 'PYMODULE'),
+  ('logging',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\logging\\__init__.py',
+   'PYMODULE'),
+  ('lzma',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\lzma.py',
+   'PYMODULE'),
+  ('numbers',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\numbers.py',
+   'PYMODULE'),
+  ('opcode',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\opcode.py',
+   'PYMODULE'),
+  ('pathlib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\pathlib.py',
+   'PYMODULE'),
+  ('pickle',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\pickle.py',
+   'PYMODULE'),
+  ('pkgutil',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\pkgutil.py',
+   'PYMODULE'),
+  ('platform',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\platform.py',
+   'PYMODULE'),
+  ('pprint',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\pprint.py',
+   'PYMODULE'),
+  ('py_compile',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\py_compile.py',
+   'PYMODULE'),
+  ('pyzipper',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\__init__.py',
+   'PYMODULE'),
+  ('pyzipper.__version__',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\__version__.py',
+   'PYMODULE'),
+  ('pyzipper.zipfile',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\zipfile.py',
+   'PYMODULE'),
+  ('pyzipper.zipfile_aes',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\zipfile_aes.py',
+   'PYMODULE'),
+  ('quopri',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\quopri.py',
+   'PYMODULE'),
+  ('random',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\random.py',
+   'PYMODULE'),
+  ('selectors',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\selectors.py',
+   'PYMODULE'),
+  ('serial',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\__init__.py',
+   'PYMODULE'),
+  ('serial.serialcli',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\serialcli.py',
+   'PYMODULE'),
+  ('serial.serialjava',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\serialjava.py',
+   'PYMODULE'),
+  ('serial.serialposix',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\serialposix.py',
+   'PYMODULE'),
+  ('serial.serialutil',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\serialutil.py',
+   'PYMODULE'),
+  ('serial.serialwin32',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\serialwin32.py',
+   'PYMODULE'),
+  ('serial.tools',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\__init__.py',
+   'PYMODULE'),
+  ('serial.tools.list_ports',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\list_ports.py',
+   'PYMODULE'),
+  ('serial.tools.list_ports_common',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\list_ports_common.py',
+   'PYMODULE'),
+  ('serial.tools.list_ports_linux',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\list_ports_linux.py',
+   'PYMODULE'),
+  ('serial.tools.list_ports_osx',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\list_ports_osx.py',
+   'PYMODULE'),
+  ('serial.tools.list_ports_posix',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\list_ports_posix.py',
+   'PYMODULE'),
+  ('serial.tools.list_ports_windows',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\tools\\list_ports_windows.py',
+   'PYMODULE'),
+  ('serial.win32',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\serial\\win32.py',
+   'PYMODULE'),
+  ('shutil',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\shutil.py',
+   'PYMODULE'),
+  ('signal',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\signal.py',
+   'PYMODULE'),
+  ('socket',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\socket.py',
+   'PYMODULE'),
+  ('sqlite3',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\sqlite3\\__init__.py',
+   'PYMODULE'),
+  ('sqlite3.__main__',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\sqlite3\\__main__.py',
+   'PYMODULE'),
+  ('sqlite3.dbapi2',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\sqlite3\\dbapi2.py',
+   'PYMODULE'),
+  ('sqlite3.dump',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\sqlite3\\dump.py',
+   'PYMODULE'),
+  ('statistics',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\statistics.py',
+   'PYMODULE'),
+  ('string',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\string.py',
+   'PYMODULE'),
+  ('stringprep',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\stringprep.py',
+   'PYMODULE'),
+  ('subprocess',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\subprocess.py',
+   'PYMODULE'),
+  ('tarfile',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\tarfile.py',
+   'PYMODULE'),
+  ('tempfile',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\tempfile.py',
+   'PYMODULE'),
+  ('textwrap',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\textwrap.py',
+   'PYMODULE'),
+  ('threading',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\threading.py',
+   'PYMODULE'),
+  ('token',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\token.py',
+   'PYMODULE'),
+  ('tokenize',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\tokenize.py',
+   'PYMODULE'),
+  ('tracemalloc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\tracemalloc.py',
+   'PYMODULE'),
+  ('typing',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\typing.py',
+   'PYMODULE'),
+  ('urllib',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\urllib\\__init__.py',
+   'PYMODULE'),
+  ('urllib.parse',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\urllib\\parse.py',
+   'PYMODULE'),
+  ('xlwt',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\__init__.py',
+   'PYMODULE'),
+  ('xlwt.BIFFRecords',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\BIFFRecords.py',
+   'PYMODULE'),
+  ('xlwt.Bitmap',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Bitmap.py',
+   'PYMODULE'),
+  ('xlwt.Cell',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Cell.py',
+   'PYMODULE'),
+  ('xlwt.Column',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Column.py',
+   'PYMODULE'),
+  ('xlwt.CompoundDoc',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\CompoundDoc.py',
+   'PYMODULE'),
+  ('xlwt.ExcelFormula',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\ExcelFormula.py',
+   'PYMODULE'),
+  ('xlwt.ExcelFormulaLexer',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\ExcelFormulaLexer.py',
+   'PYMODULE'),
+  ('xlwt.ExcelFormulaParser',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\ExcelFormulaParser.py',
+   'PYMODULE'),
+  ('xlwt.ExcelMagic',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\ExcelMagic.py',
+   'PYMODULE'),
+  ('xlwt.Formatting',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Formatting.py',
+   'PYMODULE'),
+  ('xlwt.Row',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Row.py',
+   'PYMODULE'),
+  ('xlwt.Style',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Style.py',
+   'PYMODULE'),
+  ('xlwt.UnicodeUtils',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\UnicodeUtils.py',
+   'PYMODULE'),
+  ('xlwt.Utils',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Utils.py',
+   'PYMODULE'),
+  ('xlwt.Workbook',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Workbook.py',
+   'PYMODULE'),
+  ('xlwt.Worksheet',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\Worksheet.py',
+   'PYMODULE'),
+  ('xlwt.antlr',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\antlr.py',
+   'PYMODULE'),
+  ('xlwt.compat',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\xlwt\\compat.py',
+   'PYMODULE'),
+  ('zipfile',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\zipfile\\__init__.py',
+   'PYMODULE'),
+  ('zipfile._path',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\zipfile\\_path\\__init__.py',
+   'PYMODULE'),
+  ('zipfile._path.glob',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\zipfile\\_path\\glob.py',
+   'PYMODULE'),
+  ('zipimport',
+   'C:\\Users\\Mohamed '
+   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\zipimport.py',
+   'PYMODULE')])
