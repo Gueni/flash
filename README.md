@@ -5,7 +5,7 @@
 
 
 ----
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg)  ![]([https://img.shields.io/badge/python-2.x-yellow.svg](https://github.com/Gueni/flash/blob/master/Theme/icons/flash.ico))  
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg)  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/flash.ico))  
 
  
 
