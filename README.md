@@ -139,8 +139,7 @@ flash uses a number of open source projects and libraries to work properly:
 
 * [Python ]- https://www.python.org/
 * [PyQt5] - https://pypi.org/project/PyQt5/
-* [esptool] - https://github.com/espressif/esptool (@[espressif](https://github.com/espressif
-)) (@[projectgus](https://github.com/projectgus/))    (@[themadinventor](https://github.com/themadinventor/))
+
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Download  
 ---
 flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the LTS  ([release](https://github.com/Gueni/flash/releases/tag/v2.1)).
