@@ -180,7 +180,7 @@ flash itself is open source with a [public repository][flash1.0] on GitHub.You c
 
 Or simply by cloning the repository to your machine : 
 
-      git clone https://github.com/Gueni/flash1.0.git
+      git clone https://github.com/Gueni/flash.git
 
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Installation  
 ---
@@ -195,7 +195,7 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) How to launch  
 
         python3 main.py
-or simply download the latest release : ([Latest Release](https://github.com/Gueni/flash/releases/tag/v2.0))
+or simply download the latest release : ([Latest Release](https://github.com/Gueni/flash/releases/tag/v2.1))
 
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) To do  
 
