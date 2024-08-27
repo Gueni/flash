@@ -206,8 +206,6 @@ or simply download the latest release : ([Latest Release](https://github.com/Gue
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Copyright and Licensing 
 -----
 
-   Copyright 2019 by [Mohamed Gueni](https://github.com/Gueni)
-
     Licensed under the GNU General Public License License, Version 2.0
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at GNU .
