@@ -152,8 +152,7 @@ Intended for use when debugging hardware flash chip-related problems. It allows 
 ### Chip Id
 
 Allows you to read a 4 byte ID which forms part of the MAC address.
-# New Features 
----
+
 ### Secure Packaging
 This Option allows you to select firmware files you wish to work with more than once or in multiple enviroments then compress them inside a package with the extension .mtool along with the necessary settings and options for the flashing procedure in the production mode.
 ### Efuse Table

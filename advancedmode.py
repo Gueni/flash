@@ -1415,7 +1415,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             QMessageBox.warning(self, 'Error', "Missing Argument: " + "Flash Encryption Key is Missing", QMessageBox.Ok,
                                 QMessageBox.Ok)
         else:
-            # head, keyfile = os.path.split(self.lineEdit_keypath.text())
             if not self.lineEdit_keypath.text() == "" and not self.lineEdit_keypath.text() == " ":
                 if os.name == 'nt':
                     if self.chip == 'ESP32':
@@ -1534,28 +1533,20 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         path2 = self.lineEdit_path2.text()
         path3 = self.lineEdit_path3.text()
         if self.checkBox_1.isChecked():
-            head1, tail1 = os.path.split(path1)
             offset1 = self.lineEdit_offset1.text()
         else:
-            tail1 = ""
             offset1 = ""
         if self.checkBox_2.isChecked():
-            head2, tail2 = os.path.split(path2)
             offset2 = self.lineEdit_offset2.text()
         else:
-            tail2 = ""
             offset2 = ""
         if self.checkBox_3.isChecked():
-            head3, tail3 = os.path.split(path3)
             offset3 = self.lineEdit_offset3.text()
         else:
-            tail3 = ""
             offset3 = ""
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getSaveFileName(self, "Save Combine Binary File ", filter='(*.bin)', options=options)
-        head5, tail5 = os.path.split(fileName)
-        print(head5)
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
@@ -1833,7 +1824,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_encrypt.setDisabled(True)
             self.lineEdit_keypath.setDisabled(True)
             self.pushButton_pathkey.setDisabled(True)
-            # self.fusetab.setDisabled(True)
         else:
             self.comboBox_flashsize.clear()
             self.comboBox_flashsize.addItems(self.memoryESP32)
@@ -1873,7 +1863,7 @@ def main():
     splash          = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     
     progressBar     = QProgressBar(splash)
-    progressBar.setGeometry(0, 470, 480, 10)
+    progressBar.setGeometry(-5, 470, 490, 10)
     
     splash.setMask(splash_pix.mask())
     
