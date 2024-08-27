@@ -176,7 +176,7 @@ flash uses a number of open source projects and libraries to work properly:
 )) (@[projectgus](https://github.com/projectgus/))    (@[themadinventor](https://github.com/themadinventor/))
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Download  
 ---
-flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/flash1.0/releases).
+flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the LTS  ([release](https://github.com/Gueni/flash/releases/tag/v2.1)).
 
 Or simply by cloning the repository to your machine : 
 
