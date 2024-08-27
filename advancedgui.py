@@ -75,6 +75,38 @@ class Ui_MainWindowadvanced(object):
         self.centralwidget              = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         
+        #!---------------------------------------
+        # Create custom title bar
+        self.custom_title_bar = QtWidgets.QWidget()
+        self.custom_title_bar.setFixedHeight(30)  # Set the height of the title bar
+        self.custom_title_bar.setStyleSheet("background-color: #a50658;")  # Title bar background color
+        # Create title bar buttons
+        self.minimize_button = QtWidgets.QPushButton('-')
+        self.close_button = QtWidgets.QPushButton('x')
+        # Style buttons
+        self.minimize_button.setGeometry(QtCore.QRect(1060, 0, 20, 20))
+        self.close_button.setGeometry(QtCore.QRect(1030, 0, 20, 20))
+        self.minimize_button.setStyleSheet("background-color: #a50658; color: white; font-weight: bold ;border: none;")
+        self.close_button.setStyleSheet("background-color: #a50658; color: white; font-weight: bold; border: none;")
+        # Connect buttons to their slots
+        self.minimize_button.clicked.connect(self.minimize)
+        self.close_button.clicked.connect(self.close)
+        # Create a layout for the custom title bar
+        title_bar_layout = QtWidgets.QHBoxLayout()
+        
+        title_bar_layout.addWidget(self.minimize_button)
+        title_bar_layout.addWidget(self.close_button)
+        title_bar_layout.setContentsMargins(1010, 0, 20, 0)
+        # title_bar_layout.setSpacing(0)
+        self.custom_title_bar.setLayout(title_bar_layout)
+
+        # Set the custom title bar as the window's title bar
+        MainWindow.setMenuWidget(self.custom_title_bar)
+
+        # Handle mouse events for dragging the window
+        self.custom_title_bar.mousePressEvent = self.startMove
+        self.custom_title_bar.mouseMoveEvent = self.doMove
+        #!---------------------------------------
         self.tabWidget                  = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(0, 40, 1000, 650))
         self.tabWidget.setObjectName("tabWidget")
@@ -519,7 +551,7 @@ class Ui_MainWindowadvanced(object):
         MainWindow.setCentralWidget(self.centralwidget)
         
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 20, 900, 21))
         self.menubar.setObjectName("menubar")
         
         self.menuFile = QtWidgets.QMenu(self.menubar)
@@ -555,10 +587,32 @@ class Ui_MainWindowadvanced(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #!----------------------------------------------------------------------------------------------------------------
 
-       
+    def startMove(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.old_pos = event.globalPos()
+            self.setCursor(QtCore.Qt.ClosedHandCursor)
+
+    def doMove(self, event):
+        if self.old_pos:
+            delta = event.globalPos() - self.old_pos
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self.old_pos = event.globalPos()
+
+    def minimize(self):
+        self.showMinimized()
+
+    def toggle_maximize(self):
+        if self.isMaximized():
+            self.showNormal()
+        else:
+            self.showMaximized()
+
+    def close(self):
+        self.close()
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow",    "Flash 2.0"))
+        MainWindow.setWindowTitle(_translate("MainWindow",    "flash 2.1"))
         self.menuFile.setTitle(_translate("MainWindow",    "File"))
         self.menuHelp.setTitle(_translate("MainWindow",    "Help"))
 

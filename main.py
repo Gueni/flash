@@ -172,7 +172,7 @@ class WorkerThread(QThread):
     def run(self):
 
         Com_port            = self.settingsport.value(comport, type=str)
-        os.system('python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + Com_port + " " + ' summary')
+        os.system('pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + Com_port + " " + ' summary')
 
 class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
@@ -189,7 +189,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         else:
             self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
-        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + resource_path(resource_path('Theme/icons/espLogo.png'))))
+        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + resource_path(resource_path('Theme/icons/flash.ico'))))
 
         self.lay                = QVBoxLayout()
 
@@ -382,17 +382,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             getattr(self, name).setDisabled(False)
 
     def close_application(self):
-
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
             self.savesettings()
-
             sys.exit()
-        else:
-            self.savesettings()
-            pass
+
 
     def initButtons(self):
 
@@ -644,16 +637,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_encrypt.setGeometry(QtCore.QRect(132, 265, 101, 25))
 
     def pushbutton_handler(self):
-
-        choice = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Advanced Mode ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
             self.savesettings()
             self.close()
-        else:
-            self.savesettings()
-            pass
+
 
     def setProgressValdump(self, val):
 
@@ -858,11 +845,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 if os.name == 'nt':
                     if self.chip == 'ESP32':
                         self.process.start(
-                            'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
+                            'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
 
                     if self.chip == 'ESP8266':
                         self.process.start(
-                            'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
+                            'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 verify_flash --diff yes ' + " " + verifyoffset + " " + fileName)
                 else:
                     if self.chip == 'ESP32':
                         self.process.start(
@@ -885,10 +872,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        'python' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
+                        'pythonw' + self.bundle_dir + 'Dependecies/esptool.py  --no-stub load_ram ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
@@ -903,9 +890,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
-                self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mac')
+                self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mac')
             if self.chip == 'ESP8266':
-                self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id')
+                self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id')
         else:
             if self.chip == 'ESP32':
                 self.process.start('sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mac')
@@ -916,10 +903,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.port = self.comboBox_serial.currentText()
         if os.name == 'nt':
             if self.chip == 'ESP32':
-                self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 chip_id ')
+                self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 chip_id ')
             if self.chip == 'ESP8266':
                 self.process.start(
-                    'python' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id ')
+                    'pythonw' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 chip_id ')
         else:
             if self.chip == 'ESP32':
                 self.process.start(
@@ -945,14 +932,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
 
-                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                                        --before default_reset --after hard_reset write_flash\
                                                        -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                                        {3} {4}'.format(self.port, self.baudRate, self.flasSize,
                                                                        offsetflashcomb
                                                                        , self.lineEdit_combinedfile.text()))
                 else:
-                    self.process.start('python' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('pythonw' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                                        --before default_reset --after hard_reset write_flash --flash_size={2}\
                                                         {3} {4}'.format(self.port, self.baudRate, self.flasSize,
                                                                         offsetflashcomb
@@ -989,14 +976,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.thread.start()
             if os.name == 'nt':
                 if self.chip == 'ESP32':
-                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                                 --before default_reset --after hard_reset write_flash\
                                                 -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                                 {3} {4}'.format(self.port, self.baudRate, self.flasSize, offsetflash
                                                                 , self.lineEdit_path1.text()))
 
                 else:
-                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                                 --before default_reset --after hard_reset write_flash --flash_size={2}\
                                                  {3} {4}'.format(self.port, self.baudRate, self.flasSize, offsetflash
                                                                  , self.lineEdit_path1.text()))
@@ -1036,7 +1023,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.thread.start()
             if os.name == 'nt':
                 if self.chip == 'ESP32':
-                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                         --before default_reset --after hard_reset write_flash\
                                         -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                       {3} {4} {5} {6}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
@@ -1082,7 +1069,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.thread.start()
             if os.name == 'nt':
                 if self.chip == 'ESP32':
-                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
+                    self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1}\
                                         --before default_reset --after hard_reset write_flash\
                                         -z --flash_freq 80m --flash_mod dio --flash_size {2} \
                                          {3} {4} {5} {6} {7} {8}'.format(self.port, self.baudRate, self.flasSize,
@@ -1091,7 +1078,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                                                                          self.lineEdit_path3.text(), offsetfirm,
                                                                          self.lineEdit_path1.text()))
                 else:
-                    self.process.start('python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
+                    self.process.start('pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1}\
                                         --before default_reset --after hard_reset write_flash --flash_size={2}\
                                         {3}{4}{5}{6}{7}{8}'.format(self.port, self.baudRate, self.flasSize, offsetboot,
                                                                    self.lineEdit_path2.text(), offsetpart,
@@ -1119,12 +1106,12 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.process.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 --port {0} --baud {1} erase_flash'.format(
                         self.port,
                         self.baudRate))
             if self.chip == 'ESP8266':
                 self.process.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 --port {0} --baud {1} erase_flash'.format(
                         self.port,
                         self.baudRate))
         else:
@@ -1146,10 +1133,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp32 image_info' + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp32 image_info' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp8266 image_info ' + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py  --chip esp8266 image_info ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
@@ -1201,10 +1188,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 erase_region ' + startingaddress + " " + length)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 erase_region ' + startingaddress + " " + length)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -1228,10 +1215,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
+                    '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
+                    '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' summary')
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
@@ -1245,10 +1232,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
+                    '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
+                    '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
@@ -1269,10 +1256,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mem ' + memoryaddr)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_mem ' + memoryaddr)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_mem ' + memoryaddr)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_mem ' + memoryaddr)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -1287,10 +1274,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_flash_status --bytes  ' + " " + RDSR)
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 read_flash_status --bytes  ' + " " + RDSR)
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_flash_status --bytes  ' + " " + RDSR)
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 read_flash_status --bytes  ' + " " + RDSR)
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
@@ -1305,10 +1292,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
             if self.chip == 'ESP8266':
                 self.processmem.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_flash_status  --bytes  ' + " " + WRSR + " " + '--non-volatile 0')
         else:
             if self.chip == 'ESP32':
                 self.processmem.start(
@@ -1335,10 +1322,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 write_mem ' + " " + memoryaddr1 + " " + memoryaddr2 + " " + mask)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -1369,10 +1356,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 dump_mem ' + dumpline1 + " " + dumpline2 + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -1402,10 +1389,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py  -p ' + " " + self.port + " " + ' -b' + " " + self.comboBox_baud.currentText() + " " + ' read_flash ' + " " + readflashline1 + " " + readflashline2 + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -1424,11 +1411,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 if os.name == 'nt':
                     if self.chip == 'ESP32':
                         self.processmem.start(
-                            '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
+                            '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
                                 self.port, self.lineEdit_keypath.text()))
                     if self.chip == 'ESP8266':
                         self.processmem.start(
-                            '  python ' + self.bundle_dir + '//espefuse.py --port {0} burn_key flash_encryption {1}'.format(
+                            '  pythonw ' + self.bundle_dir + '//espefuse.py --port {0} burn_key flash_encryption {1}'.format(
                                 self.port, self.lineEdit_keypath.text()))
                 else:
                     if self.chip == 'ESP32':
@@ -1556,11 +1543,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if os.name == 'nt':
             if self.chip == 'ESP32':
                 self.process.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
             if self.chip == 'ESP8266':
                 self.process.start(
-                    'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
+                    'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
         else:
             if self.chip == 'ESP32':
@@ -1608,10 +1595,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.process.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 elf2image ' + " " + elfpath)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp32 elf2image ' + " " + elfpath)
                 if self.chip == 'ESP8266':
                     self.process.start(
-                        'python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 elf2image ' + " " + elfpath)
+                        'pythonw ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 elf2image ' + " " + elfpath)
             else:
                 if self.chip == 'ESP32':
                     self.process.start(
@@ -1629,10 +1616,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if os.name == 'nt':
                 if self.chip == 'ESP32':
                     self.processmem.start(
-                        '  python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key' + " " + fileName)
+                        '  pythonw ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key' + " " + fileName)
                 if self.chip == 'ESP8266':
                     self.processmem.start(
-                        '  python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key ' + " " + fileName)
+                        '  pythonw ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key ' + " " + fileName)
             else:
                 if self.chip == 'ESP32':
                     self.processmem.start(
@@ -1798,10 +1785,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     if os.name == 'nt':
                         if self.chip == 'ESP32':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                         if self.chip == 'ESP8266':
                             self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
+                                '  pythonw ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
                     else:
                         if self.chip == 'ESP32':
                             self.processmem.start(
@@ -1852,17 +1839,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.flasSize   = self.comboBox_flashsize.currentText()
    
     def cleanUp(self):
-        choice          = QtWidgets.QMessageBox.question(self, ' Confirm Exit ', "Are You Sure You want To Exit Flash ?",
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
             self.close_serial()
+            self.savesettings()
             sys.exit()
-        else:
-            app         = QtWidgets.QApplication(sys.argv)
-            window      = AdvancedModeApp()
-            window.show()
-            app.aboutToQuit.connect(window.cleanUp)
-            sys.exit(app.exec_())
+
 
 def main():
     app             = QtWidgets.QApplication(sys.argv)
@@ -1887,6 +1867,7 @@ def main():
             app.processEvents()
     splash.close()
     window          = AdvancedModeApp()
+    # window.setWindowTitle("flash 2.1")
     window.setWindowFlags(Qt.FramelessWindowHint)
     window.show()
     app.aboutToQuit.connect(window.cleanUp)

@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(200, 130, 250, 66))
         self.label_2.setText("")
-        self.label_2.setPixmap(QtGui.QPixmap(resource_path("Theme/resources/png/small.png")))
+        self.label_2.setPixmap(QtGui.QPixmap(resource_path("Theme/icons/small.png")))
         self.label_2.setObjectName("label_2")
         
         self.label = QtWidgets.QLabel(self.centralwidget)
