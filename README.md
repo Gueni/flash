@@ -5,7 +5,7 @@
 
 
 ----
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) [![GitHub release](https://img.shields.io/github/release/johnDoe/Library.svg)](https://github.com/Gueni/flash/releases/v2.0)
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) [![GitHub release](https://img.shields.io/github/release//Gueni/flash.svg)](https://github.com/Gueni/flash/releases/v2.0)
 
 
  
