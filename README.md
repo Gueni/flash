@@ -192,7 +192,7 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) How to launch  
 
         python3 main.py
-or simply download the latest release : [Latest Release]([https://github.com/Gueni/flash1.0/issues](https://github.com/Gueni/flash/releases/tag/v2.0))
+or simply download the latest release : ([Latest Release](https://github.com/Gueni/flash/releases/tag/v2.0))
 
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) To do  
 
