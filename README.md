@@ -5,7 +5,7 @@
 
 
 ----
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) /github/v/release/:user/:repo
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) ![python2.x](https://img.shields.io/badge/python-2.x-yellow.svg) /github/v/release/:Gueni/:flash
 
  
 
