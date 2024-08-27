@@ -5,26 +5,33 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(442, 388)
+        MainWindow.resize(600, 500)
+        
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(3, 10, 431, 281))
+        self.textEdit.setGeometry(QtCore.QRect(0, 0, 600, 500))
         self.textEdit.setObjectName("textEdit")
+        
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(330, 330, 91, 31))
+        self.pushButton.setGeometry(QtCore.QRect(200, 450, 200, 25))
         self.pushButton.setObjectName("pushButton")
+        
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(10, 300, 311, 18))
+        self.label.setGeometry(QtCore.QRect(10, 400, 300, 25))
+        
         font = QtGui.QFont()
         font.setPointSize(11)
+        
         self.label.setFont(font)
         self.label.setObjectName("label")
+        
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+
+        
         self.retranslateUi(MainWindow)
+        
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

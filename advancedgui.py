@@ -17,6 +17,31 @@ try:
 except AttributeError:
     def _translate(context, text, disambig):
         return QtWidgets.QApplication.translate(context, text, disambig)
+widget_names = [
+            'pushButton_eraseentireflash', 'pushButton_disconnect', 'pushButton_combine',
+            'pushButton_selectall', 'pushButton_loadsetting', 'pushButton_flashAll',
+            'pushButton_loadram', 'pushButton_13', 'pushButton_writestatusreg',
+            'pushButton_savesetting', 'pushButton_default', 'pushButtonconnect',
+            'pushButton_chipid', 'pushButton_dumpmem', 'pushButton_eraseregion',
+            'pushButton_flashcombined', 'pushButton_flashfirmware', 'pushButton_generatebinfromelf',
+            'pushButton_imageinfo', 'pushButton_logout', 'pushButton_readmem',
+            'pushButton_readstatusreg', 'pushButton_verifyflash', 'pushButton_writemem',
+            'lineEditreadmemaddr', 'lineEdit_combinedfile', 'lineEdit_offsetcombined',
+            'lineEdit_path2', 'lineEdit_path1', 'lineEdit_path3',
+            'lineEdit_offset1', 'lineEdit_elffile', 'lineEdit_offset2',
+            'lineEdit_offset3', 'lineEdit_verifyoffset', 'lineEdit_writemem2',
+            'lineEdit_keypath', 'lineEdit_eraseregion2', 'lineEdit_eraseregion1',
+            'lineEdit_dumpmem1', 'lineEdit_dumpmem2', 'lineEdit_writemem1',
+            'lineEdit_writemem3', 'comboBox_readstatusreg', 'comboBox_writestatusreg',
+            'comboBox_serial', 'pushButton_clearop', 'pushButton_cleardata',
+            'pushButton_clearmemo', 'pushButton_readFlash', 'pushButton_Fusedump',
+            'pushButton_encrypt', 'lineEdit_readFlash1', 'lineEdit_readFlash2',
+            'pushButton_path1', 'pushButton_path2', 'pushButton_path3',
+            'pushButton_pathkey', 'pushButton_browsecombined', 'pushButton_elffile',
+            'checkBox_1', 'checkBox_2', 'checkBox_3',
+            'pushButton_genkey', 'comboBox_serial', 'comboBox_chip',
+            'comboBox_flashmode', 'comboBox_flashsize'
+        ]
 #?---------------------------------------------------------------------------------------------------------------------------
 
 class ComboBoxCOMPORT(QtWidgets.QComboBox):
@@ -43,42 +68,40 @@ class Ui_MainWindowadvanced(object):
         self.tabWidget.setTabBar(self.tabbar)
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.West)
         self.tabWidget.setTabsClosable(False)
-
-        # **************first tabwidget ******************/
+        #! tabwidge 1 ------------------------------------------------------------------------------------------------------
         self.info                       = QtWidgets.QWidget()
         self.info.setObjectName("Home")
         
         self.pushButton_disconnect      = QtWidgets.QPushButton(self.info)
-        self.pushButton_disconnect.setGeometry(QtCore.QRect((324+112), 430, 131, 41))
+        self.pushButton_disconnect.setGeometry(QtCore.QRect((324+112), 430, 140, 25))
         self.pushButton_disconnect.setObjectName("pushButton_disconnect")
         
         self.pushButton_logout          = QtWidgets.QPushButton(self.info)
-        self.pushButton_logout.setGeometry(QtCore.QRect(int(488+112), 430, 131, 41))
-        self.pushButton_logout.setObjectName("pushButton_logout")
+        self.pushButton_logout.setGeometry(QtCore.QRect(int(488+112), 430, 140, 25))
         
         self.pushButtonconnect          = QtWidgets.QPushButton(self.info)
-        self.pushButtonconnect.setGeometry(QtCore.QRect(int(160+112), 430, 131, 41))
+        self.pushButtonconnect.setGeometry(QtCore.QRect(int(160+112), 430, 140, 25))
         self.pushButtonconnect.setObjectName("pushButtonconnect")
         
         self.comboBox_serial            = ComboBoxCOMPORT(self.info)
-        self.comboBox_serial.setGeometry(QtCore.QRect(250+112, 330, 365, 22))
+        self.comboBox_serial.setGeometry(QtCore.QRect(250+112+10, 330, 365, 22))
         self.comboBox_serial.setObjectName("comboBox_serial")
-        
-        self.label_7                    = QtWidgets.QLabel(self.info)
-        self.label_7.setGeometry(QtCore.QRect(162+112, 367, 61, 21))
-        self.label_7.setObjectName("label_7")
-        
-        self.comboBox_baud              = QtWidgets.QComboBox(self.info)
-        self.comboBox_baud.setGeometry(QtCore.QRect(250+112, 367, 365, 22))
-        self.comboBox_baud.setObjectName("comboBox_baud")
-        
-        self.label_6                    = QtWidgets.QLabel(self.info)
-        self.label_6.setGeometry(QtCore.QRect(160+112, 330, 61, 21))
-        self.label_6.setObjectName("label_6")
         
         self.label_8                    = QtWidgets.QLabel(self.info)
         self.label_8.setGeometry(QtCore.QRect(320+112, 250, 451, 21))
         self.label_8.setObjectName("label_8")
+
+        self.label_6                    = QtWidgets.QLabel(self.info)
+        self.label_6.setGeometry(QtCore.QRect(160+112, 330, 61, 21))
+        self.label_6.setObjectName("label_6")
+
+        self.label_7                    = QtWidgets.QLabel(self.info)
+        self.label_7.setGeometry(QtCore.QRect(160+112, 367, 61, 21))
+        self.label_7.setObjectName("label_7")
+        
+        self.comboBox_baud              = QtWidgets.QComboBox(self.info)
+        self.comboBox_baud.setGeometry(QtCore.QRect(250+112+10, 367, 365, 22))
+        self.comboBox_baud.setObjectName("comboBox_baud")
         
         self.graphicsView               = QtWidgets.QGraphicsView(self.info)
         self.graphicsView.setGeometry(QtCore.QRect(160+112, 20, 456, 231))
@@ -87,20 +110,20 @@ class Ui_MainWindowadvanced(object):
         
         self.tabWidget.addTab(self.info, "")
 
-        # ******************second tab widget***********************
+        #! tabwidge 2 ------------------------------------------------------------------------------------------------------
         self.optab                      = QtWidgets.QWidget()
         self.optab.setObjectName("optab")
         
         self.plainTextEditadvanced      = QtWidgets.QPlainTextEdit(self.optab)
-        self.plainTextEditadvanced.setGeometry(QtCore.QRect(425, 10, 371, 511))
+        self.plainTextEditadvanced.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
         self.plainTextEditadvanced.setObjectName("plainTextEditadvanced")
         
         self.pushButtoncollapsexpand    = QtWidgets.QPushButton(self.optab)
-        self.pushButtoncollapsexpand.setGeometry(QtCore.QRect(797, 10, 12, 511))
+        self.pushButtoncollapsexpand.setGeometry(QtCore.QRect(910, 10+50, 12, 500))
         self.pushButtoncollapsexpand.setObjectName("pushButtoncollapsexpand")
         
         self.groupBox                   = QtWidgets.QGroupBox(self.optab)
-        self.groupBox.setGeometry(QtCore.QRect(30, 10, 381, 100))
+        self.groupBox.setGeometry(QtCore.QRect(100, 10+50, 381, 100))
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         
@@ -121,7 +144,7 @@ class Ui_MainWindowadvanced(object):
         self.pushButton_chipid.setObjectName("pushButton_chipid")
         
         self.groupBox_2                 = QtWidgets.QGroupBox(self.optab)
-        self.groupBox_2.setGeometry(QtCore.QRect(30, 140, 381, 161))
+        self.groupBox_2.setGeometry(QtCore.QRect(100, 140+50, 381, 161))
         self.groupBox_2.setTitle("")
         self.groupBox_2.setObjectName("groupBox_2")
         
@@ -150,7 +173,7 @@ class Ui_MainWindowadvanced(object):
         self.pushButton_eraseentireflash.setObjectName("pushButton_eraseentireflash")
         
         self.groupBox_3                 = QtWidgets.QGroupBox(self.optab)
-        self.groupBox_3.setGeometry(QtCore.QRect(30, 330, 381, 121))
+        self.groupBox_3.setGeometry(QtCore.QRect(100, 330+50, 381, 121))
         self.groupBox_3.setTitle("")
         self.groupBox_3.setObjectName("groupBox_3")
         
@@ -169,16 +192,16 @@ class Ui_MainWindowadvanced(object):
         
         self.tabWidget.addTab(self.optab, "")
 
-        # ********** third tabwidget*******************************
+        #! tabwidge 3 ------------------------------------------------------------------------------------------------------
         self.Memo = QtWidgets.QWidget()
         self.Memo.setObjectName("Home")
         
         self.plainTextEditadvancedmem   = QtWidgets.QPlainTextEdit(self.Memo)
-        self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(425, 10, 371, 511))
+        self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
         self.plainTextEditadvancedmem.setObjectName("plainTextEditadvanced")
         
         self.pushButtoncollapsexpandm   = QtWidgets.QPushButton(self.Memo)
-        self.pushButtoncollapsexpandm.setGeometry(QtCore.QRect(797, 10, 12, 511))
+        self.pushButtoncollapsexpandm.setGeometry(QtCore.QRect(910, 10+50, 12, 500))
         self.pushButtoncollapsexpandm.setObjectName("pushButtoncollapsexpandm")
         
         self.line                       = QtWidgets.QFrame(self.Memo)
@@ -296,127 +319,124 @@ class Ui_MainWindowadvanced(object):
         
         self.tabWidget.addTab(self.Memo, "")
         
-        # ****************fourth tabwidget******************************
+        #! tabwidge 4 ------------------------------------------------------------------------------------------------------
         
         self.datatab = QtWidgets.QWidget()
         self.datatab.setObjectName("datatab")
         
         self.groupBox_data = QtWidgets.QGroupBox(self.datatab)
-        self.groupBox_data.setGeometry(QtCore.QRect(40, 350, 705, 100))
+        self.groupBox_data.setGeometry(QtCore.QRect(40+85, 350+50, 705, 100))
         self.groupBox_data.setTitle("")
         self.groupBox_data.setObjectName("groupBox_data")
         
         self.pushButton_selectall = QtWidgets.QPushButton(self.groupBox_data)
-        self.pushButton_selectall.setGeometry(QtCore.QRect(10, 30, 120, 40))
+        self.pushButton_selectall.setGeometry(QtCore.QRect(10+15, 30, 120+30, 30))
         self.pushButton_selectall.setObjectName("pushButton_selectall")
         
         self.pushButton_cleardata = QtWidgets.QPushButton(self.groupBox_data)
-        self.pushButton_cleardata.setGeometry(QtCore.QRect(150, 30, 120, 40))
+        self.pushButton_cleardata.setGeometry(QtCore.QRect(150+30+15, 30, 120+30, 30))
         self.pushButton_cleardata.setObjectName("pushButton_cleardata")
         
         self.pushButton_combine = QtWidgets.QPushButton(self.groupBox_data)
-        self.pushButton_combine.setGeometry(QtCore.QRect(290, 30, 120, 40))
+        self.pushButton_combine.setGeometry(QtCore.QRect(290+30+30+15, 30, 120+30, 30))
         self.pushButton_combine.setObjectName("pushButton_combine")
         
         self.pushButton_generatebinfromelf = QtWidgets.QPushButton(self.groupBox_data)
-        self.pushButton_generatebinfromelf.setGeometry(QtCore.QRect(430, 30, 120, 40))
+        self.pushButton_generatebinfromelf.setGeometry(QtCore.QRect(430+30+60+15, 30, 120+30, 30))
         self.pushButton_generatebinfromelf.setObjectName("pushButton_generatebinfromelf")
         
-        self.pushButton_zipfiles = QtWidgets.QPushButton(self.groupBox_data)
-        self.pushButton_zipfiles.setGeometry(QtCore.QRect(570, 30, 120, 40))
-        self.pushButton_zipfiles.setObjectName("pushButton_zipfiles")
-        
+        # ***************# ***************# ***************# ***************
         self.lineEdit_offset3 = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_offset3.setGeometry(QtCore.QRect(625, 90, 101, 20))
+        self.lineEdit_offset3.setGeometry(QtCore.QRect(625+85, 90+50, 101, 20))
         self.lineEdit_offset3.setObjectName("lineEdit_offset3")
         
         self.lineEdit_offset2 = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_offset2.setGeometry(QtCore.QRect(625, 60, 101, 20))
+        self.lineEdit_offset2.setGeometry(QtCore.QRect(625+85, 60+50, 101, 20))
         self.lineEdit_offset2.setObjectName("lineEdit_offset2")
         
         self.lineEdit_offset1 = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_offset1.setGeometry(QtCore.QRect(625, 30, 101, 20))
+        self.lineEdit_offset1.setGeometry(QtCore.QRect(625+85, 30+50, 101, 20))
         self.lineEdit_offset1.setObjectName("lineEdit_offset1")
         
         self.lineEdit_path1 = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_path1.setGeometry(QtCore.QRect(80, 30, 500, 20))
+        self.lineEdit_path1.setGeometry(QtCore.QRect(80+85, 30+50, 500, 20))
         self.lineEdit_path1.setObjectName("lineEdit_path1")
         
         self.lineEdit_path2 = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_path2.setGeometry(QtCore.QRect(80, 60, 500, 20))
+        self.lineEdit_path2.setGeometry(QtCore.QRect(80+85, 60+50, 500, 20))
         self.lineEdit_path2.setObjectName("lineEdit_path2")
         
         self.lineEdit_path3 = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_path3.setGeometry(QtCore.QRect(80, 90, 500, 20))
+        self.lineEdit_path3.setGeometry(QtCore.QRect(80+85, 90+50, 500, 20))
         self.lineEdit_path3.setObjectName("lineEdit_path3")
         
         self.lineEdit_keypath = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_keypath.setGeometry(QtCore.QRect(80, 180, 500, 20))
+        self.lineEdit_keypath.setGeometry(QtCore.QRect(80+85, 180+50, 500, 20))
         self.lineEdit_keypath.setObjectName("lineEdit_keypath")
         
         self.lineEdit_combinedfile = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_combinedfile.setGeometry(QtCore.QRect(80, 120, 500, 20))
+        self.lineEdit_combinedfile.setGeometry(QtCore.QRect(80+85, 120+50, 500, 20))
         self.lineEdit_combinedfile.setObjectName("lineEdit_combinedfile")
         
         self.checkBox_3 = QtWidgets.QCheckBox(self.datatab)
-        self.checkBox_3.setGeometry(QtCore.QRect(735, 90, 31, 21))
+        self.checkBox_3.setGeometry(QtCore.QRect(735+85, 90+50, 31, 21))
         self.checkBox_3.setText("")
         self.checkBox_3.setObjectName("checkBox_3")
         
         self.checkBox_2 = QtWidgets.QCheckBox(self.datatab)
-        self.checkBox_2.setGeometry(QtCore.QRect(735, 60, 31, 21))
+        self.checkBox_2.setGeometry(QtCore.QRect(735+85, 60+50, 31, 21))
         self.checkBox_2.setText("")
         self.checkBox_2.setObjectName("checkBox_2")
         
         self.checkBox_1 = QtWidgets.QCheckBox(self.datatab)
-        self.checkBox_1.setGeometry(QtCore.QRect(735, 30, 31, 21))
+        self.checkBox_1.setGeometry(QtCore.QRect(735+85, 30+50, 31, 21))
         self.checkBox_1.setText("")
         self.checkBox_1.setObjectName("checkBox_1")
         
         self.pushButton_path1 = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_path1.setGeometry(QtCore.QRect(40, 31, 31, 20))
+        self.pushButton_path1.setGeometry(QtCore.QRect(40+85, 31+50, 31, 20))
         self.pushButton_path1.setObjectName("pushButton_path1")
         
         self.pushButton_path2 = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_path2.setGeometry(QtCore.QRect(40, 60, 31, 20))
+        self.pushButton_path2.setGeometry(QtCore.QRect(40+85, 60+50, 31, 20))
         self.pushButton_path2.setObjectName("pushButton_path2")
         
         self.pushButton_path3 = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_path3.setGeometry(QtCore.QRect(40, 91, 31, 20))
+        self.pushButton_path3.setGeometry(QtCore.QRect(40+85, 91+50, 31, 20))
         self.pushButton_path3.setObjectName("pushButton_path3")
         
         self.pushButton_pathkey = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_pathkey.setGeometry(QtCore.QRect(40, 180, 31, 20))
+        self.pushButton_pathkey.setGeometry(QtCore.QRect(40+85, 180+50, 31, 20))
         self.pushButton_pathkey.setObjectName("pushButton_pathkey")
         
         self.lineEdit_elffile = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_elffile.setGeometry(QtCore.QRect(80, 150, 500, 20))
+        self.lineEdit_elffile.setGeometry(QtCore.QRect(80+85, 150+50, 500, 20))
         self.lineEdit_elffile.setObjectName("lineEdit_elffile")
         
         self.pushButton_elffile = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_elffile.setGeometry(QtCore.QRect(40, 150, 31, 20))
+        self.pushButton_elffile.setGeometry(QtCore.QRect(40+85, 150+50, 31, 20))
         self.pushButton_elffile.setObjectName("pushButton_elffile")
         
         self.pushButton_browsecombined = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_browsecombined.setGeometry(QtCore.QRect(40, 120, 31, 20))
+        self.pushButton_browsecombined.setGeometry(QtCore.QRect(40+85, 120+50, 31, 20))
         self.pushButton_browsecombined.setObjectName("pushButton_browsecombined")
         
         self.lineEdit_offsetcombined = QtWidgets.QLineEdit(self.datatab)
-        self.lineEdit_offsetcombined.setGeometry(QtCore.QRect(625, 120, 101, 20))
+        self.lineEdit_offsetcombined.setGeometry(QtCore.QRect(625+85, 120+50, 101, 20))
         self.lineEdit_offsetcombined.setObjectName("lineEdit_offsetcombined")
         
         self.pushButton_genkey = QtWidgets.QPushButton(self.datatab)
-        self.pushButton_genkey.setGeometry(QtCore.QRect(625, 180, 101, 22))
+        self.pushButton_genkey.setGeometry(QtCore.QRect(625+85, 180+50, 101, 22))
         self.pushButton_genkey.setObjectName("pushButton_selectall")
         
         self.tabWidget.addTab(self.datatab, "")
         
-        # ********************fifth tabwidget**********************************
+        #! tabwidge 5 ------------------------------------------------------------------------------------------------------
         self.fusetab = QtWidgets.QWidget()
         self.fusetab.setObjectName("fusetab")
 
         self.pushButton_reloadfusetab = QtWidgets.QPushButton(self.fusetab)
-        self.pushButton_reloadfusetab.setGeometry(QtCore.QRect(320+70, 200+50, 128, 128))
+        self.pushButton_reloadfusetab.setGeometry(QtCore.QRect(320+85, 200+50, 100, 100))
         self.pushButton_reloadfusetab.setObjectName("pushButton_reloadfusetab")
         self.pushButton_reloadfusetab.setStyleSheet("background-image: url('Theme/icons/sync.png'); border: none;background-color :none")
 
@@ -427,16 +447,16 @@ class Ui_MainWindowadvanced(object):
 
         self.tabWidget.addTab(self.fusetab, "")
 
-        # ***************sixth tabwidget********************************
+        #! tabwidge 6 ------------------------------------------------------------------------------------------------------
         self.settingtab = QtWidgets.QWidget()
         self.settingtab.setObjectName("settingtab")
         
         self.comboBox_flashmode = QtWidgets.QComboBox(self.settingtab)
-        self.comboBox_flashmode.setGeometry(QtCore.QRect(160+50, 160+50, 311, 22))
+        self.comboBox_flashmode.setGeometry(QtCore.QRect(160+50, 200+50, 311, 25))
         self.comboBox_flashmode.setObjectName("comboBox_flashmode")
         
         self.comboBox_flashsize = QtWidgets.QComboBox(self.settingtab)
-        self.comboBox_flashsize.setGeometry(QtCore.QRect(160+50, 120+50, 311, 22))
+        self.comboBox_flashsize.setGeometry(QtCore.QRect(160+50, 140+50, 311, 25))
         self.comboBox_flashsize.setObjectName("comboBox_flashsize")
         
         self.label_5 = QtWidgets.QLabel(self.settingtab)
@@ -448,7 +468,7 @@ class Ui_MainWindowadvanced(object):
         self.label_2.setObjectName("label_2")
         
         self.comboBox_chip = QtWidgets.QComboBox(self.settingtab)
-        self.comboBox_chip.setGeometry(QtCore.QRect(160+50, 80+50, 311, 22))
+        self.comboBox_chip.setGeometry(QtCore.QRect(160+50, 80+50, 311, 25))
         self.comboBox_chip.setObjectName("comboBox_chip")
         
         self.label = QtWidgets.QLabel(self.settingtab)
@@ -456,20 +476,20 @@ class Ui_MainWindowadvanced(object):
         self.label.setObjectName("label")
         
         self.pushButton_default = QtWidgets.QPushButton(self.settingtab)
-        self.pushButton_default.setGeometry(QtCore.QRect(580+50, 80+50, 131, 41))
+        self.pushButton_default.setGeometry(QtCore.QRect(580+50, 80+50,  160, 25))
         self.pushButton_default.setObjectName("pushButton_default")
         
         self.pushButton_savesetting = QtWidgets.QPushButton(self.settingtab)
-        self.pushButton_savesetting.setGeometry(QtCore.QRect(580+50, 140+50, 131, 41))
+        self.pushButton_savesetting.setGeometry(QtCore.QRect(580+50, 140+50, 160, 25))
         self.pushButton_savesetting.setObjectName("pushButton_savesetting")
         
         self.pushButton_loadsetting = QtWidgets.QPushButton(self.settingtab)
-        self.pushButton_loadsetting.setGeometry(QtCore.QRect(580+50, 200+50, 131, 41))
+        self.pushButton_loadsetting.setGeometry(QtCore.QRect(580+50, 200+50, 160, 25))
         self.pushButton_loadsetting.setObjectName("pushButton_loadsetting")
         
         self.tabWidget.addTab(self.settingtab, "")
        
-        # ***************************************************************
+        #!----------------------------------------------------------------------------------------------------------------
         MainWindow.setCentralWidget(self.centralwidget)
         
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -507,6 +527,7 @@ class Ui_MainWindowadvanced(object):
         self.tabWidget.setCurrentIndex(0)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        #!----------------------------------------------------------------------------------------------------------------
 
        
     def retranslateUi(self, MainWindow):
@@ -520,9 +541,9 @@ class Ui_MainWindowadvanced(object):
             (self.pushButton_logout,         "Log out"),
             (self.pushButtonconnect,         "Connect"),
             (self.label_6,                   "Serial Port"),
+            (self.label_7,                   "Baud Rate"),
             (self.label_8,                   ""),
             (self.pushButton_chipid,         "chip ID"),
-            (self.pushButton_zipfiles,       "Package"),
             (self.pushButton_reloadfusetab,  ""),
             (self.pushButton_eraseregion,    "Erase Region"),
             (self.pushButton_readmem,        "Read Memory"),

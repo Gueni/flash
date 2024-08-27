@@ -90,13 +90,13 @@ verifconst                      = 'veriftest'
 dump_progress                   = 'dump_progress'
 read_flash_progress             = 'read_flash_progress'
 comport                         = 'comport'
-QSS_style               = "Theme/stylesheet.qss"
-settingsprogresswrite   = "Dependecies/Dependecies/settingsprogresswrite.ini"
-settingsstyle           = "Dependecies/settingsstyle.ini"
-expand_png              = 'Theme/icons/expand.png'
-collapse_png            = 'Theme/icons/collapse.png'
-espLogo_png             = 'Theme/icons/espLogo.png'
-splash_screen_png       = 'Theme/icons/logo-color.png'
+QSS_style                       = "Theme/stylesheet.qss"
+settingsprogresswrite           = "Dependecies/Dependecies/settingsprogresswrite.ini"
+settingsstyle                   = "Dependecies/settingsstyle.ini"
+expand_png                      = 'Theme/icons/expand.png'
+collapse_png                    = 'Theme/icons/collapse.png'
+espLogo_png                     = 'Theme/icons/espLogo.png'
+splash_screen_png               = 'Theme/icons/logo-color.png'
 #?---------------------------------------------------------------------------------------------------------------------------
 
 class MyprogressbarThread(QThread):
@@ -185,7 +185,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(self.bundle_dir + 'Theme/icons/espLogo.png'))
+
         self.lay                = QVBoxLayout()
+
         self.settingstyle       = QSettings("Dependencies/settingsstyle.ini", QSettings.IniFormat)
         self.setStyleSheet(open('Theme/stylesheet.qss', "r").read())
         self.workerThread       = WorkerThread()
@@ -203,8 +205,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.initProcessmem()
         self.baudRate           = 115200
         self.setAcceptDrops(True)
-      
-       
         self.port               = ''
         self.flasSize           = self.comboBox_flashsize.currentText()
         self.frozen             = 'not'
@@ -272,9 +272,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def initui(self):
 
-        self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(425, 10, 0, 0))
-        self.groupBoxmemo.setGeometry(QtCore.QRect(30, 10, 720, 350))
-        self.groupBox_2memo.setGeometry(QtCore.QRect(30, 370, 720, 100))
+        self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
+        self.groupBoxmemo.setGeometry(QtCore.QRect(100, 10+70, 720, 350))
+        self.groupBox_2memo.setGeometry(QtCore.QRect(100, 370+70, 720, 100))
         self.pushButton_readmem.setGeometry(QtCore.QRect(30, 20, 320, 25))
         self.lineEditreadmemaddr.setGeometry(QtCore.QRect(370, 20, 320, 25))
         self.pushButton_writemem.setGeometry(QtCore.QRect(30, 55, 150, 25))
@@ -300,10 +300,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.progressBarmemo.setGeometry(QtCore.QRect(30, 60, 660, 13))
         self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/expandv.png'))
         self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
-        self.plainTextEditadvanced.setGeometry(QtCore.QRect(425, 10, 0, 0))
-        self.groupBox.setGeometry(QtCore.QRect(30, 10, 720, 100))
-        self.groupBox_2.setGeometry(QtCore.QRect(30, 140, 720, 161))
-        self.groupBox_3.setGeometry(QtCore.QRect(30, 330, 720, 121))
+       
+        self.plainTextEditadvanced.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
+        self.groupBox.setGeometry(QtCore.QRect(100, 10+80, 720, 100))
+        self.groupBox_2.setGeometry(QtCore.QRect(100, 140+80, 720, 161))
+        self.groupBox_3.setGeometry(QtCore.QRect(100, 330+80, 720, 121))
         self.pushButton_verifyflash.setGeometry(QtCore.QRect(30, 20, 300, 25))
         self.lineEdit_verifyoffset.setGeometry(QtCore.QRect(390, 20, 300, 25))
         self.pushButton_loadram.setGeometry(QtCore.QRect(30, 55, 300, 25))
@@ -365,305 +366,15 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.process.started.connect(self.disableButtons)
         self.process.finished.connect(self.enableButtons)
 
-    def setDark(self):
-
-        self.setStyleSheet(open("Theme/stylesheet.qss", "r").read())
-        self.settingstyle.setValue(SETTINGS_style, "Theme/stylesheet.qss")
-        self.settingstyle.sync()
-        self.label_5.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_6.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_7.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_8.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButtoncollapsexpand.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_savesetting.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_13.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_browsecombined.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_chipid.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_cleardata.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_clearmemo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_clearop.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_combine.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_default.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_disconnect.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_dumpmem.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_elffile.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_encrypt.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_eraseentireflash.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_eraseregion.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_flashAll.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_verifyflash.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_loadram.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_verifyoffset.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_flashcombined.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_flashfirmware.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_imageinfo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_stop.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.progressBar.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.tabWidget.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.fusetab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.optab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.settingtab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.infohelptab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.datatab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.info.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButtonconnect.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_logout.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.comboBox_baud.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.comboBox_serial.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_selectall.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_generatebinfromelf.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_zipfiles.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_readmem.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEditreadmemaddr.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_writemem.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_writemem1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_writemem2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_writemem3.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_eraseregion1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_eraseregion2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_dumpmem1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_dumpmem2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.comboBox_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_writestatusreg.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_writestatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_readFlash.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_readFlash1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_readFlash2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_Fusedump.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_stopmemo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.progressBarmemo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.Memo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.tableWidget.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.terminal_tab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.menubar.setStyleSheet(open(SETTINGS_style, "r").read())
-
-    def setactionLight_Blue(self):
-
-        self.setStyleSheet(open("Theme/stylesheet.qss", "r").read())
-        self.settingstyle.setValue(SETTINGS_style, "Theme/stylesheet.qss")
-        self.settingstyle.sync()
-        self.menubar.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_5.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_6.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_7.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.label_8.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButtoncollapsexpand.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_savesetting.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_13.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_browsecombined.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_chipid.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_cleardata.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_clearmemo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_clearop.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_combine.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_default.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_disconnect.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_dumpmem.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_elffile.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_encrypt.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_eraseentireflash.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_eraseregion.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_flashAll.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_verifyflash.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_loadram.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_verifyoffset.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_flashcombined.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_flashfirmware.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_imageinfo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_stop.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.progressBar.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.tabWidget.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.fusetab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.optab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.settingtab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.infohelptab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.datatab.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.info.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButtonconnect.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_logout.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.comboBox_baud.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.comboBox_serial.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_selectall.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_generatebinfromelf.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.pushButton_zipfiles.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_readmem.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEditreadmemaddr.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_writemem.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_writemem1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_writemem2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_writemem3.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_eraseregion1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_eraseregion2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_dumpmem1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_dumpmem2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.comboBox_readstatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_writestatusreg.setStyleSheet(
-            open(self.settingstyle.value(SETTINGS_style, type=str), "r").read())
-        self.comboBox_writestatusreg.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_readFlash.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_readFlash1.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.lineEdit_readFlash2.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_Fusedump.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.pushButton_stopmemo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.progressBarmemo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.Memo.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.tableWidget.setStyleSheet(open(SETTINGS_style, "r").read())
-        self.terminal_tab.setStyleSheet(open(SETTINGS_style, "r").read())
-
     def disableButtons(self):
-
-        self.pushButton_eraseentireflash.setDisabled(True)
-        self.pushButton_disconnect.setDisabled(True)
-        self.pushButton_combine.setDisabled(True)
-        self.pushButton_selectall.setDisabled(True)
-        self.pushButton_loadsetting.setDisabled(True)
-        self.pushButton_flashAll.setDisabled(True)
-        self.pushButton_loadram.setDisabled(True)
-        self.pushButton_13.setDisabled(True)
-        self.pushButton_writestatusreg.setDisabled(True)
-        self.pushButton_savesetting.setDisabled(True)
-        self.pushButton_default.setDisabled(True)
-        self.pushButtonconnect.setDisabled(True)
-        self.pushButton_chipid.setDisabled(True)
-        self.pushButton_dumpmem.setDisabled(True)
-        self.pushButton_eraseregion.setDisabled(True)
-        self.pushButton_flashcombined.setDisabled(True)
-        self.pushButton_flashfirmware.setDisabled(True)
-        self.pushButton_generatebinfromelf.setDisabled(True)
-        self.pushButton_imageinfo.setDisabled(True)
-        self.pushButton_logout.setDisabled(True)
-        self.pushButton_readmem.setDisabled(True)
-        self.pushButton_readstatusreg.setDisabled(True)
-        self.pushButton_verifyflash.setDisabled(True)
-        self.pushButton_writemem.setDisabled(True)
-        self.lineEditreadmemaddr.setDisabled(True)
-        self.lineEdit_combinedfile.setDisabled(True)
-        self.lineEdit_offsetcombined.setDisabled(True)
-        self.lineEdit_path2.setDisabled(True)
-        self.lineEdit_path1.setDisabled(True)
-        self.lineEdit_path3.setDisabled(True)
-        self.lineEdit_offset1.setDisabled(True)
-        self.lineEdit_elffile.setDisabled(True)
-        self.lineEdit_offset2.setDisabled(True)
-        self.lineEdit_offset3.setDisabled(True)
-        self.lineEdit_verifyoffset.setDisabled(True)
-        self.lineEdit_writemem2.setDisabled(True)
-        self.lineEdit_keypath.setDisabled(True)
-        self.lineEdit_eraseregion2.setDisabled(True)
-        self.lineEdit_eraseregion1.setDisabled(True)
-        self.lineEdit_dumpmem1.setDisabled(True)
-        self.lineEdit_dumpmem2.setDisabled(True)
-        self.lineEdit_writemem1.setDisabled(True)
-        self.lineEdit_writemem3.setDisabled(True)
-        self.comboBox_readstatusreg.setDisabled(True)
-        self.comboBox_writestatusreg.setDisabled(True)
-        self.comboBox_serial.setDisabled(True)
-        self.pushButton_clearop.setDisabled(True)
-        self.pushButton_cleardata.setDisabled(True)
-        self.pushButton_clearmemo.setDisabled(True)
-        self.pushButton_readFlash.setDisabled(True)
-        self.pushButton_Fusedump.setDisabled(True)
-        self.pushButton_encrypt.setDisabled(True)
-        self.lineEdit_readFlash1.setDisabled(True)
-        self.lineEdit_readFlash2.setDisabled(True)
-        self.pushButton_path1.setDisabled(True)
-        self.pushButton_path2.setDisabled(True)
-        self.pushButton_path3.setDisabled(True)
-        self.pushButton_pathkey.setDisabled(True)
-        self.pushButton_browsecombined.setDisabled(True)
-        self.pushButton_elffile.setDisabled(True)
-        self.checkBox_1.setDisabled(True)
-        self.checkBox_2.setDisabled(True)
-        self.checkBox_3.setDisabled(True)
-        self.pushButton_genkey.setDisabled(True)
-        self.comboBox_serial.setDisabled(True)
-        self.comboBox_chip.setDisabled(True)
-        self.comboBox_flashsize.setDisabled(True)
-        self.comboBox_flashmode.setDisabled(True)
+       
+        for name in advancedgui.widget_names:
+            getattr(self, name).setDisabled(True)
 
     def enableButtons(self):
-
-        self.pushButton_eraseentireflash.setDisabled(False)
-        self.pushButton_disconnect.setDisabled(False)
-        self.pushButton_combine.setDisabled(False)
-        self.pushButton_selectall.setDisabled(False)
-        self.pushButton_loadsetting.setDisabled(False)
-        self.pushButton_flashAll.setDisabled(False)
-        self.pushButton_loadram.setDisabled(False)
-        self.pushButton_13.setDisabled(False)
-        self.pushButton_writestatusreg.setDisabled(False)
-        self.pushButton_savesetting.setDisabled(False)
-        self.pushButton_default.setDisabled(False)
-        self.pushButtonconnect.setDisabled(False)
-        self.pushButton_chipid.setDisabled(False)
-        self.pushButton_dumpmem.setDisabled(False)
-        self.pushButton_eraseregion.setDisabled(False)
-        self.pushButton_flashcombined.setDisabled(False)
-        self.pushButton_flashfirmware.setDisabled(False)
-        self.pushButton_generatebinfromelf.setDisabled(False)
-        self.pushButton_imageinfo.setDisabled(False)
-        self.pushButton_logout.setDisabled(False)
-        self.pushButton_readmem.setDisabled(False)
-        self.pushButton_readstatusreg.setDisabled(False)
-        self.pushButton_verifyflash.setDisabled(False)
-        self.pushButton_writemem.setDisabled(False)
-        self.lineEditreadmemaddr.setDisabled(False)
-        self.lineEdit_combinedfile.setDisabled(False)
-        self.lineEdit_offsetcombined.setDisabled(False)
-        self.lineEdit_path2.setDisabled(False)
-        self.lineEdit_path1.setDisabled(False)
-        self.lineEdit_path3.setDisabled(False)
-        self.lineEdit_offset1.setDisabled(False)
-        self.lineEdit_elffile.setDisabled(False)
-        self.lineEdit_offset2.setDisabled(False)
-        self.lineEdit_offset3.setDisabled(False)
-        self.lineEdit_verifyoffset.setDisabled(False)
-        self.lineEdit_writemem2.setDisabled(False)
-        self.lineEdit_keypath.setDisabled(False)
-        self.lineEdit_eraseregion2.setDisabled(False)
-        self.lineEdit_eraseregion1.setDisabled(False)
-        self.lineEdit_dumpmem1.setDisabled(False)
-        self.lineEdit_dumpmem2.setDisabled(False)
-        self.lineEdit_writemem1.setDisabled(False)
-        self.lineEdit_writemem3.setDisabled(False)
-        self.comboBox_readstatusreg.setDisabled(False)
-        self.comboBox_writestatusreg.setDisabled(False)
-        self.comboBox_serial.setDisabled(False)
-        self.pushButton_clearop.setDisabled(False)
-        self.pushButton_cleardata.setDisabled(False)
-        self.pushButton_clearmemo.setDisabled(False)
-        self.pushButton_readFlash.setDisabled(False)
-        self.pushButton_Fusedump.setDisabled(False)
-        self.pushButton_encrypt.setDisabled(False)
-        self.lineEdit_readFlash1.setDisabled(False)
-        self.lineEdit_readFlash2.setDisabled(False)
-        self.pushButton_path1.setDisabled(False)
-        self.pushButton_path2.setDisabled(False)
-        self.pushButton_path3.setDisabled(False)
-        self.pushButton_pathkey.setDisabled(False)
-        self.pushButton_browsecombined.setDisabled(False)
-        self.pushButton_elffile.setDisabled(False)
-        self.checkBox_1.setDisabled(False)
-        self.checkBox_2.setDisabled(False)
-        self.checkBox_3.setDisabled(False)
-        self.pushButton_genkey.setDisabled(False)
-        self.comboBox_serial.setDisabled(False)
-        self.comboBox_chip.setDisabled(False)
-        self.comboBox_flashmode.setDisabled(False)
-        self.comboBox_flashsize.setDisabled(False)
+     
+        for name in advancedgui.widget_names:
+            getattr(self, name).setDisabled(False)
 
     def close_application(self):
 
@@ -810,39 +521,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_reloadfusetab.clicked.connect(self.refreshsummary)
         self.pushButton_genkey.clicked.connect(self.generateencryptionkey)
         self.pushButton_encrypt.clicked.connect(self.encryptflash)
-        self.pushButton_zipfiles.clicked.connect(self.createpackage)
-        self.btn1.clicked.connect(self.burnfirst)
-        self.btn2.clicked.connect(self.burnsecond)
-        self.btn3.clicked.connect(self.burnthird)
-        self.btn4.clicked.connect(self.burnfourth)
-        self.btn5.clicked.connect(self.burnfifth)
-        self.btn6.clicked.connect(self.burnsixth)
-        self.btn7.clicked.connect(self.burnseventh)
-        self.btn8.clicked.connect(self.burneighth)
-        self.btn9.clicked.connect(self.burnnineth)
-        self.btn10.clicked.connect(self.burn10)
-        self.btn11.clicked.connect(self.burn11)
-        self.btn12.clicked.connect(self.burn12)
-        self.btn13.clicked.connect(self.burn13)
-        self.btn14.clicked.connect(self.burn14)
-        self.btn15.clicked.connect(self.burn15)
-        self.btn16.clicked.connect(self.burn16)
-        self.btn17.clicked.connect(self.burn17)
-        self.btn18.clicked.connect(self.burn18)
-        self.btn19.clicked.connect(self.burn19)
-        self.btn20.clicked.connect(self.burn20)
-        self.btn21.clicked.connect(self.burn21)
-        self.btn22.clicked.connect(self.burn22)
-        self.btn23.clicked.connect(self.burn23)
-        self.btn24.clicked.connect(self.burn24)
-        self.btn25.clicked.connect(self.burn25)
-        self.btn26.clicked.connect(self.burn26)
-        self.btn27.clicked.connect(self.burn27)
-        self.btn28.clicked.connect(self.burn28)
-        self.btn29.clicked.connect(self.burn29)
-        self.btn30.clicked.connect(self.burn30)
-        self.btn31.clicked.connect(self.burn31)
-        self.btn32.clicked.connect(self.burn32)
+        for i in range(32):
+            getattr(self, f'btn{i+1}').clicked.connect(self.burn)
         self.pushButton_savesetting.clicked.connect(self.saveSettingstofilebutton)
         self.btnexport.clicked.connect(self.exportfuse)
         self.btnref.clicked.connect(self.refbuttonfunction)
@@ -851,11 +531,11 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         testwidth = self.plainTextEditadvanced.width()
         testheight = self.plainTextEditadvanced.height()
-        if testheight == 511 and testwidth == 371:
-            self.plainTextEditadvanced.setGeometry(QtCore.QRect(425, 10, 0, 0))
-            self.groupBox.setGeometry(QtCore.QRect(30, 10, 720, 100))
-            self.groupBox_2.setGeometry(QtCore.QRect(30, 140, 720, 161))
-            self.groupBox_3.setGeometry(QtCore.QRect(30, 330, 720, 121))
+        if testheight == 500 and testwidth == 400:
+            self.plainTextEditadvanced.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
+            self.groupBox.setGeometry(QtCore.QRect(100, 10+80, 720, 100))
+            self.groupBox_2.setGeometry(QtCore.QRect(100, 140+80, 720, 161))
+            self.groupBox_3.setGeometry(QtCore.QRect(100, 330+80, 720, 121))
             self.pushButton_verifyflash.setGeometry(QtCore.QRect(30, 20, 300, 25))
             self.lineEdit_verifyoffset.setGeometry(QtCore.QRect(390, 20, 300, 25))
             self.pushButton_loadram.setGeometry(QtCore.QRect(30, 55, 300, 25))
@@ -873,10 +553,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
             self.pushButton_encrypt.setGeometry(QtCore.QRect(370, 265, 320, 25))
         if testheight == 0 and testwidth == 0:
-            self.plainTextEditadvanced.setGeometry(QtCore.QRect(425, 10, 371, 511))
-            self.groupBox.setGeometry(QtCore.QRect(30, 10, 381, 100))
-            self.groupBox_2.setGeometry(QtCore.QRect(30, 140, 381, 161))
-            self.groupBox_3.setGeometry(QtCore.QRect(30, 330, 381, 121))
+            self.plainTextEditadvanced.setGeometry(QtCore.QRect(510, 10+50, 400, 500))
+            self.groupBox.setGeometry(QtCore.QRect(30+50, 10+80, 381, 100))
+            self.groupBox_2.setGeometry(QtCore.QRect(30+50, 140+80, 381, 161))
+            self.groupBox_3.setGeometry(QtCore.QRect(30+50, 330+80, 381, 121))
             self.pushButton_verifyflash.setGeometry(QtCore.QRect(20, 20, 200, 25))
             self.lineEdit_verifyoffset.setGeometry(QtCore.QRect(250, 20, 111, 25))
             self.pushButton_loadram.setGeometry(QtCore.QRect(20, 55, 160, 25))
@@ -897,10 +577,10 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
         testwidth = self.plainTextEditadvancedmem.width()
         testheight = self.plainTextEditadvancedmem.height()
-        if testheight == 511 and testwidth == 371:
-            self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(425, 10, 0, 0))
-            self.groupBoxmemo.setGeometry(QtCore.QRect(30, 10, 720, 350))
-            self.groupBox_2memo.setGeometry(QtCore.QRect(30, 370, 720, 100))
+        if testheight == 500 and testwidth == 400:
+            self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
+            self.groupBoxmemo.setGeometry(QtCore.QRect(100, 10+70, 720, 350))
+            self.groupBox_2memo.setGeometry(QtCore.QRect(100, 370+70, 720, 100))
             self.pushButton_readmem.setGeometry(QtCore.QRect(30, 20, 320, 25))
             self.lineEditreadmemaddr.setGeometry(QtCore.QRect(370, 20, 320, 25))
             self.pushButton_writemem.setGeometry(QtCore.QRect(30, 55, 150, 25))
@@ -928,9 +608,9 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/expandv.png'))
             self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
         if testheight == 0 and testwidth == 0:
-            self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(425, 10, 371, 511))
-            self.groupBoxmemo.setGeometry(QtCore.QRect(30, 10, 381, 400))
-            self.groupBox_2memo.setGeometry(QtCore.QRect(30, 421, 381, 100))
+            self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(510, 10+50, 400, 500))
+            self.groupBoxmemo.setGeometry(QtCore.QRect(30+50, 10+50, 381, 400))
+            self.groupBox_2memo.setGeometry(QtCore.QRect(30+50, 421+50, 381, 100))
             self.pushButton_readmem.setGeometry(QtCore.QRect(20, 20, 221, 25))
             self.lineEditreadmemaddr.setGeometry(QtCore.QRect(250, 20, 111, 25))
             self.pushButton_writemem.setGeometry(QtCore.QRect(20, 55, 101, 25))
@@ -1102,7 +782,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         if settings.value(SETTINGS_plainadv) is not None:
             self.plainTextEditadvanced.setPlainText(settings.value(SETTINGS_plainadv))
 
-    # *******************************1st_Tab****************************************************************************
+    #! tabwidge 1 ------------------------------------------------------------------------------------------------------
 
     def baudSelect(self):
         self.baudRate = int(self.comboBox_baud.currentText())
@@ -1157,7 +837,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.graphicsView.setScene(scene)
         self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
 
-    # *******************************2nd_Tab****************************************************************************
+    #! tabwidge 2 ------------------------------------------------------------------------------------------------------
+
     def verifyFlash(self):
         verifyoffset = self.lineEdit_verifyoffset.text()
         if (verifyoffset == "") or (verifyoffset == " "):
@@ -1189,8 +870,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             else:
                 self.plainTextEditadvanced.appendPlainText("Operation Verify Flash Aborted ")
                 QMessageBox.warning(self, 'Operation Aborted', "Operation Verify Flash Aborted ", QMessageBox.Ok)
-        # diff_state = settingsverify.value(verifconst, type=str)
-        # QMessageBox.warning(self, 'Verify Result', diff_state, QMessageBox.Ok)
 
     def loadRam(self):
         options = QFileDialog.Options()
@@ -1573,7 +1252,8 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 self.processmem.start(
                     'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' dump')
 
-    # *********************************3rd_Tab**************************************************************************
+    #! tabwidge 3 ------------------------------------------------------------------------------------------------------
+
     def readmemory(self):
         memoryaddr = self.lineEditreadmemaddr.text()
         self.port = self.comboBox_serial.currentText()
@@ -1756,7 +1436,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                             'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port {0} burn_key flash_encryption {1}'.format(
                                 self.port, self.lineEdit_keypath.text()))
 
-    # *******************************4th_Tab****************************************************************************
+    #! tabwidge 4 ------------------------------------------------------------------------------------------------------
 
     def onDefault(self):
         self.comboBox_baud.setCurrentIndex(5)
@@ -1896,103 +1576,6 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     'sudo python ' + self.bundle_dir + 'Dependecies/esptool.py --chip esp8266 make_image -f  {0} -a {1}  -f {2} -a {3} -f  {4} -a {5} {6}'.format(
                         path1, offset1, path2, offset2, path3, offset3, fileName))
 
-    def saveSettingstofilepackage(self):
-
-        settings = QSettings("Dependecies/privatesettings.ini", QSettings.IniFormat)
-        settings.setValue('offset1', self.lineEdit_offset1.text())
-        settings.setValue('offset2', self.lineEdit_offset2.text())
-        settings.setValue('offset3', self.lineEdit_offset3.text())
-        settings.setValue('baudrate', self.comboBox_baud.currentIndex())
-        settings.setValue('flashsize', self.comboBox_flashsize.currentIndex())
-        settings.setValue('flashmode', self.comboBox_flashmode.currentText())
-        # add pc info and date/time to display later on
-
-        now = QDate.currentDate()
-        settings.setValue('datenowsetting', now.toString(Qt.DefaultLocaleLongDate))
-        time = QTime.currentTime()
-        settings.setValue('timenowsetting', time.toString(Qt.DefaultLocaleLongDate))
-        """Get all ip addresses from computer
-           :rtype: list
-           """
-        ip_list = []
-
-        for interface in QNetworkInterface().allInterfaces():
-            flags = interface.flags()
-            is_loopback = bool(flags & QNetworkInterface.IsLoopBack)
-            is_p2p = bool(flags & QNetworkInterface.IsPointToPoint)
-            is_running = bool(flags & QNetworkInterface.IsRunning)
-            is_up = bool(flags & QNetworkInterface.IsUp)
-
-            if not is_running:
-                continue
-            if not interface.isValid() or is_loopback or is_p2p:
-                continue
-
-            for addr in interface.allAddresses():
-                if addr == QHostAddress.LocalHost:
-                    continue
-                if not addr.toIPv4Address():
-                    continue
-                ip = addr.toString()
-                if ip == '':
-                    continue
-
-                if ip not in ip_list:
-                    ip_list.append(ip)
-        settings.setValue('ipaddresssetting', ip_list)
-        settings.setValue('machinesettig', str((platform.uname())))
-        settings.sync()
-
-    def createpackage(self):
-        self.saveSettingstofilepackage()
-        path1 = self.lineEdit_path1.text()
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getSaveFileName(self, "Select Package path", options=options)
-        head, tail = os.path.split(fileName)
-
-        if not (fileName == " " or fileName == ""):
-            secret_password = b'hello123456789'
-            with pyzipper.AESZipFile(fileName, 'w', compression=pyzipper.ZIP_LZMA) as zf:
-                zf.setpassword(secret_password)
-                zf.setencryption(pyzipper.WZ_AES, nbits=256)
-                if self.checkBox_1.isChecked() and not self.checkBox_2.isChecked() and not self.checkBox_3.isChecked():
-                    if os.path.isfile(path1):
-                        zf.write(self.lineEdit_path1.text())
-                        zf.write("Dependecies/privatesettings.ini")
-                    else:
-                        QMessageBox.about(self, "No Device is Connected", "Please Connect a Device First")
-
-                elif self.checkBox_2.isChecked() and not self.checkBox_1.isChecked() and not self.checkBox_3.isChecked():
-                    zf.write(self.lineEdit_path2.text())
-                    zf.write("Dependecies/privatesettings.ini")
-                elif self.checkBox_3.isChecked() and not self.checkBox_2.isChecked() and not self.checkBox_1.isChecked():
-                    zf.write(self.lineEdit_path3.text())
-                    zf.write("Dependecies/privatesettings.ini")
-                elif self.checkBox_1.isChecked() and self.checkBox_2.isChecked() and not self.checkBox_3.isChecked():
-                    zf.write(self.lineEdit_path1.text())
-                    zf.write(self.lineEdit_path2.text())
-                    zf.write("Dependecies/privatesettings.ini")
-                elif self.checkBox_1.isChecked() and self.checkBox_3.isChecked() and not self.checkBox_2.isChecked():
-                    zf.write(self.lineEdit_path1.text())
-                    zf.write(self.lineEdit_path3.text())
-                    zf.write("Dependecies/privatesettings.ini")
-                elif self.checkBox_2.isChecked() and self.checkBox_3.isChecked() and not self.checkBox_1.isChecked():
-                    zf.write(self.lineEdit_path2.text())
-                    zf.write(self.lineEdit_path3.text())
-                    zf.write("Dependecies/privatesettings.ini")
-                elif self.checkBox_1.isChecked() and self.checkBox_2.isChecked() and self.checkBox_3.isChecked():
-                    zf.write(self.lineEdit_path1.text())
-                    zf.write(self.lineEdit_path2.text())
-                    zf.write(self.lineEdit_path3.text())
-                    zf.write("Dependecies/privatesettings.ini")
-                else:
-                    pass
-        else:
-            pass
-        base = os.path.splitext(fileName)[0]
-        os.rename(fileName, base + '.mtool')
-
     def selectbinFile(self, name, obj):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -2062,7 +1645,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                     self.processmem.start(
                         'sudo python ' + self.bundle_dir + 'Dependecies/espsecure.py generate_flash_encryption_key ' + " " + fileName)
 
-    # *******************************5th_Tab****************************************************************************
+    #! tabwidge 5 ------------------------------------------------------------------------------------------------------
 
     def refbuttonfunction(self):
 
@@ -2076,7 +1659,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         movie.start()
         self.lay.addWidget(self.status_txt)
 
-        QtTest.QTest.qWait(11000)
+        QtTest.QTest.qWait(8000)
         movie.stop()
         self.status_txt.deleteLater()
         #
@@ -2128,14 +1711,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
         self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
         self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
-        self.tableWidget.setGeometry(QtCore.QRect(20, 0, 950, 650))
+        self.tableWidget.setGeometry(QtCore.QRect(0, 0, 850, 650))
         self.lay.addWidget(self.tableWidget)
         self.tableWidget.verticalHeader().setVisible(False)
         self.tableWidget.setColumnWidth(0, 200)
-        self.tableWidget.setColumnWidth(1, 200)
-        self.tableWidget.setColumnWidth(2, 130)
-        self.tableWidget.setColumnWidth(3, 110)
-        self.tableWidget.setColumnWidth(4, 70)
+        self.tableWidget.setColumnWidth(1, 230)
+        self.tableWidget.setColumnWidth(2, 200)
+        self.tableWidget.setColumnWidth(3, 100)
+        self.tableWidget.setColumnWidth(4, 100)
         self.tableWidget.setColumnWidth(5, 50)
 
         self.setuptablebuttons()
@@ -2192,167 +1775,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btnref.setStyleSheet("border: none;border-radius: 0px;")
         self.btnref.setStyleSheet(open(SETTINGS_style, "r").read())
 
-        self.tableWidget.setCellWidget(1, 5, self.btn1)
-        self.btn1.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn1.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn1.setStyleSheet(open(SETTINGS_style, "r").read())
+        for i in range(32):
+            btn = getattr(self, f'btn{i+1}')
+            btn.setIcon(QIcon('Theme/icons/executefuse1.png'))
+            btn.setStyleSheet("border: none;border-radius: 0px;")
+            btn.setStyleSheet(open(SETTINGS_style, "r").read())
+            self.tableWidget.setCellWidget(i+1, 5, btn)  # Place the button in the i-th row, 0-th column
 
-        self.tableWidget.setCellWidget(2, 5, self.btn2)
-        self.btn2.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn2.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn2.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(3, 5, self.btn3)
-        self.btn3.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn3.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn3.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(4, 5, self.btn4)
-        self.btn4.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn4.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn4.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(5, 5, self.btn5)
-        self.btn5.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn5.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn5.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(6, 5, self.btn6)
-        self.btn6.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn6.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn6.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(7, 5, self.btn7)
-        self.btn7.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn7.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn7.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(8, 5, self.btn8)
-        self.btn8.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn8.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn8.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(9, 5, self.btn9)
-        self.btn9.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn9.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn9.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(10, 5, self.btn10)
-        self.btn10.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn10.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn10.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(11, 5, self.btn11)
-        self.btn11.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn11.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn11.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(12, 5, self.btn12)
-        self.btn12.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn12.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn12.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(13, 5, self.btn13)
-        self.btn13.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn13.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn13.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(14, 5, self.btn14)
-        self.btn14.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn14.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn14.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(15, 5, self.btn15)
-        self.btn15.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn15.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn15.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(16, 5, self.btn16)
-        self.btn16.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn16.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn16.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(17, 5, self.btn17)
-        self.btn17.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn17.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn17.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(18, 5, self.btn18)
-        self.btn18.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn18.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn18.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(19, 5, self.btn19)
-        self.btn19.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn19.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn19.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(20, 5, self.btn20)
-        self.btn20.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn20.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn20.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(21, 5, self.btn21)
-        self.btn21.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn21.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn21.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(22, 5, self.btn22)
-        self.btn22.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn22.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn22.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(23, 5, self.btn23)
-        self.btn23.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn23.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn23.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(24, 5, self.btn24)
-        self.btn24.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn24.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn24.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(25, 5, self.btn25)
-        self.btn25.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn25.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn25.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(26, 5, self.btn26)
-        self.btn26.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn26.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn26.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(27, 5, self.btn27)
-        self.btn27.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn27.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn27.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(28, 5, self.btn28)
-        self.btn28.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn28.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn28.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(29, 5, self.btn29)
-        self.btn29.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn29.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn29.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(30, 5, self.btn30)
-        self.btn30.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn30.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn30.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(31, 5, self.btn31)
-        self.btn31.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn31.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn31.setStyleSheet(open(SETTINGS_style, "r").read())
-
-        self.tableWidget.setCellWidget(32, 5, self.btn32)
-        self.btn32.setIcon(QIcon('Theme/icons/executefuse1.png'))
-        self.btn32.setStyleSheet("border: none;border-radius: 0px;")
-        self.btn32.setStyleSheet(open(SETTINGS_style, "r").read())
-
-    def burnfirst(self):
+    def burn(self):
         self.item = self.tableWidget.item(1, 0)
 
         settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
@@ -2387,1123 +1817,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
                 settings_burn.setValue('confirm_burn', "no")
                 pass
 
-    def burnsecond(self):
-
-        self.item = self.tableWidget.item(2, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burnthird(self):
-
-        self.item = self.tableWidget.item(3, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burnfourth(self):
-
-        self.item = self.tableWidget.item(4, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burnfifth(self):
-
-        self.item = self.tableWidget.item(5, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burnsixth(self):
-
-        self.item = self.tableWidget.item(6, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burnseventh(self):
-
-        self.item = self.tableWidget.item(7, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burneighth(self):
-
-        self.item = self.tableWidget.item(8, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burnnineth(self):
-
-        self.item = self.tableWidget.item(9, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn10(self):
-
-        self.item = self.tableWidget.item(10, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn11(self):
-
-        self.item = self.tableWidget.item(11, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn12(self):
-
-        self.item = self.tableWidget.item(12, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn13(self):
-
-        self.item = self.tableWidget.item(13, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn14(self):
-
-        self.item = self.tableWidget.item(14, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn15(self):
-
-        self.item = self.tableWidget.item(15, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn16(self):
-
-        self.item = self.tableWidget.item(16, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn17(self):
-
-        self.item = self.tableWidget.item(17, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn18(self):
-
-        self.item = self.tableWidget.item(18, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn19(self):
-
-        self.item = self.tableWidget.item(19, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn20(self):
-
-        self.item = self.tableWidget.item(20, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn21(self):
-
-        self.item = self.tableWidget.item(21, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn22(self):
-
-        self.item = self.tableWidget.item(22, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn23(self):
-
-        self.item = self.tableWidget.item(23, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn24(self):
-
-        self.item = self.tableWidget.item(24, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn25(self):
-
-        self.item = self.tableWidget.item(25, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn26(self):
-
-        self.item = self.tableWidget.item(26, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn27(self):
-
-        self.item = self.tableWidget.item(27, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn28(self):
-
-        self.item = self.tableWidget.item(28, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn29(self):
-
-        self.item = self.tableWidget.item(29, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn30(self):
-
-        self.item = self.tableWidget.item(30, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn31(self):
-
-        self.item = self.tableWidget.item(31, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    def burn32(self):
-
-        self.item = self.tableWidget.item(32, 0)
-
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
-        new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
-                                                    QLineEdit.Normal, "")
-        if okPressed and new_value != '':
-            choice = QtWidgets.QMessageBox.question(self, ' Confirm Efuse Burn ',
-                                                    "Are You Sure You want To Burn " + self.item.text() + " ?",
-                                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            if choice == QtWidgets.QMessageBox.Yes:
-                settings_burn.setValue('confirm_burn', "BURN")
-                if not self.item.text() == "" or not self.item.text() == " ":
-                    self.port = self.comboBox_serial.currentText()
-                    if os.name == 'nt':
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        if self.chip == 'ESP8266':
-                            self.processmem.start(
-                                '  python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                    else:
-                        if self.chip == 'ESP32':
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                        else:
-                            self.processmem.start(
-                                'sudo python ' + self.bundle_dir + 'Dependecies/espefuse.py --port ' + " " + self.port + " " + ' burn_efuse' + " " + self.item.text() + " " + new_value)
-                else:
-                    pass
-
-            else:
-                settings_burn.setValue('confirm_burn', "no")
-                pass
-
-    # *******************************6th_Tab****************************************************************************
+    #! tabwidge 6 ------------------------------------------------------------------------------------------------------
 
     def chipSelect(self):
         self.chip = self.comboBox_chip.currentText()
@@ -3519,7 +1833,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_encrypt.setDisabled(True)
             self.lineEdit_keypath.setDisabled(True)
             self.pushButton_pathkey.setDisabled(True)
-            self.fusetab.setDisabled(True)
+            # self.fusetab.setDisabled(True)
         else:
             self.comboBox_flashsize.clear()
             self.comboBox_flashsize.addItems(self.memoryESP32)
@@ -3555,25 +1869,25 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 def main():
     app             = QtWidgets.QApplication(sys.argv)
     
-    # splash_pix      = QPixmap(splash_screen_png)
-    # splash          = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+    splash_pix      = QPixmap(splash_screen_png)
+    splash          = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     
-    # progressBar     = QProgressBar(splash)
-    # progressBar.setGeometry(0, 470, 480, 10)
+    progressBar     = QProgressBar(splash)
+    progressBar.setGeometry(0, 470, 480, 10)
     
-    # splash.setMask(splash_pix.mask())
+    splash.setMask(splash_pix.mask())
     
-    # progressBar.setTextVisible(False)
-    # progressBar.setStyleSheet(open(QSS_style, "r").read())
+    progressBar.setTextVisible(False)
+    progressBar.setStyleSheet(open(QSS_style, "r").read())
     
-    # splash.show()
+    splash.show()
     
-    # for i in range(0, 100):
-    #     progressBar.setValue(i)
-    #     t = time.time()
-    #     while time.time() < t + 0.02:
-    #         app.processEvents()
-    # splash.close()
+    for i in range(0, 100):
+        progressBar.setValue(i)
+        t = time.time()
+        while time.time() < t + 0.02:
+            app.processEvents()
+    splash.close()
     window          = AdvancedModeApp()
     window.setWindowFlags(Qt.FramelessWindowHint)
     window.show()
