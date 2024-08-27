@@ -1,6 +1,10 @@
 
 #?---------------------------------------------------------------------------------------------------------------------------
 from PyQt5 import QtCore, QtWidgets
+import os
+from PyQt5.QtCore import QSize  # Import QSize from QtCore
+import sys
+from PyQt5 import QtWidgets, QtGui
 #?---------------------------------------------------------------------------------------------------------------------------
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -43,6 +47,16 @@ widget_names = [
             'comboBox_flashmode', 'comboBox_flashsize'
         ]
 #?---------------------------------------------------------------------------------------------------------------------------
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores files there
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Access the path directly if not running as a bundled executable
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 class ComboBoxCOMPORT(QtWidgets.QComboBox):
     popupAboutToBeShown = QtCore.pyqtSignal()
@@ -438,7 +452,19 @@ class Ui_MainWindowadvanced(object):
         self.pushButton_reloadfusetab = QtWidgets.QPushButton(self.fusetab)
         self.pushButton_reloadfusetab.setGeometry(QtCore.QRect(320+85, 200+50, 100, 100))
         self.pushButton_reloadfusetab.setObjectName("pushButton_reloadfusetab")
-        self.pushButton_reloadfusetab.setStyleSheet("background-image: url('Theme/icons/sync.png'); border: none;background-color :none")
+        # icon_path = resource_path('Theme/icons/sync.png')
+        # self.pushButton_reloadfusetab.setStyleSheet(f"background-image: url({icon_path}); border: none;background-color :none")
+        # Get the path to the resource file
+        icon_path = resource_path('Theme/icons/sync.png')
+
+        # Set the icon directly
+        icon = QtGui.QIcon(icon_path)
+        self.pushButton_reloadfusetab.setIcon(icon)
+
+        # Optionally, set the icon size
+        self.pushButton_reloadfusetab.setIconSize(QSize(100, 100))
+        self.pushButton_reloadfusetab.setStyleSheet("background: transparent; border: none;")
+
 
         self.btnref = QtWidgets.QPushButton()
         for i in range(32):

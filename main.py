@@ -2,18 +2,14 @@
 #?---------------------------------------------------------------------------------------------------------------------------
 import os
 import os.path
-import platform
 import sqlite3
 import sys
-import pyzipper
 import serial.tools.list_ports
 import xlwt
 from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
 from PyQt5.QtCore import QSize, QRegExp, QCoreApplication 
 from PyQt5.QtCore import  QSettings, QThread, pyqtSignal, Qt
-from PyQt5.QtCore import  QDate, QTime
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QKeySequence, QIcon, QMovie
-from PyQt5.QtNetwork import QHostAddress, QNetworkInterface
 from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QTableWidget,QVBoxLayout
 from PyQt5.QtWidgets import QInputDialog, QLineEdit
@@ -25,8 +21,18 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QFileDialog, QSplashScreen, QProgressBar, QInputDialog, QLineEdit
 from PyQt5.QtCore import QPoint
 #?---------------------------------------------------------------------------------------------------------------------------
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores files there
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Access the path directly if not running as a bundled executable
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
+
 machinesettig                   = 'machinesettig'
-ipaddresssetting                = 'ipaddresssetting'
 timenowsetting                  = 'timenowsetting'
 datenowsetting                  = 'datenowsetting'
 ORGANIZATION_NAME               = 'flash Softwares'
@@ -64,7 +70,6 @@ SETTING_path6                   = 'SETTING_path6'
 SETTINGS_check1                 = 'SETTINGS_check1'
 SETTINGS_check2                 = 'SETTINGS_check2'
 SETTINGS_check3                 = 'SETTINGS_check3'
-SETTINGS_style                  = 'Theme/stylesheet.qss'
 offset1                         = 'offset1'
 offset2                         = 'offset2'
 offset3                         = 'offset3'
@@ -90,14 +95,14 @@ verifconst                      = 'veriftest'
 dump_progress                   = 'dump_progress'
 read_flash_progress             = 'read_flash_progress'
 comport                         = 'comport'
-QSS_style                       = "Theme/stylesheet.qss"
-settingsprogresswrite           = "Dependecies/Dependecies/settingsprogresswrite.ini"
-settingsstyle                   = "Dependecies/settingsstyle.ini"
-expand_png                      = 'Theme/icons/expand.png'
-collapse_png                    = 'Theme/icons/collapse.png'
-espLogo_png                     = 'Theme/icons/espLogo.png'
-splash_screen_png               = 'Theme/icons/logo-color.png'
+settingsprogresswrite           = resource_path("Dependecies/Dependecies/settingsprogresswrite.ini")
+settingsstyle                   = resource_path("Dependecies/settingsstyle.ini")
+expand_png                      = resource_path('Theme/icons/expand.png')
+collapse_png                    = resource_path('Theme/icons/collapse.png')
+espLogo_png                     = resource_path('Theme/icons/espLogo.png')
+splash_screen_png               = resource_path('Theme/icons/logo-color.png')
 #?---------------------------------------------------------------------------------------------------------------------------
+
 
 class MyprogressbarThread(QThread):
     
@@ -107,7 +112,7 @@ class MyprogressbarThread(QThread):
 
         cnt                         = 0
         while cnt < 100:
-            settingsprogresswrite   = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresswrite   = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
             cnt                     = settingsprogresswrite.value(progressnum, type=int)
             self.change_value.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -123,7 +128,7 @@ class MyprogressbarThreadreadflash(QThread):
 
         cnt                         = 0
         while cnt < 100:
-            settingsread_flash      = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsread_flash      = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
             cnt                     = settingsread_flash.value(read_flash_progress, type=int)
             self.change_valuereadflash.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -136,7 +141,7 @@ class MyprogressbarThreaddump(QThread):
 
         cnt                         = 0
         while cnt < 100:
-            settingsprogresdump     = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresdump     = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
             cnt                     = settingsprogresdump.value(dump_progress, type=int)
             self.change_valuedump.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -151,7 +156,7 @@ class MyprogressbarThreadflashall(QThread):
     def run(self):
         cnt                         = 0
         while cnt <= 100:
-            settingsprogresswrite   = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+            settingsprogresswrite   = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
             cnt                     = settingsprogresswrite.value(progressnum, type=int)
             self.change_valueall.emit(cnt)
             QtTest.QTest.qWait(500)
@@ -162,7 +167,7 @@ class WorkerThread(QThread):
 
         super(WorkerThread, self).__init__(parent)
         self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
-        self.settingsport   = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+        self.settingsport   = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
 
     def run(self):
 
@@ -184,12 +189,12 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         else:
             self.bundle_dir     = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
-        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + 'Theme/icons/espLogo.png'))
+        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + resource_path(resource_path('Theme/icons/espLogo.png'))))
 
         self.lay                = QVBoxLayout()
 
         self.settingstyle       = QSettings("Dependencies/settingsstyle.ini", QSettings.IniFormat)
-        self.setStyleSheet(open('Theme/stylesheet.qss', "r").read())
+        self.setStyleSheet(open(resource_path('Theme/stylesheet.qss'), "r").read())
         self.workerThread       = WorkerThread()
         self.memoryESP8266      = ['detect', '512KB', '256KB', '1MB', '2MB', '4MB', '2MB-c1', '4MB-c1', '4MB-c2']
         self.memoryESP32        = ['detect', '1MB', '2MB', '4MB', '8MB', '16MB']
@@ -227,14 +232,14 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.lineEdit_eraseregion2.setValidator(validator2)
         self.lineEdit_dumpmem2.setValidator(validator2)
         self.lineEdit_readFlash2.setValidator(validator2)
-        iconConnection          = QtGui.QIcon(u'Theme/icons/connection.png')
-        icondata                = QtGui.QIcon(u'Theme/icons/settings.ico')
-        iconoperation           = QtGui.QIcon(u'Theme/icons/chip.png')
-        iconsetting             = QtGui.QIcon(u'Theme/icons/setting.png')
-        iconmemo                = QtGui.QIcon(u'Theme/icons/debug.png')
-        iconfuse                = QtGui.QIcon(u'Theme/icons/fuse.png')
-        icon_terminal           = QtGui.QIcon(u'Theme/icons/terminal.png')
-        iconhelp                = QtGui.QIcon(u'Theme/icons/Info-icon.png')
+        iconConnection          = QtGui.QIcon(resource_path('Theme/icons/connection.png'))
+        icondata                = QtGui.QIcon(resource_path('Theme/icons/settings.ico'))
+        iconoperation           = QtGui.QIcon(resource_path('Theme/icons/chip.png'))
+        iconsetting             = QtGui.QIcon(resource_path('Theme/icons/setting.png'))
+        iconmemo                = QtGui.QIcon(resource_path('Theme/icons/debug.png'))
+        iconfuse                = QtGui.QIcon(resource_path('Theme/icons/fuse.png'))
+        icon_terminal           = QtGui.QIcon(resource_path('Theme/icons/terminal.png'))
+        iconhelp                = QtGui.QIcon(resource_path('Theme/icons/Info-icon.png'))
         self.tabWidget.setTabIcon(0, iconConnection)
         self.tabWidget.setTabIcon(1, iconoperation)
         self.tabWidget.setTabIcon(2, iconmemo)
@@ -245,7 +250,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.tabWidget.setTabIcon(7, iconhelp)
         self.tabWidget.setIconSize(QSize(57, 57))
         scene                   = QGraphicsScene()
-        pixmap                  = QPixmap('Theme/icons/disconnected.png')
+        pixmap                  = QPixmap(resource_path('Theme/icons/disconnected.png'))
         pixmapbig               = pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio)
         scene.addPixmap(pixmapbig)
         self.graphicsView.setScene(scene)
@@ -298,7 +303,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_clearmemo.setGeometry(QtCore.QRect(30, 20, 320, 25))
         self.pushButton_stopmemo.setGeometry(QtCore.QRect(370, 20, 320, 25))
         self.progressBarmemo.setGeometry(QtCore.QRect(30, 60, 660, 13))
-        self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/expandv.png'))
+        self.pushButtoncollapsexpandm.setIcon(QIcon(resource_path('Theme/icons/expandv.png')))
         self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
        
         self.plainTextEditadvanced.setGeometry(QtCore.QRect(510, 10+50, 0, 0))
@@ -318,7 +323,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.pushButton_clearop.setGeometry(QtCore.QRect(30, 30, 300, 25))
         self.pushButton_stop.setGeometry(QtCore.QRect(390, 30, 300, 25))
         self.progressBar.setGeometry(QtCore.QRect(30, 80, 660, 13))
-        self.pushButtoncollapsexpand.setIcon(QIcon('Theme/icons/expandv.png'))
+        self.pushButtoncollapsexpand.setIcon(QIcon(resource_path('Theme/icons/expandv.png')))
         self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
         self.pushButton_encrypt.setGeometry(QtCore.QRect(370, 265, 320, 25))
         self.pushButton_loadsetting.clicked.connect(self.loadsettingsbutton)
@@ -549,7 +554,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearop.setGeometry(QtCore.QRect(30, 30, 300, 25))
             self.pushButton_stop.setGeometry(QtCore.QRect(390, 30, 300, 25))
             self.progressBar.setGeometry(QtCore.QRect(30, 80, 660, 13))
-            self.pushButtoncollapsexpand.setIcon(QIcon('Theme/icons/expandv.png'))
+            self.pushButtoncollapsexpand.setIcon(QIcon(resource_path('Theme/icons/expandv.png')))
             self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
             self.pushButton_encrypt.setGeometry(QtCore.QRect(370, 265, 320, 25))
         if testheight == 0 and testwidth == 0:
@@ -570,7 +575,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearop.setGeometry(QtCore.QRect(20, 30, 161, 25))
             self.pushButton_stop.setGeometry(QtCore.QRect(200, 30, 161, 25))
             self.progressBar.setGeometry(QtCore.QRect(20, 80, 340, 13))
-            self.pushButtoncollapsexpand.setIcon(QIcon('Theme/icons/collapsev.png'))
+            self.pushButtoncollapsexpand.setIcon(QIcon(resource_path('Theme/icons/collapsev.png')))
             self.pushButtoncollapsexpand.setIconSize(QSize(24, 15))
 
     def expandcollapsemem(self):
@@ -605,7 +610,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearmemo.setGeometry(QtCore.QRect(30, 20, 320, 25))
             self.pushButton_stopmemo.setGeometry(QtCore.QRect(370, 20, 320, 25))
             self.progressBarmemo.setGeometry(QtCore.QRect(30, 60, 660, 13))
-            self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/expandv.png'))
+            self.pushButtoncollapsexpandm.setIcon(QIcon(resource_path('Theme/icons/expandv.png')))
             self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
         if testheight == 0 and testwidth == 0:
             self.plainTextEditadvancedmem.setGeometry(QtCore.QRect(510, 10+50, 400, 500))
@@ -634,7 +639,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             self.pushButton_clearmemo.setGeometry(QtCore.QRect(20, 20, 161, 25))
             self.pushButton_stopmemo.setGeometry(QtCore.QRect(200, 20, 161, 25))
             self.progressBarmemo.setGeometry(QtCore.QRect(20, 60, 340, 13))
-            self.pushButtoncollapsexpandm.setIcon(QIcon('Theme/icons/collapsev.png'))
+            self.pushButtoncollapsexpandm.setIcon(QIcon(resource_path('Theme/icons/collapsev.png')))
             self.pushButtoncollapsexpandm.setIconSize(QSize(24, 15))
             self.pushButton_encrypt.setGeometry(QtCore.QRect(132, 265, 101, 25))
 
@@ -803,7 +808,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def comPortSelect(self):
         self.port = self.comboBox_serial.currentText()
-        settingsport = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+        settingsport = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
         settingsport.setValue(comport, self.comboBox_serial.currentText())
         settingsport.sync()
 
@@ -818,13 +823,13 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
             if self.ser.is_open == True:
                 self.label_8.setText("Connection Established !")
                 scene = QGraphicsScene()
-                scene.addPixmap(QPixmap('Theme/icons/connected.png'))
+                scene.addPixmap(QPixmap(resource_path('Theme/icons/connected.png')))
                 self.graphicsView.setScene(scene)
                 self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
         except:
             self.label_8.setText("Error! Check COM Port !")
             scene = QGraphicsScene()
-            scene.addPixmap(QPixmap('Theme/icons/wrongcom.png'))
+            scene.addPixmap(QPixmap(resource_path('Theme/icons/wrongcom.png')))
             self.graphicsView.setScene(scene)
             self.label_8.setStyleSheet(" border-radius: 5px;  color: #e53935;font-weight: bold;")
 
@@ -833,7 +838,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.ser.close()
         self.label_8.setText("Serial Port Closed !")
         scene = QGraphicsScene()
-        scene.addPixmap(QPixmap('Theme/icons/disconnected.png'))
+        scene.addPixmap(QPixmap(resource_path('Theme/icons/disconnected.png')))
         self.graphicsView.setScene(scene)
         self.label_8.setStyleSheet(" border-radius: 5px;  color: #039BE5;font-weight: bold;")
 
@@ -1644,7 +1649,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btnref.setDisabled(True)
         self.btnexport.setDisabled(True)
         self.status_txt = QtWidgets.QLabel()
-        movie = QMovie("Theme/icons/GREY-GEAR-LOADING.gif")
+        movie = QMovie(resource_path("Theme/icons/GREY-GEAR-LOADING.gif"))
         self.status_txt.setMovie(movie)
         self.status_txt.setAlignment(Qt.AlignCenter)
         movie.start()
@@ -1654,7 +1659,7 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         movie.stop()
         self.status_txt.deleteLater()
         #
-        self.conn = sqlite3.connect('Dependecies/samples.db')
+        self.conn = sqlite3.connect(resource_path('Dependecies/samples.db'))
         cur = self.conn.cursor()
         cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
         rows = cur.fetchall()
@@ -1672,58 +1677,61 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
         self.btnexport.setDisabled(False)
 
     def refreshsummary(self):
-        self.workerThread.start()
+        try:
+            self.workerThread.start()
 
-        self.pushButton_reloadfusetab.deleteLater()
-        self.fusetab.setLayout(self.lay)
+            self.pushButton_reloadfusetab.deleteLater()
+            self.fusetab.setLayout(self.lay)
 
-        self.status_txt = QtWidgets.QLabel()
-        movie = QMovie("Theme/icons/GREY-GEAR-LOADING.gif")
-        self.status_txt.setMovie(movie)
-        self.status_txt.setAlignment(Qt.AlignCenter)
+            self.status_txt = QtWidgets.QLabel()
+            movie = QMovie(resource_path("Theme/icons/GREY-GEAR-LOADING.gif"))
+            self.status_txt.setMovie(movie)
+            self.status_txt.setAlignment(Qt.AlignCenter)
 
-        movie.start()
-        self.lay.addWidget(self.status_txt)
+            movie.start()
+            self.lay.addWidget(self.status_txt)
 
-        QtTest.QTest.qWait(10000)
-        movie.stop()
-        self.status_txt.deleteLater()
+            QtTest.QTest.qWait(10000)
+            movie.stop()
+            self.status_txt.deleteLater()
 
-        self.conn = sqlite3.connect('Dependecies/samples.db')
-        cur = self.conn.cursor()
-        cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
-        rows = cur.fetchall()
-        self.tableWidget.setRowCount(0)
-        self.tableWidget.setRowCount(33)
-        self.tableWidget.setColumnCount(6)
-        self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("EFUSE NAME"))
-        self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("Description "))
-        self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Meaningful Value"))
-        self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
-        self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
-        self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
-        self.tableWidget.setGeometry(QtCore.QRect(0, 0, 850, 650))
-        self.lay.addWidget(self.tableWidget)
-        self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setColumnWidth(0, 200)
-        self.tableWidget.setColumnWidth(1, 230)
-        self.tableWidget.setColumnWidth(2, 200)
-        self.tableWidget.setColumnWidth(3, 100)
-        self.tableWidget.setColumnWidth(4, 100)
-        self.tableWidget.setColumnWidth(5, 50)
+            self.conn = sqlite3.connect(resource_path('Dependecies/samples.db'))
+            cur = self.conn.cursor()
+            cur.execute("SELECT Field1 , Field2, Field3,Field4, Field5 from samples")
+            rows = cur.fetchall()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setRowCount(33)
+            self.tableWidget.setColumnCount(6)
+            self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("EFUSE NAME"))
+            self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("Description "))
+            self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem("Meaningful Value"))
+            self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem("Readable/Writeable"))
+            self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem("Hex Value"))
+            self.tableWidget.setHorizontalHeaderItem(5, QTableWidgetItem("Action"))
+            self.tableWidget.setGeometry(QtCore.QRect(0, 0, 850, 650))
+            self.lay.addWidget(self.tableWidget)
+            self.tableWidget.verticalHeader().setVisible(False)
+            self.tableWidget.setColumnWidth(0, 200)
+            self.tableWidget.setColumnWidth(1, 230)
+            self.tableWidget.setColumnWidth(2, 200)
+            self.tableWidget.setColumnWidth(3, 100)
+            self.tableWidget.setColumnWidth(4, 100)
+            self.tableWidget.setColumnWidth(5, 50)
 
-        self.setuptablebuttons()
+            self.setuptablebuttons()
 
-        itr1 = 1
-        itr2 = 0
-        for record in rows:
+            itr1 = 1
             itr2 = 0
-            for eachrecord in record:
-                self.tableWidget.setItem(itr1, itr2, QTableWidgetItem(str(eachrecord)))
-                itr2 = itr2 + 1
-            itr1 = itr1 + 1
-        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-
+            for record in rows:
+                itr2 = 0
+                for eachrecord in record:
+                    self.tableWidget.setItem(itr1, itr2, QTableWidgetItem(str(eachrecord)))
+                    itr2 = itr2 + 1
+                itr1 = itr1 + 1
+            self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        except Exception:
+            pass
+        
     def exportfuse(self):
 
         choice = QtWidgets.QMessageBox.question(self, ' Export efuse ',
@@ -1756,27 +1764,27 @@ class AdvancedModeApp(QtWidgets.QMainWindow, advancedgui.Ui_MainWindowadvanced):
 
     def setuptablebuttons(self):
         self.tableWidget.setCellWidget(0, 0, self.btnexport)
-        self.btnexport.setIcon(QIcon('Theme/icons/Excel.png'))
+        self.btnexport.setIcon(QIcon(resource_path('Theme/icons/Excel.png')))
         self.btnexport.setStyleSheet("border: none;border-radius: 0px;")
         self.btnexport.setIconSize(QSize(20, 20))
-        self.btnexport.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.btnexport.setStyleSheet(open(resource_path('Theme/stylesheet.qss'), "r").read())
 
         self.tableWidget.setCellWidget(0, 5, self.btnref)
-        self.btnref.setIcon(QIcon('Theme/icons/refresh.png'))
+        self.btnref.setIcon(QIcon(resource_path('Theme/icons/refresh.png')))
         self.btnref.setStyleSheet("border: none;border-radius: 0px;")
-        self.btnref.setStyleSheet(open(SETTINGS_style, "r").read())
+        self.btnref.setStyleSheet(open(resource_path('Theme/stylesheet.qss'), "r").read())
 
         for i in range(32):
             btn = getattr(self, f'btn{i+1}')
-            btn.setIcon(QIcon('Theme/icons/executefuse1.png'))
+            btn.setIcon(QIcon(resource_path('Theme/icons/executefuse1.png')))
             btn.setStyleSheet("border: none;border-radius: 0px;")
-            btn.setStyleSheet(open(SETTINGS_style, "r").read())
+            btn.setStyleSheet(open(resource_path('Theme/stylesheet.qss'), "r").read())
             self.tableWidget.setCellWidget(i+1, 5, btn)  # Place the button in the i-th row, 0-th column
 
     def burn(self):
         self.item = self.tableWidget.item(1, 0)
 
-        settings_burn = QSettings("Dependecies/settingsprogresswrite.ini", QSettings.IniFormat)
+        settings_burn = QSettings(resource_path("Dependecies/settingsprogresswrite.ini"), QSettings.IniFormat)
         new_value, okPressed = QInputDialog.getText(self, "Enter a New Value ", self.item.text() + " value :",
                                                     QLineEdit.Normal, "")
         if okPressed and new_value != '':
@@ -1868,7 +1876,7 @@ def main():
     splash.setMask(splash_pix.mask())
     
     progressBar.setTextVisible(False)
-    progressBar.setStyleSheet(open("Theme/stylesheet.qss", "r").read())
+    progressBar.setStyleSheet(open(resource_path('Theme/stylesheet.qss'), "r").read())
     
     splash.show()
     

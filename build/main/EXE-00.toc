@@ -2,8 +2,7 @@
  False,
  False,
  True,
- 'C:\\Users\\Mohamed '
- 'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\bootloader\\images\\icon-windowed.ico',
+ ['D:/4 WORKSPACE/flash/Theme/icons/flash.ico'],
  None,
  False,
  False,
@@ -68,7 +67,7 @@
  [],
  False,
  False,
- 1724775273,
+ 1724781054,
  [('runw.exe',
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw.exe',

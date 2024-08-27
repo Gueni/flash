@@ -1,169 +1,5 @@
 ('D:\\4 WORKSPACE\\flash\\build\\main\\PYZ-00.pyz',
- [('Cryptodome',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\__init__.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\__init__.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher.AES',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\AES.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._EKSBlowfish',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_EKSBlowfish.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_cbc',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_cbc.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_ccm',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ccm.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_cfb',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_cfb.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_ctr',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ctr.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_eax',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_eax.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_ecb',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ecb.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_gcm',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_gcm.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_ocb',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ocb.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_ofb',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_ofb.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_openpgp',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_openpgp.py',
-   'PYMODULE'),
-  ('Cryptodome.Cipher._mode_siv',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Cipher\\_mode_siv.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\__init__.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.BLAKE2s',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\BLAKE2s.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.CMAC',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\CMAC.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.HMAC',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\HMAC.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.MD5',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\MD5.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA1',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA1.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA224',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA224.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA256',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA256.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA384',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA384.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA3_224',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_224.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA3_256',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_256.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA3_384',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_384.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA3_512',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA3_512.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.SHA512',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\SHA512.py',
-   'PYMODULE'),
-  ('Cryptodome.Hash.keccak',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Hash\\keccak.py',
-   'PYMODULE'),
-  ('Cryptodome.Protocol',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Protocol\\__init__.py',
-   'PYMODULE'),
-  ('Cryptodome.Protocol.KDF',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Protocol\\KDF.py',
-   'PYMODULE'),
-  ('Cryptodome.Random',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Random\\__init__.py',
-   'PYMODULE'),
-  ('Cryptodome.Util',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\__init__.py',
-   'PYMODULE'),
-  ('Cryptodome.Util.Counter',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\Counter.py',
-   'PYMODULE'),
-  ('Cryptodome.Util._cpu_features',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\_cpu_features.py',
-   'PYMODULE'),
-  ('Cryptodome.Util._file_system',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\_file_system.py',
-   'PYMODULE'),
-  ('Cryptodome.Util._raw_api',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\_raw_api.py',
-   'PYMODULE'),
-  ('Cryptodome.Util.number',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\number.py',
-   'PYMODULE'),
-  ('Cryptodome.Util.py3compat',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\py3compat.py',
-   'PYMODULE'),
-  ('Cryptodome.Util.strxor',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Cryptodome\\Util\\strxor.py',
-   'PYMODULE'),
-  ('PyQt5',
+ [('PyQt5',
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyQt5\\__init__.py',
    'PYMODULE'),
@@ -262,33 +98,9 @@
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\__init__.py',
    'PYMODULE'),
-  ('ctypes._aix',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\_aix.py',
-   'PYMODULE'),
   ('ctypes._endian',
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\_endian.py',
-   'PYMODULE'),
-  ('ctypes.macholib',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\__init__.py',
-   'PYMODULE'),
-  ('ctypes.macholib.dyld',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\dyld.py',
-   'PYMODULE'),
-  ('ctypes.macholib.dylib',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\dylib.py',
-   'PYMODULE'),
-  ('ctypes.macholib.framework',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\macholib\\framework.py',
-   'PYMODULE'),
-  ('ctypes.util',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ctypes\\util.py',
    'PYMODULE'),
   ('ctypes.wintypes',
    'C:\\Users\\Mohamed '
@@ -544,10 +356,6 @@
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\pkgutil.py',
    'PYMODULE'),
-  ('platform',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\platform.py',
-   'PYMODULE'),
   ('pprint',
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\pprint.py',
@@ -555,22 +363,6 @@
   ('py_compile',
    'C:\\Users\\Mohamed '
    'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\py_compile.py',
-   'PYMODULE'),
-  ('pyzipper',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\__init__.py',
-   'PYMODULE'),
-  ('pyzipper.__version__',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\__version__.py',
-   'PYMODULE'),
-  ('pyzipper.zipfile',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\zipfile.py',
-   'PYMODULE'),
-  ('pyzipper.zipfile_aes',
-   'C:\\Users\\Mohamed '
-   'Gueni\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyzipper\\zipfile_aes.py',
    'PYMODULE'),
   ('quopri',
    'C:\\Users\\Mohamed '

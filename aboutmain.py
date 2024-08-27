@@ -7,7 +7,15 @@ from PyQt5.QtWidgets import QDesktopWidget
 import aboutgui
 import licensemain
 
-
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores files there
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Access the path directly if not running as a bundled executable
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 class abouthandel(QtWidgets.QMainWindow, aboutgui.Ui_MainWindow):
     switch_window2 = QtCore.pyqtSignal()
@@ -20,8 +28,8 @@ class abouthandel(QtWidgets.QMainWindow, aboutgui.Ui_MainWindow):
         else:
             self.bundle_dir = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
-        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + 'Theme/icons/espLogo.png'))
-        self.setStyleSheet(open("Theme/stylesheet.qss", "r").read())
+        self.setWindowIcon(QtGui.QIcon(self.bundle_dir + resource_path('Theme/icons/espLogo.png')))
+        self.setStyleSheet(open(resource_path("Theme/stylesheet.qss"), "r").read())
         self.pushButton.clicked.connect(self.showLicense)
         self.label_3.setOpenExternalLinks(True)
         self.label_4.setOpenExternalLinks(True)

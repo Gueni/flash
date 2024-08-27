@@ -1,7 +1,19 @@
 
 #?---------------------------------------------------------------------------------------------------------------------------
+import os
+import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 #?---------------------------------------------------------------------------------------------------------------------------
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores files there
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Access the path directly if not running as a bundled executable
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 class Ui_MainWindow(object):
 
@@ -15,9 +27,9 @@ class Ui_MainWindow(object):
 
         
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(200, 130, 200, 66))
+        self.label_2.setGeometry(QtCore.QRect(200, 130, 250, 66))
         self.label_2.setText("")
-        self.label_2.setPixmap(QtGui.QPixmap("Theme/resources/png/small.png"))
+        self.label_2.setPixmap(QtGui.QPixmap(resource_path("Theme/resources/png/small.png")))
         self.label_2.setObjectName("label_2")
         
         self.label = QtWidgets.QLabel(self.centralwidget)
