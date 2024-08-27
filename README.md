@@ -24,7 +24,7 @@ The software is divided into two major modes, production mode and advanced mode.
 ---
 - [Features](#features)
   - [Serial Port](#![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Serial-Port)
-  - [Baud Rate](#Baud-Rate)
+  - [Baud Rate](# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Baud Rate)
   - [Flash Firmware Bootloader](#Flash-Firmware-Bootloader)
   - [Setting Flash Mode and Size](#Setting-Flash-Mode-and-Size)
   - [Compression](#Compression)
