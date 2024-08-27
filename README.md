@@ -9,7 +9,7 @@
 
  
 
-# Getting Started  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/flash.ico)
+# Getting Started  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.jpg)
 ---
 flash is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
 
