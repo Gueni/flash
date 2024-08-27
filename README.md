@@ -19,39 +19,6 @@
 The software is divided into two major modes, production mode and advanced mode. The production mode is a simple user interface containing the minimum number of features allowing the operator to conduct the necessary flashing and or flash erasing procedures with minimum complexity and errors.The advanced mode on the other hand is more complex and sums up all the features and commands made possible with the esptool library but with an easier and more advanced user experience. 
 
 
-  
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Table of contents  
----
-- [Features](#features)
-  - [Serial Port](#Serial-Port)
-  - [Baud Rate](#Baud Rate).
-  - [Flash Firmware Bootloader](#Flash-Firmware-Bootloader)
-  - [Setting Flash Mode and Size](#Setting-Flash-Mode-and-Size)
-  - [Compression](#Compression)
-  - [Read Flash Contents](#Read-Flash-Contents)
-  - [Erase Flash & erase region](#Erase-Flash-&-erase-region)
-  - [Convert ELF to Binary](#Convert-ELF-to-Binary)
-  - [Output bin image details](#Output-bin-image-details)
-  - [Verify flash](#Verify-flash)
-  - [Dump Memory](#Dump-Memory)
-  - [load RAM](#load-RAM)
-  - [Read / write Memory](#Read-/-write-Memory)
-  - [Read flash status](#Read-flash-status)
-  - [Write flash status](#Write-flash-status)
-  - [Chip Id](#Chip-Id)
-  - [Secure Packaging](#Secure-Packaging)
-  - [Efuse Table](#Efuse-Table)
-  - [Export Efuse](#Export-Efuse)
-  - [Login/Password Change](#Login/Password-Change)
-- [Dependencies](#Dependencies)
-- [Download](#Download)
-- [Installation](#Installation)
-- [To do](#To-do)
-- [Licensing](#Licensing)
-
-
-
-
 #  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Features  
 ---
 
