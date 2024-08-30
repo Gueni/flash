@@ -16,9 +16,6 @@
 ---
 ([flash 2.1](https://github.com/Gueni/flash/releases/tag/v2.1)) is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
 
-The software is divided into two major modes, production mode and advanced mode. The production mode is a simple user interface containing the minimum number of features allowing the operator to conduct the necessary flashing and or flash erasing procedures with minimum complexity and errors.The advanced mode on the other hand is more complex and sums up all the features and commands made possible with the esptool library but with an easier and more advanced user experience. 
-
-
 #  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Features  
 ---
 
