@@ -1,0 +1,6 @@
+PyQt5                   == 5.15.11
+ecdsa                   == 0.19.0
+openpyxl                == 3.1.5
+pyaes                   == 1.6.1
+serial                  == 0.0.97
+xlwt                    == 1.3.0
