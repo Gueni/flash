@@ -16,42 +16,6 @@
 ---
 ([flash 2.1](https://github.com/Gueni/flash/releases/tag/v2.1)) is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
 
-The software is divided into two major modes, production mode and advanced mode. The production mode is a simple user interface containing the minimum number of features allowing the operator to conduct the necessary flashing and or flash erasing procedures with minimum complexity and errors.The advanced mode on the other hand is more complex and sums up all the features and commands made possible with the esptool library but with an easier and more advanced user experience. 
-
-
-  
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Table of contents  
----
-- [Features](#features)
-  - [Serial Port](#Serial-Port)
-  - [Baud Rate](#Baud-Rate)
-  - [Flash Firmware Bootloader](#Flash-Firmware-Bootloader)
-  - [Setting Flash Mode and Size](#Setting-Flash-Mode-and-Size)
-  - [Compression](#Compression)
-  - [Read Flash Contents](#Read-Flash-Contents)
-  - [Erase Flash & erase region](#Erase-Flash-&-erase-region)
-  - [Convert ELF to Binary](#Convert-ELF-to-Binary)
-  - [Output bin image details](#Output-bin-image-details)
-  - [Verify flash](#Verify-flash)
-  - [Dump Memory](#Dump-Memory)
-  - [load RAM](#load-RAM)
-  - [Read / write Memory](#Read-/-write-Memory)
-  - [Read flash status](#Read-flash-status)
-  - [Write flash status](#Write-flash-status)
-  - [Chip Id](#Chip-Id)
-  - [Secure Packaging](#Secure-Packaging)
-  - [Efuse Table](#Efuse-Table)
-  - [Export Efuse](#Export-Efuse)
-  - [Login/Password Change](#Login/Password-Change)
-- [Dependencies](#Dependencies)
-- [Download](#Download)
-- [Installation](#Installation)
-- [To do](#To-do)
-- [Licensing](#Licensing)
-
-
-
-
 #  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Features  
 ---
 
@@ -176,11 +140,11 @@ flash uses a number of open source projects and libraries to work properly:
 )) (@[projectgus](https://github.com/projectgus/))    (@[themadinventor](https://github.com/themadinventor/))
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Download  
 ---
-flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the first release from the [this link ](https://github.com/Gueni/flash1.0/releases).
+flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the LTS  ([release](https://github.com/Gueni/flash/releases/tag/v2.1)).
 
 Or simply by cloning the repository to your machine : 
 
-      git clone https://github.com/Gueni/flash1.0.git
+      git clone https://github.com/Gueni/flash.git
 
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Installation  
 ---
@@ -195,7 +159,7 @@ Install PyQt5 from https://pypi.org/project/PyQt5/
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) How to launch  
 
         python3 main.py
-or simply download the latest release : ([Latest Release](https://github.com/Gueni/flash/releases/tag/v2.0))
+or simply download the latest release : ([Latest Release](https://github.com/Gueni/flash/releases/tag/v2.1))
 
 # ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) To do  
 
