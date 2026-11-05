@@ -1,6 +1,7 @@
-PyQt5                   >= 5.15.11
-ecdsa                   >= 0.19.0
-openpyxl                >= 3.1.5
-pyaes                   >= 1.6.1
-serial                  >= 0.0.97
-xlwt                    >= 1.3.0
+# Runtime dependencies for Flash.
+# NOTE: the serial library is "pyserial". The PyPI package called "serial" is an unrelated
+# project that shadows it and causes: AttributeError: module 'serial' has no attribute 'Serial'.
+PySide6-Essentials >= 6.7
+esptool            >= 5.0, < 6
+pyserial           >= 3.5
+openpyxl           >= 3.1

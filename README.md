@@ -1,193 +1,202 @@
 <p align="center">
-  <img  src="\Screenshots\espLogo.png.png"
+  <img src="src/flash/assets/img/logo.png" width="96" alt="Flash logo">
 </p>
 
+<h1 align="center">Flash</h1>
 
-
-----
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)
-[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://ansicolortags.readthedocs.io/?badge=latest)
-[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
-[![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/Naereen/badges/)
-
- 
-
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Getting Started  
----
-([flash 2.1](https://github.com/Gueni/flash/releases/tag/v2.1)) is a free software which allows the user to access, flash and erase the ESP32 and ESP8266 internal memory. Meanwhile , flash introduces the set of features mentioned in the sections below.
-
-#  ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Features  
----
-
-
-
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Serial Port  
-
-The serial port is selected using the ComboBox Designated Serial Port, like COM1 (Windows). If no option is specified,esptool will enumerate all connected serial ports and try each one until it finds an Espressif device (ESP32 or ESP8266) connected. 
 <p align="center">
-  <img  src="\Screenshots\serialandbaud.png">
+  A modern, cross-platform desktop app to flash, inspect and secure <b>ESP32</b> and <b>ESP8266</b> chips.<br>
+  Built on Espressif's official <a href="https://github.com/espressif/esptool">esptool</a> with a Qt 6 interface.
 </p>
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Baud Rate  
-
-The default baud rate is 115200bps. Different rates may be set using the Baud Rate ComboBox. This can speed up writing and reading flash operations.The baud rate is limited to 115200 when initial connection is established,higher speeds are only used for data transfers. Most hardware configurations will work with 230400, some with 460800, 921600 and/or 1500000 or higher.If you have connectivity problems then you can also set baud rates below 115200. You can also choose 74880, which is the usual baud rate used by the ESP8266 to output boot log information. 
-
-
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Flash Firmware/Bootloader  
-
-
-Binary data (Multiple flash addresses and file)can be written to the ESP's flash chip. The chip selection is optional when writing to ESP flash, as it will be detected when it connects to the serial port.The offset (address) and file name are crucial for this operation.
-
-The file names created by "ELF to Bin" include the flash offsets as part of the file name. For other types of images, consult your SDK documentation to determine the files to flash at which offsets.Numeric values passed as offset address can only
-be specified in hex (ie 0x1000). 
-
-
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Setting Flash Mode and Size  
-
-You may also need to specify flash mode and flash size, if you wish to override the defaults. 
-
-
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Compression  
-By default, the serial transfered data is compressed by [esptool.py ](https://github.com/espressif/esptool) for better performance. 
-
-
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Read Flash Contents 
-
-The Read flash feature allows reading back the contents of flash. for that you need to specify an address, a size, and a filename to dump the output to. 
-
-
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Erase Flash & erase region  
-
-
-
-To erase the entire flash chip (all data replaced with 0xFF bytes) To erase a region of the flash, for example starting at an address (ie 0x20000)with a length (ie 0x4000 bytes) (16KB) The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips. 
 <p align="center">
-  <img  src="\Screenshots\memo.png">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue">
+  <img alt="Qt" src="https://img.shields.io/badge/UI-PySide6%20%2F%20Qt%206-41cd52">
+  <img alt="esptool" src="https://img.shields.io/badge/esptool-5.x-e7352c">
+  <img alt="Platforms" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux-lightgrey">
 </p>
 
+![Flash – dark theme](assets/img/flash-dark.png)
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Convert ELF to Binary  
+## Features
 
-Converts an ELF file into the binary executable images which can be flashed and then booted into the chip. This command does not require a serial connection. 
+| Page | What you can do |
+|------|-----------------|
+| **Flash** | Write any number of images at any offsets in one go. Drag & drop `.bin` files and the offsets are guessed from the names (bootloader / partitions / app, or `0x…` in the name). Layout presets for ESP32, S3/C3/C6/H2 and P4/C5. Flash mode / frequency / size, erase-all, compression, skip-already-flashed, **verify**, **merge into one .bin** and **erase flash**. |
+| **Memory** | Read flash to a file (or `ALL`), erase a region, peek / poke 32-bit memory words, dump memory, read / write the SPI flash status register. |
+| **Device** | Chip ID, MAC address, flash ID & size, security info, load an image into RAM and run it, reset and run the app. |
+| **Tools** | ELF → binary, image info (headers, segments, checksum), generate a flash-encryption key and burn it into an eFuse key block. |
+| **eFuse** | Read every eFuse into a sortable, searchable table with category and non-zero filters. Burn a value through a dialog that requires you to type the eFuse name. Export to **Excel (.xlsx)** or CSV, or get a raw dump. Also has a **virtual chip** mode for trying things without hardware. |
+| **Monitor** | Serial console with timestamps, line-ending choice, a board-reset button, and log saving. It pauses automatically while an operation uses the port, then reconnects. |
+| **Settings** | System / light / dark theme, reset strategy (`--before` / `--after`), connect attempts, `--no-stub`, and **profiles** that save every field to a JSON file. |
+
+Shared across all pages:
+
+* **Live console** with colored output, a progress bar with percentage, elapsed time and a **Stop** button (Esc). It can be copied or saved.
+* **Hot-plug detection**: serial ports refresh by themselves, and a newly plugged board is selected automatically.
+* **Fully responsive**:
+  * the sidebar collapses to icons on small windows;
+  * cards reflow into 1–3 columns;
+  * the connection bar wraps;
+  * on very wide screens the console moves beside the pages.
+* **HiDPI-sharp**: all icons are vector graphics, and themes follow the OS dark-mode setting.
+* Every field is **remembered** between sessions.
+* Supports all chips of esptool 5.x: ESP8266, ESP32, ‑S2, ‑S3, ‑C2, ‑C3, ‑C5, ‑C6, ‑C61, ‑H2, ‑P4…
+
 <p align="center">
-  <img  src="\Screenshots\settings.png">
+  <img src="assets/img/efuse-light.png" width="74%" alt="eFuse table, light theme">
+  <img src="assets/img/compact-dark.png" width="24%" alt="Compact window">
 </p>
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Output bin image details  
+### Keyboard shortcuts
 
-The image info outputs some information (load addresses, sizes, etc) about a .bin file. 
+| Keys | Action |
+|------|--------|
+| `Ctrl+1` … `Ctrl+7` | Switch page |
+| `Ctrl+Enter` | Flash selected images |
+| `Esc` | Stop the running operation |
+| `F5` | Rescan serial ports |
+| `Ctrl+J` / `Ctrl+L` | Show/hide console / clear console |
+| `Ctrl+T` | Toggle light/dark theme |
+| `Ctrl+B` | Collapse/expand sidebar |
 
+## Install
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Verify flash  
+No Python is needed for either option. Download from the [releases page](https://github.com/Gueni/flash/releases).
 
-Allows you to verify that data in flash matches a local file. Additional verification is not usually needed. However, if you wish to perform a byte-by-byte verification of the flash contents then you can do so with this feature. 
-<p align="center">
-  <img  src="\Screenshots\advmod.png">
-</p>
+**Windows**
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Dump Memory  
+* **`Flash-<version>-Setup.exe`** is the installer. It installs per user without admin rights (or for all users if you
+  choose), adds a Start-menu entry, an optional desktop icon and an uninstaller in *Settings → Apps*. Sample
+  MicroPython firmware is included. Installing a newer version upgrades the old one in place.
+* **`Flash-<version>-windows-x64.zip`** is the portable version. Unzip it anywhere and run `Flash\Flash.exe`.
 
-Will dump a region from the chip's memory space to a file. 
+Silent install, for IT or scripts: `Flash-<version>-Setup.exe /VERYSILENT /CURRENTUSER`.
 
+**Linux**
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) load RAM  
+```bash
+tar xzf Flash-<version>-linux-x86_64.tar.gz
+bash Flash-<version>/install.sh          # installs to ~/.local, adds a menu entry and the 'flash-esp' command
+bash Flash-<version>/install.sh --uninstall
+```
 
-Allows the loading of an executable binary image directly into RAM, and then immediately executes the program contained within it.The binary image must only contain IRAM- and DRAM-resident segments. Any SPI flash mapped segments will not load correctly and the image will probably crash. The image info can be used to check the binary image contents. 
+## Run from source
 
+Requirements: **Python 3.10+** (tested with 3.14).
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Read / write Memory  
+**Windows (PowerShell)**
 
-The read & write Memory allow reading and writing single words (4 bytes) of RAM. This can be used to "peek" and "poke" at registers. 
+```powershell
+git clone https://github.com/Gueni/flash.git
+cd flash
+powershell -ExecutionPolicy Bypass -File scripts\setup_venv.ps1
+.venv\Scripts\python.exe main.py
+```
 
+**Linux**
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Read flash status  
+```bash
+git clone https://github.com/Gueni/flash.git
+cd flash
+bash scripts/setup_venv.sh
+.venv/bin/python main.py
+```
 
-Intended for use when debugging hardware flash chip-related problems. It allows sending a RDSR, RDSR2 and/or RDSR3 command to the flash chip to read the status register contents. This can be used to check write protection status.
-The bytes number determines how many status register bytes are read:
+You can also install it as a package with `pip install .` and then start it with `flash-esp`.
 
-- bytes 1 sends the most common RDSR command (05h) and returns a single byte of status. 
-- bytes 2 sends both RDSR (05h) and RDSR2 (35h), reads one byte of status from each, and returns a two byte status. 
-- bytes 3 sends RDSR (05h), RDSR2 (35h), and RDSR3 (15h), reads one byte of status from each, and returns a 3 byte status. 
+## Build the installer
 
+The build scripts do everything in order:
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Write flash status  
+1. set up the venv and install the dependencies;
+2. run the unit tests;
+3. build the app with PyInstaller from [`flash.spec`](flash.spec);
+4. smoke-test the bundled esptool;
+5. package the result.
 
-Intended for use when debugging hardware flash chip-related problems. It allows sending WRSR, WRSR2 and/or WRSR3 commands to the flash chip to write the status register contents. This can be used to clear write protection bits. The bytes option is similar to the corresponding option for read flash status and causes a mix of WRSR (01h), WRSR2 (31h), and WRSR3 (11h) commands to be sent to the chip. If bytes 2 is used then WRSR is sent first with a 16-bit argument and then with an 8-bit argument. Otherwise, each command is accompanied by 8-bits of the new status register value. 
+```powershell
+# Windows -> release\Flash-<v>-Setup.exe  +  release\Flash-<v>-windows-x64.zip
+powershell -ExecutionPolicy Bypass -File scripts\build.ps1
+powershell -ExecutionPolicy Bypass -File scripts\build.ps1 -OneFile    # single portable .exe instead
+```
 
+The Windows installer is compiled from [`installer/flash.iss`](installer/flash.iss) with
+[Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`). Without Inno Setup the
+script still produces the portable zip.
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Chip Id 
+```bash
+# Linux -> release/Flash-<v>-linux-<arch>.tar.gz (with install.sh)
+bash scripts/build.sh
+bash scripts/build.sh --install     # ...and install it for the current user
+bash scripts/build.sh --onefile     # single portable binary instead
+```
 
-Allows you to read a 4 byte ID which forms part of the MAC address.
+PyInstaller can't cross-compile, so build the Windows installer on Windows and the Linux package on Linux.
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Efuse Table  
-The efuse tab introduced in flash makes it easier to display and burn any efuse without having to go through a long summary in a terminal. Also having as a simple security layer , a dialog that prevents you from making any unwanted burn operation, makes it safer than the traditional ways.
-<p align="center">
-  <img  src="\Screenshots\efusetab.png">
-</p>
+## Project layout
 
-### ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Export Efuse  
-You can now export the efuse table with all the values and states to an excel (xls) file.
+```
+flash/
+├── main.py                  # launcher: python main.py (also the PyInstaller entry)
+├── flash.spec               # PyInstaller build definition
+├── installer/flash.iss      # Inno Setup script (Windows installer)
+├── pyproject.toml           # package metadata (pip install .)
+├── requirements.txt         # runtime deps      requirements-dev.txt -> + PyInstaller
+├── scripts/                 # setup_venv.{ps1,sh}, build.{ps1,sh}, install_linux.sh
+├── assets/img/              # README screenshots
+├── tests/                   # unit tests (test_flash_core.py) + sample firmware/images
+└── src/flash/
+    ├── app.py               # QApplication setup, --run-tool dispatch
+    ├── settings.py          # persistent state + JSON profiles
+    ├── assets/              # app icon and logo (bundled)
+    ├── core/                # no GUI code in here
+    │   ├── tools.py         # esptool/espefuse/espsecure invocation, arg builders, output parsing
+    │   ├── runner.py        # QProcess runner: streaming output, progress, stop
+    │   ├── serial_monitor.py
+    │   └── efuse.py         # eFuse JSON parsing + xlsx/csv export
+    └── ui/
+        ├── theme.py         # light/dark palettes -> Qt stylesheet
+        ├── icons.py         # inline SVG icon set
+        ├── widgets.py       # FlowLayout, ResponsiveGrid, Card, inputs, Console, Toast
+        ├── main_window.py   # sidebar, connection bar, console, responsive behaviour
+        └── pages/           # flash, memory, device, tools, efuse, monitor, settings
+```
 
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Dependencies  
----
-flash uses a number of open source projects and libraries to work properly:
+### How the tools run
 
-* [Python ]- https://www.python.org/
-* [PyQt5] - https://pypi.org/project/PyQt5/
-* [esptool] - https://github.com/espressif/esptool (@[espressif](https://github.com/espressif
-)) (@[projectgus](https://github.com/projectgus/))    (@[themadinventor](https://github.com/themadinventor/))
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Download  
----
-flash itself is open source with a [public repository][flash1.0] on GitHub.You can also download the LTS  ([release](https://github.com/Gueni/flash/releases/tag/v2.1)).
+Every operation runs in a **separate process**, so a hung transfer can always be stopped and never freezes the
+window:
 
-Or simply by cloning the repository to your machine : 
+* **From source:** the app runs `python -m esptool …`.
+* **In the packaged exe:** there is no Python interpreter, so the exe starts itself again as
+  `Flash.exe --run-tool esptool …`, and that copy runs the bundled esptool.
 
-      git clone https://github.com/Gueni/flash.git
+In both cases the output is parsed live for progress and errors.
 
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Installation  
----
-flash requires [Python 3](https://www.python.org/download/releases/3.0/) to run.
+## Tests
 
-Install python 3 from https://www.python.org/download/releases/3.0/
+```bash
+python -m unittest tests.test_flash_core -v
+```
 
-Install PyQt5 from https://pypi.org/project/PyQt5/ 
+The tests cover argument building, number parsing, progress parsing and eFuse parsing/export. They also run the
+real tools offline: `image-info` on the sample firmware, and an `espefuse --virt` summary. No board is needed.
+The other `tests/test_*.py` files are the legacy upstream esptool 2.x suites, and they need hardware.
 
-        pip install pyqt5
-        
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) How to launch  
+## Troubleshooting
 
-        python3 main.py
-or simply download the latest release : ([Latest Release](https://github.com/Gueni/flash/releases/tag/v2.1))
+| Problem | Fix |
+|---------|-----|
+| `AttributeError: module 'serial' has no attribute 'Serial'` | The wrong PyPI package `serial` is installed and hides **pyserial**. Run `pip uninstall serial` and then `pip install --force-reinstall pyserial`. The setup scripts do this for you. |
+| Linux: `Permission denied: '/dev/ttyUSB0'` | Run `sudo usermod -aG dialout $USER`, then log out and back in. Don't run the app with sudo. |
+| Linux: `Could not load the Qt platform plugin "xcb"` | Run `sudo apt install libxcb-cursor0` (or the equivalent package for your distro). |
+| `Failed to connect to ESP32: No serial data received` | Hold **BOOT**, tap **EN/RESET**, then try again. Or, in Settings, set *Before* to `no-reset` and put the chip in download mode by hand. A lower baud rate can also help. |
+| Port busy | Close other serial monitors. Flash's own monitor pauses itself while an operation runs. |
 
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) To do  
+## Credits
 
- - Optimize the Efuse feature.
- - Enhance UI/UX.
- - More Interactive Help Section.
- - Secure Boot Feature.
- - A dedicated Firmware merge library for ESP32.
- - more file type choices for efuse export.
-
-# ![](https://github.com/Gueni/flash/blob/master/Theme/icons/GT.ico) Copyright and Licensing 
------
-
-Licensed under the GNU General Public License, Version 3.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at GNU.
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-###### [FAQ :Feel free to submit issues and enhancement requests.](https://github.com/Gueni/flash1.0/issues)
-
-
-
-[//]:<These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO- >
-
-
-   [flash1.0]: <https://github.com/Gueni/flash1.0/tree/1.0>
-   [GNU]:<https://github.com/Gueni/flash1.0/releases>
-  
+* [esptool / espefuse / espsecure](https://github.com/espressif/esptool) by Espressif Systems and contributors
+  (GPL-2.0-or-later). Flash drives these tools and bundles them in the packaged executable.
+* [Qt for Python (PySide6)](https://doc.qt.io/qtforpython-6/) and [pySerial](https://github.com/pyserial/pyserial).
+* Author: [Mohamed Gueni](https://github.com/Gueni). Issues and pull requests are welcome.

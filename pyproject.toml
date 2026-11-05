@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flash-esp"
+dynamic = ["version"]
+description = "Modern cross-platform GUI to flash, inspect and secure ESP32 / ESP8266 chips (built on esptool)."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Mohamed Gueni" }]
+keywords = ["esp32", "esp8266", "esptool", "flash", "efuse", "espressif", "gui"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: X11 Applications :: Qt",
+    "Topic :: Software Development :: Embedded Systems",
+]
+dependencies = [
+    "PySide6-Essentials>=6.7",
+    "esptool>=5.0,<6",
+    "pyserial>=3.5",
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.10"]
+
+[project.gui-scripts]
+flash-esp = "flash.app:main"
+
+[project.urls]
+Homepage = "https://github.com/Gueni/flash"
+
+[tool.setuptools.dynamic]
+version = { attr = "flash.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+flash = ["assets/*"]
