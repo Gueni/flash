@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QFileDialog, QGraphicsScene, QShortcut
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QTableWidget,QVBoxLayout
 from PyQt5.QtWidgets import QInputDialog, QLineEdit
 import aboutmain
-import advancedgui
+import lib.advancedgui as advancedgui
 import time
 from PyQt5.QtCore import Qt, QSize, QSettings, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap, QIcon
