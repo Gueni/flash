@@ -72,11 +72,18 @@ PATHS: dict[str, str]       = {
     "power": '<path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/>',
     "image": '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
     "scan": '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/>',
+    # window buttons (custom title bar)
+    "win-min": '<path d="M4 12h16"/>',
+    "win-max": '<rect x="4" y="4" width="16" height="16" rx="2.5"/>',
+    "win-restore": '<rect x="4" y="8" width="12" height="12" rx="2"/><path d="M8 8V6.5A2.5 2.5 0 0 1 10.5 4h7A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H16"/>',
+    "win-close": '<path d="M5 5l14 14M19 5 5 19"/>',
 }
 #?----------------------------------------------------------------------------------------------------------------------------------------
 def svg(name: str, color: str, stroke: float = 2.0) -> str:
     body                    = PATHS.get(name, PATHS["info"])
     fill                    = color if name in ("play",) else "none"
+    if name.startswith("win-"):
+        stroke              = 1.6                                                      # thin glyphs like native caption buttons
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="{fill}" stroke="{color}" '
             f'stroke-width="{stroke}" stroke-linecap="round" stroke-linejoin="round">{body}</svg>')
 #?----------------------------------------------------------------------------------------------------------------------------------------

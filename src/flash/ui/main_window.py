@@ -20,9 +20,10 @@
 #? -------------------------------------------------------------------------------
 from    __future__                    import  annotations
 
+import  sys
 from    pathlib                       import  Path
 
-from    PySide6.QtCore                import  QEasingCurve, QParallelAnimationGroup, QPropertyAnimation, QSize, Qt, QTimer
+from    PySide6.QtCore                import  QEasingCurve, QEvent, QParallelAnimationGroup, QPropertyAnimation, QSize, Qt, QTimer
 from    PySide6.QtGui                 import  QIcon, QKeySequence, QShortcut
 from    PySide6.QtWidgets             import  (QApplication, QButtonGroup, QComboBox, QFrame, QHBoxLayout, QLabel, QMainWindow, QMessageBox,
                                                QProgressBar, QSizePolicy, QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget)
@@ -41,7 +42,8 @@ from    flash.ui.pages.monitor_page   import  MonitorPage
 from    flash.ui.pages.settings_page  import  SettingsPage
 from    flash.ui.pages.tools_page     import  ToolsPage
 from    flash.ui.theme                import  theme
-from    flash.ui.widgets              import  Console, FlowLayout, StatusPill, Toast, icon_button, repolish, set_icon
+from    flash.ui.titlebar             import  TitleBar, WindowChrome
+from    flash.ui.widgets             import  Console, FlowLayout, StatusPill, Toast, icon_button, repolish, set_icon
 #?----------------------------------------------------------------------------------------------------------------------------------------
 SIDEBAR_EXPANDED            = 212
 SIDEBAR_COLLAPSED           = 68
@@ -55,18 +57,28 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(asset("flash.ico")))
         self.setMinimumSize(560, 480)
         self.setAcceptDrops(False)
+        WindowChrome.make_frameless(self)                                              # custom title bar replaces the OS one
 
         self.store          = StateStore()
         self.runner         = ToolRunner(self)
         self._sidebar_pinned: bool | None = None
         self._known_ports: set[str] = set()
+        self._resizer       = None
 
         root                = QWidget()
         root.setObjectName("Root")
-        h                   = QHBoxLayout(root)
+        outer               = QVBoxLayout(root)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(0)
+        self.titlebar       = TitleBar(self, QIcon(asset("flash.ico")), APP_NAME, f"ESP flashing toolkit  ·  v{__version__}")
+        outer.addWidget(self.titlebar)
+        body                = QWidget()
+        h                   = QHBoxLayout(body)
         h.setContentsMargins(0, 0, 0, 0)
         h.setSpacing(0)
+        outer.addWidget(body, 1)
         self.setCentralWidget(root)
+        self._root          = root
 
         self.pages          = [FlashPage(self), MemoryPage(self), DevicePage(self), ToolsPage(self),
                                EfusePage(self), MonitorPage(self), SettingsPage(self)]
@@ -119,24 +131,8 @@ class MainWindow(QMainWindow):
         self.sidebar.setObjectName("Sidebar")
         self.sidebar.setFixedWidth(SIDEBAR_EXPANDED)
         lay                 = QVBoxLayout(self.sidebar)
-        lay.setContentsMargins(12, 16, 12, 12)
+        lay.setContentsMargins(12, 14, 12, 12)
         lay.setSpacing(2)
-
-        brand               = QHBoxLayout()
-        brand.setContentsMargins(6, 0, 0, 12)
-        self.brand_icon     = QLabel()
-        self.brand_icon.setPixmap(QIcon(asset("flash.ico")).pixmap(QSize(30, 30)))
-        brand.addWidget(self.brand_icon)
-        texts               = QVBoxLayout()
-        texts.setSpacing(0)
-        self.brand_name     = QLabel(APP_NAME)
-        self.brand_name.setObjectName("Brand")
-        self.brand_sub      = QLabel("ESP flashing toolkit")
-        self.brand_sub.setObjectName("BrandSub")
-        texts.addWidget(self.brand_name)
-        texts.addWidget(self.brand_sub)
-        brand.addLayout(texts, 1)
-        lay.addLayout(brand)
 
         self.nav_group      = QButtonGroup(self)
         self.nav_group.setExclusive(True)
@@ -494,8 +490,6 @@ class MainWindow(QMainWindow):
         style               = Qt.ToolButtonStyle.ToolButtonTextBesideIcon if expanded else Qt.ToolButtonStyle.ToolButtonIconOnly
         for b in self.nav_buttons:
             b.setToolButtonStyle(style)
-        self.brand_name.setVisible(expanded)
-        self.brand_sub.setVisible(expanded)
         if self.sidebar.width() == target:
             return
         if not animate:
@@ -513,6 +507,24 @@ class MainWindow(QMainWindow):
 
     def toggle_console(self) -> None:
         self.console_panel.setVisible(self.console_btn.isChecked())
+
+    def showEvent(self, event) -> None:                                                # noqa: N802
+        super().showEvent(event)
+        if self._resizer is None:                                                      # native handle exists now
+            self._resizer   = WindowChrome.polish(self)
+            self._sync_frame()
+
+    def changeEvent(self, event) -> None:                                              # noqa: N802
+        super().changeEvent(event)
+        if event.type() == QEvent.Type.WindowStateChange:
+            self._sync_frame()
+
+    def _sync_frame(self) -> None:
+        """Thin outline where the OS draws none (Linux / Windows 10); Windows 11 adds its own border and shadow."""
+        framed              = sys.platform != "win32" and not (self.isMaximized() or self.isFullScreen())
+        if self._root.property("framed") != framed:
+            self._root.setProperty("framed", framed)
+            repolish(self._root)
 
     def resizeEvent(self, event) -> None:                                              # noqa: N802
         super().resizeEvent(event)

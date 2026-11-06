@@ -91,6 +91,18 @@ QWidget {{ color: {p.text}; font-size: 10pt; }}
 QMainWindow, #Root {{ background: {p.bg}; }}
 QToolTip {{ background: {p.surface2}; color: {p.text}; border: 1px solid {p.border}; padding: 6px 8px; border-radius: 6px; }}
 
+/* ---------- custom title bar ---------- */
+#TitleBar {{ background: {p.surface}; border-bottom: 1px solid {p.border}; }}
+#TitleText {{ font-weight: 700; font-size: 10pt; }}
+#TitleText:disabled, #TitleSub:disabled {{ color: {p.muted}; }}
+#TitleSub {{ color: {p.muted}; font-size: 9pt; }}
+QToolButton#WinButton, QToolButton#WinClose {{ background: transparent; border: none; border-radius: 0; padding: 0; }}
+QToolButton#WinButton:hover {{ background: {p.hover}; }}
+QToolButton#WinButton:pressed {{ background: {p.border}; }}
+QToolButton#WinClose:hover {{ background: #e81123; }}
+QToolButton#WinClose:pressed {{ background: #f1707a; }}
+#Root[framed="true"] {{ border: 1px solid {p.border}; }}
+
 /* ---------- sidebar ---------- */
 #Sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
 #Brand {{ font-size: 15pt; font-weight: 700; }}
