@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/flash/assets/img/logo.png" width="96" alt="Flash logo">
+  <img src="src/flash/assets/logo.png" width="96" alt="Flash logo">
 </p>
 
 <h1 align="center">Flash</h1>
