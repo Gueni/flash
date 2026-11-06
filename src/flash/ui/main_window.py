@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
             self.nav_buttons.append(b)
             lay.addWidget(b)
         lay.addStretch(1)
-        self.sidebar_footer = QLabel(f"v{__version__}")
+        self.sidebar_footer = QLabel(f"")
         self.sidebar_footer.setObjectName("SidebarFooter")
         self.sidebar_footer.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.addWidget(self.sidebar_footer)
