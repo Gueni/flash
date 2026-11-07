@@ -491,7 +491,10 @@ class Toast(QLabel):
         self._anim.start()
 #?----------------------------------------------------------------------------------------------------------------------------------------
 class Console(QPlainTextEdit):
-    """Read-only log with colored lines; progress lines overwrite each other."""
+    """Read-only log with colored lines; progress lines overwrite each other.
+    Compiler messages (file:line:col: error: ...) are clickable and emit location_clicked."""
+
+    location_clicked        = Signal(str, int, int)                                    # path, line, column
 
     def __init__(self, object_name: str = "Console") -> None:
         super().__init__()
@@ -500,8 +503,25 @@ class Console(QPlainTextEdit):
         self.setMaximumBlockCount(20000)
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.WidgetWidth)
         self.setUndoRedoEnabled(False)
+        self.viewport().setMouseTracking(True)
         self._last_progress = False
         self.autoscroll     = True
+
+    def _diagnostic_at(self, pos):
+        from    flash.core.arduino            import  parse_diagnostic
+        return parse_diagnostic(self.cursorForPosition(pos).block().text())
+
+    def mouseMoveEvent(self, event) -> None:                                           # noqa: N802
+        super().mouseMoveEvent(event)
+        link                = self._diagnostic_at(event.position().toPoint()) is not None
+        self.viewport().setCursor(Qt.CursorShape.PointingHandCursor if link else Qt.CursorShape.IBeamCursor)
+
+    def mouseReleaseEvent(self, event) -> None:                                        # noqa: N802
+        super().mouseReleaseEvent(event)
+        if event.button() == Qt.MouseButton.LeftButton and not self.textCursor().hasSelection():
+            diag            = self._diagnostic_at(event.position().toPoint())
+            if diag is not None:
+                self.location_clicked.emit(diag.path, diag.line, diag.col)
 
     def _color(self, kind: str) -> str | None:
         p                   = theme().palette

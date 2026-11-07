@@ -29,11 +29,13 @@ from    PySide6.QtWidgets             import  (QApplication, QButtonGroup, QComb
                                                QProgressBar, QSizePolicy, QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget)
 
 from    flash                         import  APP_NAME, __version__
+from    flash.core                    import  arduino
 from    flash.core.runner             import  ToolRunner
 from    flash.core.serial_monitor     import  list_ports
 from    flash.core.tools              import  BAUD_RATES, CHIPS, Connection, classify_line
 from    flash.paths                   import  asset
 from    flash.settings                import  StateStore, app_settings
+from    flash.ui.pages.code_page      import  CodePage
 from    flash.ui.pages.device_page    import  DevicePage
 from    flash.ui.pages.efuse_page     import  EfusePage
 from    flash.ui.pages.flash_page     import  FlashPage
@@ -80,10 +82,12 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(root)
         self._root          = root
 
-        self.pages          = [FlashPage(self), MemoryPage(self), DevicePage(self), ToolsPage(self),
-                               EfusePage(self), MonitorPage(self), SettingsPage(self)]
-        self.monitor: MonitorPage = self.pages[5]
-        self.settings_page: SettingsPage = self.pages[6]
+        self.flash_page     = FlashPage(self)
+        self.code_page      = CodePage(self)
+        self.monitor        = MonitorPage(self)
+        self.settings_page  = SettingsPage(self)
+        self.pages          = [self.flash_page, self.code_page, MemoryPage(self), DevicePage(self), ToolsPage(self),
+                               EfusePage(self), self.monitor, self.settings_page]
 
         h.addWidget(self._build_sidebar())
         content             = QWidget()
@@ -264,6 +268,7 @@ class MainWindow(QMainWindow):
         v.addLayout(head)
         self.console        = Console()
         self.console.setMinimumHeight(90)
+        self.console.location_clicked.connect(self._open_location)                     # compiler error -> editor line
         v.addWidget(self.console, 1)
         self.console_panel  = panel
         return panel
@@ -317,6 +322,18 @@ class MainWindow(QMainWindow):
         return True
 
     def run(self, tool: str, args: list[str], title: str, on_done=None, uses_port: bool = True) -> bool:
+        """Run esptool / espefuse / espsecure."""
+        return self._start(lambda done: self.runner.run(tool, args, title, done), on_done, uses_port)
+
+    def run_cli(self, args: list[str], title: str, on_done=None, uses_port: bool = False) -> bool:
+        """Run arduino-cli (Code page, board and library managers)."""
+        cli                 = arduino.find_cli()
+        if not cli:
+            self.toast("arduino-cli is not installed yet - open the Code page to download it.", "error")
+            return False
+        return self._start(lambda done: self.runner.run_program(cli, args, title, done, "arduino-cli"), on_done, uses_port)
+
+    def _start(self, launch, on_done, uses_port: bool) -> bool:
         if self.runner.busy:
             self.toast("Another operation is still running.", "warning")
             return False
@@ -332,7 +349,11 @@ class MainWindow(QMainWindow):
             if reopen:
                 QTimer.singleShot(300, self.monitor.open_port)
 
-        return self.runner.run(tool, args, title, done)
+        return launch(done)
+
+    def _open_location(self, path: str, line: int, col: int) -> None:
+        if self.code_page.open_location(path, line, col):
+            self.select_page(self.pages.index(self.code_page))
 
     def toast(self, text: str, kind: str = "info", ms: int = 3500) -> None:
         self.toast_widget.show_message(text, kind, ms)
@@ -591,6 +612,9 @@ class MainWindow(QMainWindow):
                 event.ignore()
                 return
             self.runner.stop()
+        if not self.code_page.maybe_save():                                            # unsaved sketch: Save / Discard / Cancel
+            event.ignore()
+            return
         self.monitor.close_port()
         self.store.save()
         s                   = app_settings()

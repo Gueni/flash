@@ -59,16 +59,23 @@ class ToolRunner(QObject):
 
     def run(self, tool: str, args: list[str], title: str,
             on_done: Callable[[int], None] | None = None) -> bool:
+        """Run esptool / espefuse / espsecure (see core.tools.tool_invocation)."""
+        program, arguments  = tool_invocation(tool, args)
+        return self.run_program(program, arguments, title, on_done, tool)
+
+    def run_program(self, program: str, arguments: list[str], title: str,
+                    on_done: Callable[[int], None] | None = None, name: str = "",
+                    env_extra: dict[str, str] | None = None) -> bool:
+        """Run any external program (e.g. arduino-cli) with streamed output and progress."""
         if self.busy:
             return False
-        program, arguments  = tool_invocation(tool, args)
-        self._job           = Job(tool, args, title, on_done, time.monotonic())
+        self._job           = Job(name or program, arguments, title, on_done, time.monotonic())
         self._splitter      = LineSplitter()
         self._killed        = False
 
         proc                = QProcess(self)
         env                 = QProcessEnvironment.systemEnvironment()
-        for key, value in tool_environment().items():
+        for key, value in {**tool_environment(), **(env_extra or {})}.items():
             env.insert(key, value)
         proc.setProcessEnvironment(env)
         proc.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)

@@ -103,6 +103,23 @@ QToolButton#WinClose:hover {{ background: #e81123; }}
 QToolButton#WinClose:pressed {{ background: #f1707a; }}
 #Root[framed="true"] {{ border: 1px solid {p.border}; }}
 
+/* ---------- code page ---------- */
+#CodeToolbar {{ background: {p.bg}; border-bottom: 1px solid {p.border}; }}
+#CodeFooter {{ background: {p.surface}; border-top: 1px solid {p.border}; }}
+#FindBar {{ background: {p.surface}; border-top: 1px solid {p.border}; }}
+QPlainTextEdit#CodeEditor {{
+    background: {p.console_bg}; color: {p.console_text}; border: none;
+    selection-background-color: {p.selection}; font-family: "{mono}";
+}}
+QTabWidget#EditorTabs::pane {{ border: none; background: {p.console_bg}; }}
+QTabWidget#EditorTabs QTabBar {{ background: {p.bg}; }}
+QTabWidget#EditorTabs QTabBar::tab {{
+    background: transparent; color: {p.muted}; padding: 8px 16px; border: none;
+    border-bottom: 2px solid transparent; font-weight: 600;
+}}
+QTabWidget#EditorTabs QTabBar::tab:hover {{ color: {p.text}; background: {p.hover}; }}
+QTabWidget#EditorTabs QTabBar::tab:selected {{ color: {p.text}; border-bottom: 2px solid {p.accent}; background: {p.console_bg}; }}
+
 /* ---------- sidebar ---------- */
 #Sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
 #Brand {{ font-size: 15pt; font-weight: 700; }}
