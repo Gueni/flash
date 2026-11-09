@@ -11,6 +11,15 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
+# release\SHA256SUMS.txt for the files of the current version (format understood by `sha256sum -c`).
+function Write-Checksums([string]$Version) {
+    $files = Get-ChildItem release -File | Where-Object { $_.Name -like "Flash-$Version-*" } | Sort-Object Name
+    $lines = $files | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name }
+    # LF line endings: `sha256sum -c` on Linux / macOS rejects CRLF
+    [IO.File]::WriteAllText((Join-Path $Root "release\SHA256SUMS.txt"), (($lines -join "`n") + "`n"))
+    Write-Host "==> Checksums: release\SHA256SUMS.txt ($($files.Count) files)"
+}
+
 if (-not (Test-Path ".venv\Scripts\python.exe")) {
     & (Join-Path $PSScriptRoot "setup_venv.ps1") -Dev
 } else {
@@ -59,6 +68,7 @@ if ($OneFile) {
     $target = "release\Flash-$Version-windows-x64.exe"
     Copy-Item -Force $Exe $target
     Write-Host "==> Done: $target" -ForegroundColor Green
+    Write-Checksums $Version
     exit 0
 }
 
@@ -83,9 +93,11 @@ $iscc = @("$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
           "$env:ProgramFiles\Inno Setup 6\ISCC.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $iscc) {
     Write-Warning "Inno Setup 6 not found (winget install JRSoftware.InnoSetup). Portable build is in dist\Flash."
+    Write-Checksums $Version
     exit 0
 }
 Write-Host "==> Building installer" -ForegroundColor Cyan
 & $iscc /Q "/DAppVersion=$Version" installer\flash.iss
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
 Write-Host "==> Done: release\Flash-$Version-Setup.exe" -ForegroundColor Green
+Write-Checksums $Version
