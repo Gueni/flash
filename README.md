@@ -5,8 +5,10 @@
 <h1 align="center">Flash</h1>
 
 <p align="center">
-  A modern, cross-platform desktop app to flash, inspect and secure <b>ESP32</b> and <b>ESP8266</b> chips.<br>
-  Built on Espressif's official <a href="https://github.com/espressif/esptool">esptool</a> with a Qt 6 interface.
+  A modern, cross-platform desktop app to flash, inspect and secure <b>ESP32</b> and <b>ESP8266</b> chips,<br>
+  with a built-in <b>Arduino-style IDE</b> to write, compile and upload code to ESP, AVR, STM32 and RP2040 boards.<br>
+  Built on Espressif's official <a href="https://github.com/espressif/esptool">esptool</a> and
+  <a href="https://github.com/arduino/arduino-cli">arduino-cli</a> with a Qt 6 interface.
 </p>
 
 <p align="center">
@@ -23,6 +25,7 @@
 | Page | What you can do |
 |------|-----------------|
 | **Flash** | Write any number of images at any offsets in one go. Drag & drop `.bin` files and the offsets are guessed from the names (bootloader / partitions / app, or `0x…` in the name). Layout presets for ESP32, S3/C3/C6/H2 and P4/C5. Flash mode / frequency / size, erase-all, compression, skip-already-flashed, **verify**, **merge into one .bin** and **erase flash**. |
+| **Code** | Arduino-style IDE: write sketches with syntax highlighting, autocomplete and multiple file tabs, then **Verify** / **Upload** to the board on PORT. Includes a **Boards manager** (ESP32, ESP8266, AVR, STM32, RP2040 …), a **Library manager**, board options (partition scheme, upload speed …), examples, and clickable compiler errors. See [Code page](#code-page-arduino-ide). |
 | **Memory** | Read flash to a file (or `ALL`), erase a region, peek / poke 32-bit memory words, dump memory, read / write the SPI flash status register. |
 | **Device** | Chip ID, MAC address, flash ID & size, security info, load an image into RAM and run it, reset and run the app. |
 | **Tools** | ELF → binary, image info (headers, segments, checksum), generate a flash-encryption key and burn it into an eFuse key block. |
@@ -52,13 +55,48 @@ Shared across all pages:
 
 | Keys | Action |
 |------|--------|
-| `Ctrl+1` … `Ctrl+7` | Switch page |
+| `Ctrl+1` … `Ctrl+8` | Switch page |
 | `Ctrl+Enter` | Flash selected images |
+| `Ctrl+R` / `Ctrl+U` | Code page: verify (compile) / upload |
+| `Ctrl+S` / `Ctrl+Shift+S` | Code page: save / save as |
+| `Ctrl+F` / `Ctrl+H` / `Ctrl+G` | Code page: find / replace / go to line |
+| `Ctrl+/` / `Ctrl+Space` | Code page: toggle comment / autocomplete |
+| `Ctrl+wheel`, `Ctrl+=` / `Ctrl+-` | Code page: zoom the editor |
 | `Esc` | Stop the running operation |
 | `F5` | Rescan serial ports |
 | `Ctrl+J` / `Ctrl+L` | Show/hide console / clear console |
 | `Ctrl+T` | Toggle light/dark theme |
 | `Ctrl+B` | Collapse/expand sidebar |
+
+## Code page (Arduino IDE)
+
+![Code page](assets/img/code-dark.png)
+
+The Code page works like the Arduino IDE, built into Flash. Compiling, uploading, cores and libraries are handled by
+**arduino-cli**, the engine behind Arduino IDE 2. The installer includes it. When you run from source, the Code page
+offers to download it the first time (about 20 MB, checksum-verified).
+
+1. **Install a board core.** Open **Boards** and install the core for your board family:
+   * `esp32:esp32` for ESP32 / S2 / S3 / C3 / C6 / H2 / P4;
+   * `esp8266:esp8266` for ESP8266;
+   * `arduino:avr` for Uno / Nano / Mega;
+   * also STM32 and RP2040.
+
+   The board-index URLs for ESP32, ESP8266, RP2040 and STM32 are preset; add more under *Board URLs…*.
+   The ESP32 core downloads about 1–2 GB of compilers the first time.
+2. **Pick the board** in the BOARD box (type to search). Use ⚙ for board options such as the partition scheme, flash
+   size or upload speed. The scan button identifies boards with a native USB chip on PORT.
+3. **Write code.** You get syntax highlighting, autocomplete (`Ctrl+Space`), auto-indent, bracket matching, comment
+   toggling, find/replace, multiple file tabs (`+` adds a `.h` or `.cpp`) and examples (*Examples* menu).
+4. **Verify** (`Ctrl+R`) to compile, or **Upload** (`Ctrl+U`) to compile and flash the board on PORT. The serial
+   monitor pauses during the upload and reconnects afterwards.
+   * Compiler errors are underlined in the editor, marked in the gutter, and clickable in the console.
+   * The footer shows the flash and RAM usage.
+5. **Export compiled binaries** (*Sketch* menu) writes the `.bin` files into the sketch's `build/` folder. For ESP
+   boards it can load them straight into the **Flash** page.
+
+New sketches start as untitled scratch sketches, kept automatically. Use **Save as** to give one a name and a folder;
+the default is `Documents/Arduino`. Cores, libraries and the sketchbook are shared with the Arduino IDE.
 
 ## Install
 
@@ -143,9 +181,9 @@ flash/
 ├── installer/flash.iss      # Inno Setup script (Windows installer)
 ├── pyproject.toml           # package metadata (pip install .)
 ├── requirements.txt         # runtime deps      requirements-dev.txt -> + PyInstaller
-├── scripts/                 # setup_venv.{ps1,sh}, build.{ps1,sh}, install_linux.sh
+├── scripts/                 # setup_venv.{ps1,sh}, build.{ps1,sh}, install_linux.sh, style.py (house style)
 ├── assets/img/              # README screenshots
-├── tests/                   # unit tests (test_flash_core.py) + sample firmware/images
+├── tests/                   # unit tests (test_flash_core.py, test_arduino.py) + sample firmware/images
 └── src/flash/
     ├── app.py               # QApplication setup, --run-tool dispatch
     ├── settings.py          # persistent state + JSON profiles
@@ -153,14 +191,18 @@ flash/
     ├── core/                # no GUI code in here
     │   ├── tools.py         # esptool/espefuse/espsecure invocation, arg builders, output parsing
     │   ├── runner.py        # QProcess runner: streaming output, progress, stop
-    │   ├── serial_monitor.py
+    │   ├── arduino.py       # arduino-cli: download, command lines, JSON / compiler-output parsing, sketches
+│   ├── serial_monitor.py
     │   └── efuse.py         # eFuse JSON parsing + xlsx/csv export
     └── ui/
         ├── theme.py         # light/dark palettes -> Qt stylesheet
         ├── icons.py         # inline SVG icon set
+        ├── code_editor.py   # C++/Arduino editor: highlighting, completion, diagnostics, find/replace
+        ├── arduino_dialogs.py  # Boards manager and Library manager
+        ├── titlebar.py      # custom window title bar (frameless window chrome)
         ├── widgets.py       # FlowLayout, ResponsiveGrid, Card, inputs, Console, Toast
         ├── main_window.py   # sidebar, connection bar, console, responsive behaviour
-        └── pages/           # flash, memory, device, tools, efuse, monitor, settings
+        └── pages/           # flash, code, memory, device, tools, efuse, monitor, settings
 ```
 
 ### How the tools run
@@ -177,7 +219,7 @@ In both cases the output is parsed live for progress and errors.
 ## Tests
 
 ```bash
-python -m unittest tests.test_flash_core -v
+python -m unittest tests.test_flash_core tests.test_arduino -v
 ```
 
 The tests cover argument building, number parsing, progress parsing and eFuse parsing/export. They also run the

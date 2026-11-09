@@ -24,8 +24,15 @@ Write-Host "==> Flash $Version" -ForegroundColor Cyan
 
 if (-not $SkipTests) {
     Write-Host "==> Running tests" -ForegroundColor Cyan
-    & $Py -m unittest tests.test_flash_core
+    & $Py -m unittest tests.test_flash_core tests.test_arduino
     if ($LASTEXITCODE -ne 0) { throw "tests failed" }
+}
+
+# arduino-cli for the Code page: downloaded once into vendor\ (checksum-verified) and bundled into the app.
+if (-not (Test-Path "vendor\arduino-cli\arduino-cli.exe")) {
+    Write-Host "==> Fetching arduino-cli" -ForegroundColor Cyan
+    & $Py -c "import sys; sys.path.insert(0, 'src'); from pathlib import Path; from flash.core.arduino import download_cli; print(download_cli(Path('vendor/arduino-cli')))"
+    if ($LASTEXITCODE -ne 0) { throw "arduino-cli download failed" }
 }
 
 Write-Host "==> Building executable" -ForegroundColor Cyan
@@ -41,6 +48,11 @@ Write-Host "==> Smoke testing $Exe" -ForegroundColor Cyan
 $out = & $Exe --run-tool esptool version 2>&1 | Out-String
 if ($out -notmatch "\d+\.\d+") { throw "bundled esptool did not run:`n$out" }
 Write-Host ("    bundled esptool " + ($out.Trim() -split "`n")[-1])
+if (-not $OneFile) {
+    $cli = "dist\Flash\_internal\flash\bin\arduino-cli.exe"
+    if (-not (Test-Path $cli)) { throw "arduino-cli was not bundled ($cli missing)" }
+    Write-Host ("    bundled arduino-cli " + ((& $cli version) -join " "))
+}
 
 New-Item -ItemType Directory -Force release | Out-Null
 if ($OneFile) {

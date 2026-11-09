@@ -30,7 +30,13 @@ echo "==> Flash $VERSION"
 
 if [ "$SKIP_TESTS" = 0 ]; then
     echo "==> Running tests"
-    QT_QPA_PLATFORM=offscreen "$PY" -m unittest tests.test_flash_core
+    QT_QPA_PLATFORM=offscreen "$PY" -m unittest tests.test_flash_core tests.test_arduino
+fi
+
+# arduino-cli for the Code page: downloaded once into vendor/ (checksum-verified) and bundled into the app.
+if [ ! -x vendor/arduino-cli/arduino-cli ]; then
+    echo "==> Fetching arduino-cli"
+    "$PY" -c "import sys; sys.path.insert(0, 'src'); from pathlib import Path; from flash.core.arduino import download_cli; print(download_cli(Path('vendor/arduino-cli')))"
 fi
 
 echo "==> Building executable"
@@ -39,6 +45,9 @@ if [ "$ONEFILE" = 1 ]; then EXE=dist/Flash; else EXE=dist/Flash/Flash; fi
 
 echo "==> Smoke testing $EXE"
 "$EXE" --run-tool esptool version
+if [ "$ONEFILE" = 0 ]; then
+    dist/Flash/_internal/flash/bin/arduino-cli version
+fi
 
 mkdir -p release
 if [ "$ONEFILE" = 1 ]; then

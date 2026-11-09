@@ -1,2 +1,3 @@
 -r requirements.txt
 pyinstaller >= 6.10
+pyfiglet    >= 1.0          # scripts/style.py (house-style headers)

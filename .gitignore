@@ -31,3 +31,6 @@ desktop.ini
 # Runtime artefacts
 *.log
 flash-efuse-*.json
+
+# Downloaded build inputs (arduino-cli for the Code page)
+vendor/

@@ -35,6 +35,10 @@ NAME                        = "Flash"
 # esptool & friends load chip definitions, flasher stubs and eFuse tables at runtime.
 tool_packages               = ["esptool", "espefuse", "espsecure", "esp_pylib"]
 datas                       = [(str(SRC / "flash" / "assets"), "flash/assets")]
+binaries                    = []
+cli                         = ROOT / "vendor" / "arduino-cli" / ("arduino-cli.exe" if sys.platform == "win32" else "arduino-cli")
+if cli.is_file():                                                                      # Code page: bundled arduino-cli (fetched by build scripts)
+    binaries.append((str(cli), "flash/bin"))
 hiddenimports               = []
 for pkg in tool_packages:
     datas                  += collect_data_files(pkg)
@@ -45,7 +49,7 @@ hiddenimports              += collect_submodules("flash") + ["serial.tools.list_
 a                           = Analysis(
     [str(ROOT / "main.py")],
     pathex=[str(SRC)],
-    binaries=[],
+    binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
     hookspath=[],

@@ -615,6 +615,7 @@ class MainWindow(QMainWindow):
         if not self.code_page.maybe_save():                                            # unsaved sketch: Save / Discard / Cancel
             event.ignore()
             return
+        self.code_page.shutdown()
         self.monitor.close_port()
         self.store.save()
         s                   = app_settings()

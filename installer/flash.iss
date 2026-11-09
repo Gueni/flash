@@ -1,7 +1,7 @@
 ; Inno Setup script for Flash. Built by scripts\build.ps1 (ISCC.exe installer\flash.iss /DAppVersion=x.y.z).
 ; Packages the one-folder PyInstaller build in dist\Flash. Keep AppId unchanged so upgrades replace old versions.
 #ifndef AppVersion
-  #define AppVersion "3.1.0"
+  #define AppVersion "3.2.0"
 #endif
 #define AppName "Flash"
 #define AppExe  "Flash.exe"

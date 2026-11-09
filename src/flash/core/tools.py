@@ -292,6 +292,8 @@ def quote_command(program: str, args: list[str]) -> str:
     def q(a: str) -> str:
         return f'"{a}"' if (" " in a or not a) else a
     name                    = Path(program).stem
+    args                    = [f"<{len(a.split(','))} board index URLs>" if i and args[i - 1] == "--additional-urls" else a
+                               for i, a in enumerate(args)]                            # keep the echo readable
     if args[:2] == ["-u", "-m"]:
         return " ".join(q(a) for a in args[2:])
     if args[:1] == [TOOL_FLAG]:
